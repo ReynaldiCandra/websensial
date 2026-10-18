@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────────────────────── */
+:root {
+  --ws-bg: #ffffff;
+  --ws-bg-soft: #f7f8ff;
+  --ws-primary: #6328f5;
+  --ws-primary-strong: #4b18d6;
+  --ws-blue: #4f6bff;
+  --ws-lavender: #a58bff;
+  --ws-ink: #171936;
+  --ws-muted: #69708a;
+  --ws-border: #e4e7f5;
+  --ws-glass-bg: rgba(255, 255, 255, 0.62);
+  --ws-glass-border: rgba(255, 255, 255, 0.85);
+  --ws-shadow-soft: 0 12px 40px -8px rgba(87, 65, 190, 0.12);
+  --ws-shadow-card: 0 4px 24px -6px rgba(87, 65, 190, 0.16);
+}
+
+@theme inline {
+  --color-white: #ffffff;
+  --color-soft: var(--ws-bg-soft);
+  --color-primary: var(--ws-primary);
+  --color-primary-strong: var(--ws-primary-strong);
+  --color-blue: var(--ws-blue);
+  --color-lavender: var(--ws-lavender);
+  --color-ink: var(--ws-ink);
+  --color-muted: var(--ws-muted);
+  --color-line: var(--ws-border);
+  --font-sans: var(--font-jakarta), var(--ws-fallback-sans, ui-sans-serif), system-ui, sans-serif;
+}
+
+html {
+  --ws-fallback-sans: "Plus Jakarta Sans";
+  /* Sticky header height + breathing room for in-page anchors. */
+  scroll-padding-top: 6rem;
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────────── */
+body {
+  background: var(--ws-bg);
+  color: var(--ws-ink);
+  font-family: var(--font-sans, "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(99, 40, 245, 0.18);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ws-primary);
+  outline-offset: 2px;
+}
+
+/* ─── Glassmorphism (selective) ─────────────────────────────────────────── */
+.glass {
+  background: var(--ws-glass-bg);
+  border: 1px solid var(--ws-glass-border);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: var(--ws-shadow-soft);
+  color: var(--ws-ink);
+}
+
+/* Premium glass surface for content cards. Keeps copy readable while the
+   lavender lighting and 3D decor show through the edges. */
+.glass-card {
+  position: relative;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.56) 48%,
+    rgba(240, 237, 255, 0.48) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 20px 48px -24px rgba(87, 65, 190, 0.36),
+    0 2px 8px -3px rgba(87, 65, 190, 0.12);
+  backdrop-filter: blur(16px) saturate(1.35);
+  -webkit-backdrop-filter: blur(16px) saturate(1.35);
+}
+
+/* Diagonal light sweep, under the card content. */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  background: linear-gradient(
+    118deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0) 34%,
+    rgba(255, 255, 255, 0) 68%,
+    rgba(165, 139, 255, 0.14) 100%
+  );
+  opacity: 0.6;
+}
+
+.glass-card-hover {
+  transition:
+    transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 350ms ease,
+    border-color 350ms ease;
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 30px 62px -26px rgba(87, 65, 190, 0.44),
+    0 6px 18px -8px rgba(79, 107, 255, 0.18);
+}
+
+/* Blur is the most expensive part of glass; skip it on small screens. */
+@media (max-width: 639px) {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.95) inset,
+      0 12px 30px -20px rgba(87, 65, 190, 0.24);
+  }
+  .glass-card::before {
+    opacity: 0.35;
+  }
+}
+
+/* ─── Decorative backgrounds ─────────────────────────────────────────────── */
+.bg-mesh {
+  background:
+    radial-gradient(48rem 30rem at 12% -10%, rgba(165, 139, 255, 0.2), transparent 60%),
+    radial-gradient(44rem 28rem at 92% 8%, rgba(99, 40, 245, 0.12), transparent 55%),
+    radial-gradient(36rem 24rem at 62% 40%, rgba(79, 107, 255, 0.08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f7f8ff 55%, #eef0ff 100%);
+}
+
+/* Soft lavender band that bridges hero → value props → white content.
+   Start/end colours match `.bg-mesh` (hero) and `.bg-aurora` (next section)
+   exactly, so no hard seam shows at either edge. */
+.bg-hero-band {
+  background:
+    radial-gradient(42rem 22rem at 80% 0%, rgba(165, 139, 255, 0.14), transparent 65%),
+    linear-gradient(180deg, #eef0ff 0%, #f4f5ff 46%, #ffffff 100%);
+}
+
+/* ─── Section atmosphere behind glass cards ──────────────────────────────── */
+.bg-aurora {
+  background:
+    radial-gradient(52rem 34rem at 92% -6%, rgba(173, 158, 255, 0.32), transparent 62%),
+    radial-gradient(42rem 28rem at -4% 104%, rgba(79, 107, 255, 0.14), transparent 64%),
+    linear-gradient(180deg, #ffffff 0%, #f4f5ff 52%, #fbfbff 100%);
+}
+
+.bg-aurora-soft {
+  background:
+    radial-gradient(50rem 32rem at 90% 2%, rgba(181, 169, 255, 0.5), transparent 62%),
+    radial-gradient(40rem 26rem at 0% 98%, rgba(165, 139, 255, 0.26), transparent 65%),
+    linear-gradient(180deg, #f4f5ff 0%, #ecefff 55%, #f6f7ff 100%);
+}
+
+/* ─── Hero artwork (raster composition from the asset pack) ─────────────── */
+/* Feathers the artwork edges so the composition blends into the light page
+   background instead of showing a hard rectangle. No content is cropped. */
+.hero-scene-mask {
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 6%, #000 97%, transparent),
+    linear-gradient(to bottom, transparent, #000 6%, #000 93%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 6%, #000 97%, transparent),
+    linear-gradient(to bottom, transparent, #000 6%, #000 93%, transparent);
+  mask-composite: intersect;
+}
+
+/* ─── 3D / float helpers (CSS-only, no WebGL) ───────────────────────────── */
+@keyframes ws-floaty {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+/* Duration/delay come from the object (see GlassDecor FLOAT_TIMING). */
+.float-slow {
+  animation: ws-floaty 7s ease-in-out infinite both;
+}
+.float-fast {
+  animation: ws-floaty 5s ease-in-out infinite reverse;
+}
+
+/* Hero composition: one slow vertical drift for the whole scene. */
+@keyframes ws-hero-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -9px, 0); }
+}
+
+.hero-scene-float {
+  animation: ws-hero-drift 11s ease-in-out infinite;
+}
+
+/* Ambient lavender glow behind the hero scene. */
+@keyframes ws-glow-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.8; }
+  50% { transform: translate3d(-2%, 1.5%, 0) scale(1.08); opacity: 1; }
+}
+
+.glow-drift {
+  animation: ws-glow-drift 22s ease-in-out infinite;
+}
+
+/* Mild perspective — depth comes from overlap/shadows, not aggressive tilt */
+.tilt-3d {
+  transform: perspective(1600px) rotateX(3deg) rotateY(-5deg) translateZ(0);
+  transform-style: preserve-3d;
+  transition: transform 400ms ease;
+}
+.tilt-3d:hover {
+  transform: perspective(1600px) rotateX(1.5deg) rotateY(-2.5deg) translateZ(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-slow,
+  .float-fast,
+  .hero-scene-float,
+  .glow-drift {
+    animation: none !important;
+  }
+  .tilt-3d {
+    transform: none !important;
+    transition: none !important;
+  }
+  .glass-card-hover:hover {
+    transform: none !important;
+  }
+}

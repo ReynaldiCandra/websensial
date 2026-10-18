@@ -1,0 +1,33 @@
+/* Websensial motion presets — use on isolated decorative elements only. */
+.ws-float {
+  animation: ws-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+.ws-float-delay { animation-delay: -2.2s; }
+.ws-float-slow { animation-duration: 8s; }
+.ws-glow {
+  animation: ws-glow 5s ease-in-out infinite;
+}
+.ws-reveal {
+  animation: ws-reveal .7s cubic-bezier(.2,.7,.2,1) both;
+}
+.ws-tilt {
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease;
+}
+.ws-tilt:hover { transform: translateY(-5px) rotateX(1deg); }
+@keyframes ws-float {
+  0%, 100% { transform: translate3d(0,0,0) rotate(0deg); }
+  50% { transform: translate3d(0,-12px,0) rotate(1.2deg); }
+}
+@keyframes ws-glow {
+  0%, 100% { filter: drop-shadow(0 8px 18px rgba(99,40,245,.10)); }
+  50% { filter: drop-shadow(0 12px 28px rgba(99,40,245,.24)); }
+}
+@keyframes ws-reveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-float, .ws-glow, .ws-reveal { animation: none !important; }
+  .ws-tilt { transition: none !important; }
+}

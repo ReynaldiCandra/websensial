@@ -1,0 +1,28 @@
+{
+  "title": "Websensial Complete Visual Asset Pack",
+  "note": "Generated raster images are visual assets/mockups. They are not interactive website code. SVG files in public/3d are editable vector decorative objects, not physically accurate 3D meshes.",
+  "assets": [
+    "public/hero/hero-dashboard-composition.png",
+    "public/hero/trackly-device-showcase.png",
+    "public/previews/portfolio/loom-product-landing.png",
+    "public/previews/portfolio/growth-marketing-dark.png",
+    "public/previews/portfolio/trackly-analytics.png",
+    "public/previews/portfolio/forma-corporate.png",
+    "public/previews/portfolio/agency-website-concept.png",
+    "public/previews/portfolio/portfolio-ui-overview.png",
+    "public/previews/portfolio/portfolio-grid-concept.png",
+    "public/3d/3d-glass-composition-reference.png",
+    "docs/visual-asset-catalog-overview.png",
+    "docs/visual-asset-library-overview.png",
+    "docs/complete-pack-overview.png",
+    "public/brand/websensial-logo-tech.png",
+    "public/3d/cube-glass.svg",
+    "public/3d/sphere-glass.svg",
+    "public/3d/diamond-glass.svg",
+    "public/3d/ring-glass.svg",
+    "public/3d/glass-pedestal.svg",
+    "public/3d/floating-panel.svg",
+    "public/backgrounds/lavender-glass-background.svg",
+    "code-snippets/motion-presets.css"
+  ]
+}

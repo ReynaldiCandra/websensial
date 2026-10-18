@@ -1,0 +1,230 @@
+{
+  "meta": {
+    "siteTitle": "WEBSENSIAL — Premium Digital Agency & Website Templates",
+    "siteDescription": "Websensial is a premium digital agency building conversion-focused websites and landing pages — and selling premium, ready-to-use website templates.",
+    "titles": {
+      "home": "Premium Digital Agency & Website Templates",
+      "products": "Template Catalog",
+      "productDetail": "Product Details",
+      "services": "Services",
+      "portfolio": "Portfolio",
+      "contact": "Contact",
+      "notFound": "Page not found"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Templates",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "contact": "Contact",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "language": "Language"
+  },
+  "common": {
+    "viewDetails": "View Details",
+    "viewCatalog": "Browse Catalog",
+    "exploreServices": "Our Services",
+    "liveDemo": "Live Demo",
+    "buy": "Buy Now",
+    "featured": "Featured",
+    "consultFree": "Free Consultation",
+    "heroDecorationAriaLabel": "Preview of a Websensial analytics dashboard, metric panels and mobile app composition (concept mockup)",
+    "notConfigured": "Not yet available",
+    "notConfiguredTitle": { "demo": "Demo not configured yet", "purchase": "Checkout not configured yet" },
+    "notConfiguredBody": "**This channel is still being set up.** No {kind} destination has been configured for this product yet. Contact us and the Websensial team will help you proceed.",
+    "contactToBuy": "Contact us to purchase",
+    "price": "Price",
+    "oneTime": "one-time payment",
+    "loading": "Loading…",
+    "submitting": "Sending…",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "home": {
+    "hero": {
+      "badge": "Digital agency & premium templates",
+      "titleLine1": "Premium websites &",
+      "titleHighlight": "ready-made templates",
+      "titleLine2": "for your business growth.",
+      "subtitle": "Websensial designs conversion-focused websites and landing pages for your business — and sells premium templates you can put to work right away.",
+      "primaryCta": "Browse Templates",
+      "secondaryCta": "View Portfolio",
+      "secondaryNote": "Concept & demo work",
+      "sceneBadge": "Digital solutions for modern business",
+      "floatChip": "UI preview"
+    },
+    "valueProps": [
+      {
+        "title": "Professional websites",
+        "text": "Modern, responsive design on every device."
+      },
+      {
+        "title": "Ready-made templates",
+        "text": "Buy, download, and host on your own terms, with no monthly plan."
+      },
+      {
+        "title": "Conversion landing pages",
+        "text": "Page structure guided by your business goals."
+      },
+      {
+        "title": "Template customization",
+        "text": "Adapt colors, typography, and content to your brand."
+      }
+    ],
+    "featured": {
+      "title": "Featured templates",
+      "subtitle": "Ready-made digital products — buy, download, and host them yourself.",
+      "seeAll": "See all templates"
+    },
+    "categories": {
+      "title": "Product categories",
+      "subtitle": "Start with the website type closest to your need."
+    },
+    "services": {
+      "title": "Agency services",
+      "subtitle": "Need more than a template? We build websites tailored to you.",
+      "seeAll": "View services"
+    },
+    "portfolio": {
+      "title": "Selected work",
+      "subtitle": "Studio concept studies and visual explorations — transparently labeled.",
+      "seeAll": "View portfolio"
+    },
+    "process": {
+      "title": "How we work",
+      "steps": [
+        { "title": "Brief & strategy", "text": "A quick conversation about goals, audience, and content." },
+        { "title": "Design & build", "text": "Premium visual composition, then production frontend work." },
+        { "title": "Review & refine", "text": "You review the visuals; we polish the details." },
+        { "title": "Delivery & support", "text": "Files are handed over with usage guidance." }
+      ]
+    },
+    "reasons": {
+      "title": "Why Websensial",
+      "items": [
+        { "title": "Speed", "text": "Lightweight pages with restrained motion that stay smooth on phones." },
+        { "title": "Transparency", "text": "Concept work is clearly labeled — never presented as client delivery." },
+        { "title": "You own the code", "text": "You receive the source code, not a monthly SaaS plan." },
+        { "title": "Built to grow", "text": "A clean data layer that eases a future backend migration." }
+      ]
+    },
+    "cta": {
+      "title": "Ready to show your business off this beautifully?",
+      "text": "Start with a ready-made template, or discuss a fully custom build.",
+      "primary": "Browse Templates",
+      "secondary": "Contact us"
+    }
+  },
+  "products": {
+    "title": "Template Catalog",
+    "subtitle": "Premium ready-made templates — purchase once, host yourself, own a conversion channel.",
+    "searchLabel": "Search templates",
+    "searchPlaceholder": "Search by name or keyword…",
+    "previewAlt": "Template preview",
+    "filterCategory": "Category",
+    "filterAll": "All",
+    "format": {
+      "label": "Format",
+      "nextjs": "Next.js",
+      "html": "HTML/CSS/JS",
+      "figma": "Figma"
+    },
+    "results": "{count} templates found",
+    "clearFilters": "Clear filters",
+    "emptyTitle": "Nothing matches",
+    "emptyText": "Try different keywords or clear the active filters.",
+    "demoNotice": "The products below are a sample catalog for previewing the marketplace experience.",
+    "cardFrom": "from"
+  },
+  "product": {
+    "categoryLabel": "Category",
+    "descriptionLabel": "Full description",
+    "featuresLabel": "Features",
+    "includedFilesLabel": "Files you receive",
+    "techLabel": "Technology",
+    "compatibilityLabel": "Compatibility",
+    "installLabel": "Installation requirements",
+    "licenseLabel": "License",
+    "formatLabel": "Template format",
+    "previewLabel": "Product preview",
+    "actionsLabel": "Purchase actions",
+    "backToCatalog": "Back to catalog",
+    "relatedLabel": "Related products",
+    "draftBadge": "Draft",
+    "conceptNotice": "**Showcase concept.** This product is a demonstration sample — it is not a live, purchasable product right now."
+  },
+  "services": {
+    "title": "Services",
+    "subtitle": "The Websensial team designs and builds web experiences for your business — from zero to live.",
+    "ctaTitle": "Have something specific in mind?",
+    "ctaText": "Tell us about your website needs — we'll reply with a realistic estimate.",
+    "ctaButton": "Contact us"
+  },
+  "portfolio": {
+    "title": "Selected Projects",
+    "subtitle": "A collection of concept work and visual explorations. Every piece is clearly labeled, never presented as client work.",
+    "badge": "Portfolio",
+    "filterLabel": "Filter portfolio",
+    "filters": { "all": "All", "website": "Website", "dashboard": "Dashboard", "landing": "Landing Page" },
+    "demo": "Demo",
+    "demoSoon": "Coming soon",
+    "demoUnavailable": "Demo link not configured yet",
+    "empty": "No work in this category yet.",
+    "conceptBadge": "Concept",
+    "clientBadge": "Client",
+    "visitProject": "Open project",
+    "notConfigured": "Project link not configured yet."
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Discuss a website project or a template — we're happy to answer product questions too.",
+    "form": {
+      "name": "Full name",
+      "email": "Email address",
+      "topic": "Topic",
+      "topics": {
+        "templateQuestion": "Template question",
+        "serviceInquiry": "Service inquiry",
+        "partnership": "Partnership",
+        "other": "Other"
+      },
+      "message": "Your message",
+      "namePlaceholder": "Your name",
+      "emailPlaceholder": "name@email.com",
+      "messagePlaceholder": "Tell us a little about your needs…",
+      "submit": "Send message",
+      "successTitle": "Your message is ready to send via your email app",
+      "successText": "We've composed your message into a ready-to-send email. Click the button below to open your email app.",
+      "openMailApp": "Open email app",
+      "integrationNote": "**Integration status:** No email backend is configured yet, so sending happens through your own email app. Once a delivery provider is configured (e.g. Resend, Formspree), messages will reach our team directly.",
+      "errors": {
+        "nameRequired": "Please enter your name.",
+        "emailInvalid": "That email address doesn't look valid.",
+        "messageTooShort": "Your message is too short (10 characters minimum)."
+      }
+    },
+    "infoTitle": "Contact details",
+    "emailLabel": "Email",
+    "whatsappLabel": "WhatsApp",
+    "whatsappNotConfigured": "The WhatsApp channel isn't available yet — email works fine for now.",
+    "responseTimeTitle": "Response time",
+    "responseTimeValue": "1–2 business days"
+  },
+  "footer": {
+    "tagline": "A digital agency that turns numbers into premium, converting visuals.",
+    "colProducts": "Templates",
+    "colCompany": "Company",
+    "colContact": "Contact",
+    "languageNote": "English is active.",
+    "rights": "All rights reserved.",
+    "demoNotice": "Some products and work shown on this site are demonstration content and will be replaced with the real thing."
+  },
+  "notFound": {
+    "title": "This page is lost in orbit",
+    "text": "The address you opened doesn't exist — or it moved to another route.",
+    "backHome": "Back to home",
+    "backCatalog": "Browse templates"
+  }
+}

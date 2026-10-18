@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="og" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="0.6" stop-color="#F7F8FF"/>
+      <stop offset="1" stop-color="#EFEAFF"/>
+    </linearGradient>
+    <linearGradient id="ogmark" x1="80" y1="60" x2="420" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A58BFF"/>
+      <stop offset="0.5" stop-color="#6328F5"/>
+      <stop offset="1" stop-color="#4F6BFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#og)"/>
+  <circle cx="1010" cy="120" r="290" fill="url(#ogmark)" opacity="0.12"/>
+  <circle cx="1080" cy="330" r="170" fill="#6328F5" opacity="0.08"/>
+  <rect x="90" y="120" width="80" height="80" rx="20" fill="url(#ogmark)"/>
+  <text x="100" y="180" font-family="system-ui, sans-serif" font-weight="700" font-size="42" fill="#FFFFFF">W</text>
+  <text x="90" y="330" font-family="system-ui, sans-serif" font-weight="800" font-size="76" fill="#171936">WEBSENSIAL</text>
+  <text x="90" y="390" font-family="system-ui, sans-serif" font-weight="600" font-size="34" fill="#69708A">Premium digital agency &amp; website templates</text>
+  <rect x="90" y="440" width="260" height="56" rx="14" fill="#6328F5"/>
+  <text x="120" y="476" font-family="system-ui, sans-serif" font-weight="700" font-size="22" fill="#FFFFFF">Browse templates</text>
+  <rect x="366" y="440" width="240" height="56" rx="14" fill="#FFFFFF" stroke="#E4E7F5"/>
+  <text x="398" y="476" font-family="system-ui, sans-serif" font-weight="700" font-size="22" fill="#171936">Our services</text>
+</svg>
