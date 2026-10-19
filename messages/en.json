@@ -127,6 +127,7 @@
     "filterAll": "All",
     "format": {
       "label": "Format",
+      "all": "All",
       "nextjs": "Next.js",
       "html": "HTML/CSS/JS",
       "figma": "Figma"
