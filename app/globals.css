@@ -115,9 +115,19 @@ body {
 
 /* ─── Editorial surfaces ────────────────────────────────────────────────── */
 .ws-brand-logo {
+  display: none;
   padding: 0.22rem;
   border-radius: 0.35rem;
   background: var(--ws-logo-surface);
+}
+
+:root[data-theme="light"] .ws-brand-logo-light,
+:root:not([data-theme="dark"]) .ws-brand-logo-light {
+  display: block;
+}
+
+:root[data-theme="dark"] .ws-brand-logo-dark {
+  display: block;
 }
 
 :root[data-theme="dark"] .bg-white {

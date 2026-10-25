@@ -27,7 +27,7 @@ export default function Footer() {
       <div className="grid w-full gap-8 px-4 py-10 sm:grid-cols-2 sm:px-7 lg:grid-cols-4 lg:px-10 xl:px-14">
         <div className="sm:col-span-2 lg:col-span-1">
           <div className="flex items-center">
-            <Logo className="h-auto w-[140px]" />
+            <Logo className="h-auto w-[190px]" />
           </div>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{t("tagline")}</p>
         </div>
