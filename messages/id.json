@@ -16,11 +16,16 @@
     "home": "Beranda",
     "products": "Template",
     "services": "Layanan",
-    "portfolio": "Portofolio",
-    "contact": "Kontak",
+    "portfolio": "Karya kami",
+    "contact": "Tentang Kami",
     "openMenu": "Buka menu navigasi",
     "closeMenu": "Tutup menu navigasi",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "switchToDark": "Aktifkan mode gelap",
+    "switchToLight": "Aktifkan mode terang",
+    "themeToggle": "Ubah tema terang atau gelap",
+    "about": "Tentang Kami",
+    "bookCall": "Jadwalkan konsultasi"
   },
   "common": {
     "viewDetails": "Lihat Detail",
@@ -44,16 +49,20 @@
   },
   "home": {
     "hero": {
-      "badge": "Digital agency & template premium",
-      "titleLine1": "Website premium &",
-      "titleHighlight": "template siap pakai",
-      "titleLine2": "untuk pertumbuhan bisnis Anda.",
-      "subtitle": "Websensial merancang website dan landing page fokus konversi untuk bisnis Anda — dan menjual template premium yang bisa langsung Anda pakai.",
-      "primaryCta": "Jelajahi Template",
-      "secondaryCta": "Lihat Portofolio",
-      "secondaryNote": "Konsep & demo karya kami",
-      "sceneBadge": "Solusi digital untuk bisnis modern",
-      "floatChip": "Pratinjau UI"
+      "badge": "Koleksi kecil. Banyak karakter.",
+      "titleLine1": "Karya",
+      "titleHighlight": "karakter.",
+      "titleLine2": "dengan",
+      "subtitle": "Website dan template siap pakai dengan karakter tersendiri — dirancang untuk bisnis nyata, dibuat dengan penuh perhatian.",
+      "primaryCta": "Jelajahi karya",
+      "secondaryCta": "Lihat template",
+      "secondaryNote": "Konsep studio, ditandai transparan.",
+      "sceneBadge": "Awal yang berbeda untuk cerita Anda",
+      "floatChip": "Konsep pilihan",
+      "previewLabel": "Pratinjau konsep pilihan",
+      "exploreFeatured": "Jelajahi konsep {name}",
+      "featureLabel": "Konsep {category}",
+      "heroFoot": "Dibuat dengan niat. Siap disesuaikan dengan dunia Anda."
     },
     "valueProps": [
       {
@@ -74,6 +83,7 @@
       }
     ],
     "featured": {
+      "badge": "Template pilihan",
       "title": "Template unggulan",
       "subtitle": "Produk digital siap pakai — beli, unduh, dan hosting sendiri.",
       "seeAll": "Lihat semua template"
@@ -85,7 +95,8 @@
     "services": {
       "title": "Layanan agency",
       "subtitle": "Butuh lebih dari sekadar template? Kami buatkan website yang disesuaikan.",
-      "seeAll": "Detail layanan"
+      "seeAll": "Detail layanan",
+      "badge": "Apa yang kami kerjakan"
     },
     "portfolio": {
       "title": "Sorotan karya",
@@ -108,7 +119,8 @@
       ]
     },
     "cta": {
-      "title": "Siap menampilkan bisnis Anda secantik ini?",
+      "badge": "Mari berbincang",
+      "title": "Wujudkan ide Anda menjadi produk digital.",
       "text": "Mulai dari template siap pakai atau diskusikan kebutuhan khusus Anda.",
       "primary": "Lihat Template",
       "secondary": "Hubungi kami"
@@ -116,7 +128,8 @@
   },
   "products": {
     "title": "Katalog Template",
-    "subtitle": "Template premium siap pakai — purchase sekali, hosting sendiri, jadi kanal konversi Anda.",
+    "subtitle": "Beli sekali, unduh file, lalu hosting template Anda sendiri.",
+    "badge": "Template siap pakai",
     "searchLabel": "Cari template",
     "searchPlaceholder": "Cari nama atau kata kunci…",
     "previewAlt": "Pratinjau template",
@@ -158,12 +171,14 @@
     "subtitle": "Tim Websensial merancang dan membangun web untuk bisnis Anda — dari nol sampai live.",
     "ctaTitle": "Punya kebutuhan spesifik?",
     "ctaText": "Ceritakan kebutuhan website Anda — kami balas dengan estimasi realistis.",
-    "ctaButton": "Kontak kami"
+    "ctaButton": "Kontak kami",
+    "badge": "Layanan kami"
   },
   "portfolio": {
-    "title": "Proyek Pilihan Kami",
-    "subtitle": "Kumpulan karya konsep dan eksplorasi visual. Setiap karya diberi label transparan, bukan proyek klien.",
-    "badge": "Portofolio",
+    "title": "Pilih karakter Anda.",
+    "subtitle": "Empat belas arah orisinal dengan ragam gaya. Setiap karya konsep diberi label jelas, bukan proyek klien.",
+    "badge": "01 / Koleksi",
+    "conceptNote": "Konsep orisinal studio, dibuat sebagai eksplorasi visual — bukan hasil proyek klien.",
     "filterLabel": "Filter portofolio",
     "filters": { "all": "Semua", "website": "Website", "dashboard": "Dashboard", "landing": "Landing Page" },
     "demo": "Demo",
@@ -173,7 +188,12 @@
     "conceptBadge": "Konsep",
     "clientBadge": "Klien",
     "visitProject": "Buka proyek",
-    "notConfigured": "Tautan proyek belum diatur."
+    "notConfigured": "Tautan proyek belum diatur.",
+    "sourceCodeUnavailable": "Kode sumber belum diatur",
+    "behindDesign": "Di balik desain",
+    "tickerItems": ["Website responsif", "Template premium siap pakai", "Desain dibuat dengan perhatian", "Dari ide menuju digital"],
+    "tickerPause": "Jeda teks berjalan",
+    "tickerResume": "Lanjutkan teks berjalan"
   },
   "contact": {
     "title": "Hubungi kami",

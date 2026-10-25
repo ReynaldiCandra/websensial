@@ -15,47 +15,44 @@ export default function ProductCard({ product, priority = false }: { product: Pr
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="glass-card glass-card-hover group flex h-full flex-col overflow-hidden rounded-3xl p-2"
+      className="portfolio-card group flex h-full flex-col overflow-hidden rounded-[0.3rem] border-0 bg-transparent transition-colors"
     >
-      <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-soft ring-1 ring-white/80">
+      <div className="portfolio-collection-preview relative aspect-[16/10] overflow-hidden rounded-[0.3rem] bg-[#e4e3df]">
         <Image
           src={product.previews[0]}
           alt={`${product.name[locale]} — ${t("previewAlt")}`}
           fill
           priority={priority}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+          className="portfolio-preview-motion object-cover object-top shadow-[0_8px_24px_-16px_rgba(20,24,24,0.35)]"
         />
         {product.featured ? (
-          <span className="glass absolute top-3 left-3 rounded-full px-3 py-1 text-xs font-bold text-primary">
+          <span className="absolute top-3 left-3 rounded-full border border-white/70 bg-white/90 px-3 py-1 text-[10px] font-semibold text-ink">
             ★ {tc("featured")}
           </span>
         ) : null}
       </div>
 
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <div className="flex items-center gap-2 text-xs font-semibold text-muted">
-          {category ? <span className="rounded-full bg-primary/5 px-2.5 py-1 text-primary">{category.name[locale]}</span> : null}
-          <span className="ml-auto text-[11px] font-medium tracking-wide uppercase">{product.currency}</span>
+      <div className="flex flex-1 flex-col pt-3">
+        <div className="flex items-baseline gap-2">
+          <h3 className="text-base font-semibold tracking-tight text-ink group-hover:text-muted sm:text-lg">
+            {product.name[locale]}
+          </h3>
+          {category ? <span className="ml-auto text-right text-[9px] text-muted sm:text-[10px]">{category.name[locale]}</span> : null}
         </div>
-
-        <h3 className="mt-3 text-base font-extrabold text-ink group-hover:text-primary">
-          {product.name[locale]}
-        </h3>
         <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted">{product.summary[locale]}</p>
 
-        <div className="mt-auto flex items-end justify-between pt-4">
-          <div>
-            <p className="text-[11px] font-semibold text-muted uppercase">{t("cardFrom")}</p>
-            <p className="text-lg font-extrabold text-ink">
-              {formatPrice(product.price, product.currency, locale)}
-            </p>
-          </div>
-          <span className="inline-flex items-center gap-1.5 text-sm font-bold text-primary">
-            {tc("viewDetails")}
-            <InlineArrow className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </span>
+        <div className="mt-3 flex items-center justify-between border-y border-line py-2 text-[10px]">
+          <span className="font-medium text-ink">{tc("viewDetails")} <InlineArrow className="inline h-3 w-3" /></span>
+          <span className="text-muted">{product.format.toUpperCase()}</span>
         </div>
+        <details className="group/details">
+          <summary className="flex cursor-pointer list-none items-center justify-between py-2 text-[10px] text-muted [&::-webkit-details-marker]:hidden">
+            {t("cardFrom")} · {formatPrice(product.price, product.currency, locale)}
+            <span className="text-sm leading-none transition-transform group-open/details:rotate-45">+</span>
+          </summary>
+          <p className="border-t border-line py-2 text-[10px] text-muted">{product.summary[locale]}</p>
+        </details>
       </div>
     </Link>
   );

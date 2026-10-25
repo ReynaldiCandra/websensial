@@ -27,7 +27,7 @@ export default function LanguageSwitcher() {
         value={locale}
         onChange={(e) => switchTo(e.target.value)}
         title={alternativeName}
-        className="h-10 cursor-pointer appearance-none rounded-xl border border-line bg-white pl-3 pr-8 text-sm font-semibold text-ink transition-colors hover:bg-soft"
+        className="h-9 cursor-pointer appearance-none rounded-full border border-line bg-transparent pl-3 pr-8 text-xs font-semibold text-ink transition-colors hover:bg-black/5"
       >
         {locales.map((l) => (
           <option key={l} value={l}>

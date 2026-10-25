@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024" fill="none">
+  <defs>
+    <linearGradient id="wash" x1="180" y1="120" x2="1370" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F7FF"/>
+      <stop offset=".55" stop-color="#F2F0FF"/>
+      <stop offset="1" stop-color="#F8F8F6"/>
+    </linearGradient>
+    <linearGradient id="violet" x1="732" y1="280" x2="1210" y2="746" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7847FF"/>
+      <stop offset="1" stop-color="#4F6BFF"/>
+    </linearGradient>
+    <linearGradient id="softViolet" x1="770" y1="342" x2="1100" y2="686" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0EDFF"/>
+      <stop offset="1" stop-color="#E1E5FF"/>
+    </linearGradient>
+    <linearGradient id="orb" x1="1130" y1="200" x2="1340" y2="424" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C5B5FF" stop-opacity=".82"/>
+      <stop offset="1" stop-color="#8DA2FF" stop-opacity=".45"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1536" height="1024" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
+    <filter id="smallShadow" x="0" y="0" width="1536" height="1024" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="760" cy="505" rx="670" ry="390" fill="url(#wash)"/>
+  <circle cx="1270" cy="210" r="105" fill="url(#orb)" opacity=".52"/>
+  <circle cx="224" cy="710" r="70" fill="#CFC4FF" opacity=".48"/>
+  <circle cx="1320" cy="690" r="34" fill="#9CAEFF" opacity=".55"/>
+  <ellipse cx="756" cy="860" rx="520" ry="42" fill="#30314A" opacity=".12" filter="url(#shadow)"/>
+
+  <!-- Original browser mockup showing a fictional ready-to-customize SaaS template. -->
+  <rect x="104" y="144" width="1212" height="680" rx="28" fill="#25263A" opacity=".12" filter="url(#smallShadow)"/>
+  <rect x="92" y="118" width="1212" height="680" rx="28" fill="#FFFFFF" stroke="#E4E3EC" stroke-width="2"/>
+  <path d="M120 118h1156a28 28 0 0 1 28 28v48H92v-48a28 28 0 0 1 28-28Z" fill="#FBFBFD"/>
+  <path d="M92 194h1212" stroke="#ECECF2" stroke-width="2"/>
+  <circle cx="128" cy="157" r="7" fill="#E7E4F0"/>
+  <circle cx="153" cy="157" r="7" fill="#E7E4F0"/>
+  <circle cx="178" cy="157" r="7" fill="#E7E4F0"/>
+  <rect x="420" y="142" width="500" height="30" rx="15" fill="#F0F0F5"/>
+  <circle cx="440" cy="157" r="4" fill="#C5C5D1"/>
+
+  <path d="M126 226h1128" stroke="#F0EFF4" stroke-width="2"/>
+  <rect x="136" y="211" width="35" height="35" rx="12" fill="#6328F5"/>
+  <path d="M146 235v-14l8-5 8 5v14h-5v-8h-6v8h-5Z" fill="#FFFFFF"/>
+  <text x="182" y="236" fill="#202031" font-family="Arial,sans-serif" font-size="21" font-weight="700" letter-spacing="-.6">aurora</text>
+  <text x="826" y="234" fill="#777887" font-family="Arial,sans-serif" font-size="13">Overview</text>
+  <text x="915" y="234" fill="#777887" font-family="Arial,sans-serif" font-size="13">Features</text>
+  <text x="1005" y="234" fill="#777887" font-family="Arial,sans-serif" font-size="13">Stories</text>
+  <rect x="1100" y="207" width="126" height="38" rx="19" fill="#171A1B"/>
+  <text x="1127" y="231" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="12" font-weight="600">Get started</text>
+
+  <text x="148" y="337" fill="#757581" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="2.2">A CALMER WAY TO WORK</text>
+  <text x="144" y="414" fill="#171A1B" font-family="Georgia,serif" font-size="60" letter-spacing="-2">Make room for</text>
+  <text x="144" y="481" fill="#6328F5" font-family="Georgia,serif" font-size="60" font-style="italic" letter-spacing="-2">your next idea.</text>
+  <text x="148" y="531" fill="#747780" font-family="Arial,sans-serif" font-size="15">A thoughtful digital workspace to plan,</text>
+  <text x="148" y="556" fill="#747780" font-family="Arial,sans-serif" font-size="15">create, and bring good work to life.</text>
+  <rect x="148" y="589" width="142" height="46" rx="23" fill="#6328F5"/>
+  <text x="174" y="617" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="13" font-weight="600">Explore Aurora</text>
+  <rect x="304" y="589" width="142" height="46" rx="23" fill="#FFFFFF" stroke="#E4E3EC" stroke-width="2"/>
+  <text x="337" y="617" fill="#32333B" font-family="Arial,sans-serif" font-size="13" font-weight="600">How it works</text>
+
+  <rect x="600" y="274" width="604" height="450" rx="28" fill="url(#violet)"/>
+  <circle cx="1111" cy="316" r="86" fill="#A58BFF" opacity=".27"/>
+  <circle cx="680" cy="669" r="52" fill="#FFFFFF" opacity=".11"/>
+  <rect x="654" y="328" width="508" height="354" rx="18" fill="#FFFFFF" stroke="#F2F1FA" stroke-width="2"/>
+  <path d="M672 328h472a18 18 0 0 1 18 18v35H654v-35a18 18 0 0 1 18-18Z" fill="#FBFBFD"/>
+  <circle cx="679" cy="350" r="5" fill="#E3E2EC"/>
+  <circle cx="697" cy="350" r="5" fill="#E3E2EC"/>
+  <rect x="722" y="343" width="214" height="14" rx="7" fill="#F0EFF5"/>
+  <path d="M654 382h508" stroke="#EFEEF4" stroke-width="2"/>
+  <rect x="676" y="405" width="110" height="16" rx="8" fill="#252638"/>
+  <text x="676" y="451" fill="#737584" font-family="Arial,sans-serif" font-size="11">Weekly overview</text>
+  <rect x="676" y="464" width="145" height="74" rx="12" fill="#F7F6FC"/>
+  <text x="691" y="487" fill="#818291" font-family="Arial,sans-serif" font-size="10">Projects completed</text>
+  <text x="691" y="520" fill="#252638" font-family="Arial,sans-serif" font-size="24" font-weight="700">24</text>
+  <rect x="831" y="464" width="145" height="74" rx="12" fill="#F7F6FC"/>
+  <text x="846" y="487" fill="#818291" font-family="Arial,sans-serif" font-size="10">Focus time</text>
+  <text x="846" y="520" fill="#252638" font-family="Arial,sans-serif" font-size="24" font-weight="700">18.5h</text>
+  <rect x="986" y="464" width="154" height="74" rx="12" fill="#F7F6FC"/>
+  <text x="1001" y="487" fill="#818291" font-family="Arial,sans-serif" font-size="10">Team rhythm</text>
+  <text x="1001" y="520" fill="#6328F5" font-family="Arial,sans-serif" font-size="22" font-weight="700">On track</text>
+  <rect x="676" y="555" width="464" height="102" rx="12" fill="#FAFAFC"/>
+  <path d="M700 624c35-27 55-20 84-39 31-20 43 9 72-2 27-10 39-43 67-34 25 8 45 2 70-13 25-14 48 1 75-13" stroke="#7250F5" stroke-width="4" stroke-linecap="round"/>
+  <path d="M700 624c35-27 55-20 84-39 31-20 43 9 72-2 27-10 39-43 67-34 25 8 45 2 70-13 25-14 48 1 75-13v69H700v32Z" fill="#A58BFF" opacity=".12"/>
+  <path d="M700 637h418" stroke="#E6E5EE" stroke-width="2" stroke-dasharray="4 8"/>
+
+  <!-- Mobile companion preview. -->
+  <rect x="1024" y="438" width="258" height="462" rx="38" fill="#242536" opacity=".15" filter="url(#smallShadow)"/>
+  <rect x="1012" y="423" width="258" height="462" rx="38" fill="#222331"/>
+  <rect x="1021" y="432" width="240" height="444" rx="31" fill="#FFFFFF"/>
+  <rect x="1091" y="442" width="100" height="19" rx="10" fill="#222331"/>
+  <rect x="1040" y="479" width="30" height="30" rx="10" fill="#6328F5"/>
+  <path d="M1048 500v-12l7-4 7 4v12h-4v-7h-6v7h-4Z" fill="#FFFFFF"/>
+  <text x="1078" y="499" fill="#252638" font-family="Arial,sans-serif" font-size="16" font-weight="700">aurora</text>
+  <text x="1043" y="549" fill="#777887" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="1">YOUR WEEK, IN VIEW</text>
+  <text x="1043" y="581" fill="#20212D" font-family="Georgia,serif" font-size="26">Small steps,</text>
+  <text x="1043" y="611" fill="#6328F5" font-family="Georgia,serif" font-size="26" font-style="italic">big momentum.</text>
+  <rect x="1043" y="631" width="194" height="116" rx="16" fill="url(#softViolet)"/>
+  <circle cx="1080" cy="688" r="25" fill="#FFFFFF" opacity=".72"/>
+  <path d="M1080 673v15l11 7" stroke="#6328F5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1117" y="682" fill="#777887" font-family="Arial,sans-serif" font-size="10">FOCUS SESSION</text>
+  <text x="1117" y="704" fill="#252638" font-family="Arial,sans-serif" font-size="17" font-weight="700">25 minutes</text>
+  <rect x="1043" y="765" width="194" height="42" rx="21" fill="#6328F5"/>
+  <text x="1101" y="791" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="12" font-weight="600">Start session</text>
+  <path d="M1094 850h94" stroke="#E9E8EF" stroke-width="5" stroke-linecap="round"/>
+
+  <rect x="132" y="735" width="276" height="66" rx="18" fill="#FFFFFF" stroke="#E8E6EF" stroke-width="2"/>
+  <circle cx="165" cy="768" r="15" fill="#F0EDFF"/>
+  <path d="m159 768 4 4 8-9" stroke="#6328F5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="192" y="763" fill="#777887" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="1">READY FOR YOUR BRAND</text>
+  <text x="192" y="783" fill="#252638" font-family="Arial,sans-serif" font-size="12" font-weight="600">Responsive · Customizable · Yours</text>
+
+  <rect x="1112" y="276" width="184" height="48" rx="24" fill="#FFFFFF" stroke="#E7E4F0" stroke-width="2"/>
+  <circle cx="1137" cy="300" r="7" fill="#6328F5"/>
+  <text x="1154" y="305" fill="#4E4E5B" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing=".7">WEBSITE TEMPLATE</text>
+</svg>

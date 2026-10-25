@@ -5,140 +5,165 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import Reveal from "@/components/motion/Reveal";
 import Container from "@/components/ui/Container";
-import { GlassObject, SectionBackground } from "@/components/ui/GlassDecor";
+import { InlineArrow } from "@/components/ui/Button";
 import { portfolioFilters, portfolioProjects, type PortfolioFilter } from "@/lib/data/portfolio";
 
 type FilterValue = "all" | PortfolioFilter;
+
+export function PortfolioTicker() {
+  const t = useTranslations("portfolio");
+  const [tickerPaused, setTickerPaused] = useState(false);
+  const tickerItems = t.raw("tickerItems") as string[];
+
+  return (
+    <div className="portfolio-marquee relative left-1/2 flex w-screen -translate-x-1/2 items-center overflow-hidden bg-[var(--ws-ink)] py-5 text-[var(--ws-bg)] sm:py-6">
+      <p className="sr-only">{tickerItems.join(" · ")}</p>
+      <div aria-hidden="true" className={`portfolio-marquee-track${tickerPaused ? " is-paused" : ""}`}>
+        {[0, 1].map((copy) => (
+          <div key={copy} className="portfolio-marquee-group">
+            {tickerItems.map((item, index) => (
+              <span key={`${copy}-${index}`} className="portfolio-marquee-item">
+                {item}
+                <svg viewBox="0 0 32 32" className="h-6 w-6 shrink-0 text-[var(--ws-bg)] sm:h-8 sm:w-8" fill="none" aria-hidden="true">
+                  <path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8m0-19.8L6.1 25.9" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+                </svg>
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => setTickerPaused((paused) => !paused)}
+        aria-pressed={tickerPaused}
+        aria-label={tickerPaused ? t("tickerResume") : t("tickerPause")}
+        className="portfolio-marquee-toggle absolute right-3 z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[var(--ws-bg)]/90 bg-[var(--ws-ink)] text-[var(--ws-bg)] transition-colors hover:bg-[var(--ws-bg)] hover:text-[var(--ws-ink)] sm:right-8 sm:h-14 sm:w-14"
+      >
+        {tickerPaused ? (
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+        ) : (
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z" /></svg>
+        )}
+      </button>
+    </div>
+  );
+}
 
 export default function PortfolioShowcase({ showHeader = true, limit }: { showHeader?: boolean; limit?: number }) {
   const t = useTranslations("portfolio");
   const locale = useLocale() as "id" | "en";
   const [filter, setFilter] = useState<FilterValue>("all");
-
   const projects = useMemo(() => {
     const matching = portfolioProjects.filter((p) => filter === "all" || p.filter === filter);
-    return limit ? matching.slice(0, limit) : matching;
+    return matching.slice(0, limit ?? matching.length);
   }, [filter, limit]);
 
   const filterOptions: FilterValue[] = ["all", ...portfolioFilters];
 
   return (
-    <section className="bg-aurora-soft relative overflow-hidden">
-      <SectionBackground imageClassName="opacity-50" />
-      <GlassObject asset="ring" className="-top-20 -right-20 hidden w-80 rotate-12 opacity-45 lg:block" float />
-      <GlassObject asset="sphere" className="-bottom-12 -left-12 hidden w-36 opacity-60 xl:block" float />
-      <GlassObject asset="diamond" className="top-1/3 -right-10 hidden w-20 -rotate-12 opacity-60 xl:block" float />
-      <GlassObject asset="cube" className="top-[44%] left-2 hidden w-24 -rotate-12 opacity-55 2xl:block" />
-      <Container className="relative py-20">
-        {showHeader ? (
-        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <section id="work" className="portfolio-collection-section border-y border-line bg-[var(--ws-bg-soft)]">
+      <Container className="py-14 sm:py-16 lg:py-20">
+        <div className="mb-8 flex flex-col gap-5 sm:mb-10 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-xl">
-            <span className="inline-flex rounded-full bg-primary/5 px-3 py-1 text-[11px] font-bold tracking-widest text-primary uppercase ring-1 ring-primary/15">
-              {t("badge")}
-            </span>
-            <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">{t("title")}</h2>
-            <p className="mt-2 text-[15px] leading-relaxed text-muted">{t("subtitle")}</p>
+            {showHeader ? <p className="eyebrow">{t("badge")}</p> : null}
+            <h2 className="mt-3 font-editorial text-4xl leading-[0.95] tracking-[-0.035em] text-ink sm:text-5xl">{t("title")}</h2>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">{showHeader ? t("conceptNote") : t("subtitle")}</p>
           </div>
-
-          <div role="group" aria-label={t("filterLabel")} className="flex flex-wrap gap-2">
-            {filterOptions.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => setFilter(option)}
-                aria-pressed={filter === option}
-                className={`rounded-full px-4 py-2 text-xs font-bold whitespace-nowrap transition-colors sm:text-sm ${
-                  filter === option
-                    ? "bg-primary text-white shadow-[0_8px_20px_-8px_rgba(99,40,245,0.6)]"
-                    : "bg-white text-muted ring-1 ring-line hover:text-primary"
-                }`}
-              >
-                {t(`filters.${option}`)}
-              </button>
-            ))}
-          </div>
+          {showHeader ? (
+            <div role="group" aria-label={t("filterLabel")} className="flex flex-wrap gap-1.5">
+              {filterOptions.map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => setFilter(option)}
+                  aria-pressed={filter === option}
+                  className={`rounded-full px-3.5 py-2 text-[11px] font-semibold whitespace-nowrap transition-colors ${
+                    filter === option ? "bg-ink text-white" : "border border-line bg-transparent text-muted hover:text-ink"
+                  }`}
+                >
+                  {t(`filters.${option}`)}
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
-      ) : null}
 
       {projects.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-line bg-soft px-6 py-12 text-center text-sm text-muted">
           {t("empty")}
         </p>
       ) : (
-        <div className="grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:gap-4 lg:grid-cols-[repeat(4,minmax(0,1fr))] xl:gap-5">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-2 lg:grid-cols-2">
           {projects.map((project, index) => (
             <Reveal key={project.id} delay={Math.min(index * 0.06, 0.3)}>
-              <article className="glass-card glass-card-hover group flex h-full flex-col overflow-hidden rounded-3xl p-2">
+              <article id={project.slug} className="portfolio-card group flex h-full flex-col overflow-hidden rounded-[0.3rem] border-0 bg-transparent">
                 {project.previewPath ? (
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-soft to-lavender/20 ring-1 ring-white/80 sm:aspect-[16/10]">
-                    <Image
-                      src={project.previewPath}
-                      alt={`${project.name[locale]} — ${project.category[locale]}`}
-                      fill
-                      sizes="(max-width: 640px) 45vw, (max-width: 1024px) 48vw, 25vw"
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                    <span className="glass absolute top-2 left-2 rounded-full px-2 py-0.5 text-[9px] font-bold text-primary sm:top-3 sm:left-3 sm:px-3 sm:py-1 sm:text-[11px]">
-                      {project.category[locale]}
-                    </span>
+                  <div className="portfolio-collection-preview relative aspect-[16/10] overflow-hidden rounded-[0.3rem] bg-[#e4e3df] p-3 sm:p-5">
+                    <div className="portfolio-preview-motion absolute inset-3 overflow-hidden bg-white shadow-[0_8px_24px_-16px_rgba(20,24,24,0.35)] sm:inset-5">
+                      <Image
+                        src={project.previewPath}
+                        alt={`${project.name[locale]} — ${project.category[locale]}`}
+                        fill
+                        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 44vw"
+                        className="object-cover object-top"
+                        loading={index < 2 ? "eager" : "lazy"}
+                      />
+                    </div>
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-primary/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                     />
                   </div>
                 ) : null}
 
-                <div className="flex flex-1 flex-col p-3 sm:p-4">
-                  {/* Padding stays compact so the preview keeps the spotlight. */}
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`rounded-full px-1.5 py-0.5 text-[9px] font-extrabold tracking-wider uppercase sm:px-2 sm:text-[10px] ${
-                        project.kind === "concept" ? "bg-lavender/20 text-primary" : "bg-primary text-white"
-                      }`}
-                    >
-                      {project.kind === "concept" ? t("conceptBadge") : t("clientBadge")}
+                <div className="flex flex-1 flex-col pt-3">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[9px] tabular-nums text-muted">{String(index + 1).padStart(2, "0")}</span>
+                    <h3 className="text-base font-semibold tracking-tight text-ink sm:text-lg">
+                      {project.name[locale]}
+                    </h3>
+                    <span className="ml-auto text-right text-[9px] text-muted sm:text-[10px]">
+                      {project.category[locale]}
                     </span>
                   </div>
-                  {/* Description intentionally omitted — it belongs on the project
-                      detail view so the cards stay compact and premium. */}
-                  <h3 className="mt-2 text-[13px] leading-snug font-extrabold text-ink sm:mt-3 sm:text-[15px]">
-                    {project.name[locale]}
-                  </h3>
+                  <p className="mt-1 line-clamp-1 text-xs text-muted">{project.description[locale]}</p>
 
-                  <div className="mt-auto pt-4 sm:pt-5">
-                    <div className="flex flex-wrap gap-1 sm:gap-1.5">
+                  <div className="mt-3 flex items-center justify-between border-y border-line py-2 text-[10px]">
+                    {project.projectUrl ? (
+                      <a
+                        href={project.projectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 font-medium text-ink sm:text-xs"
+                      >
+                        {t("demo")} <InlineArrow className="h-3 w-3" />
+                      </a>
+                    ) : (
+                      <span className="font-medium text-muted" title={t("demoUnavailable")}>
+                        {t("demo")} · {t("demoSoon")}
+                      </span>
+                    )}
+                    <span className="text-muted">{t("sourceCodeUnavailable")}</span>
+                  </div>
+                  <details className="group/details">
+                    <summary className="flex cursor-pointer list-none items-center justify-between py-2 text-[10px] text-muted [&::-webkit-details-marker]:hidden">
+                      {t("behindDesign")}
+                      <span className="text-sm leading-none transition-transform group-open/details:rotate-45">+</span>
+                    </summary>
+                    <div className="flex flex-wrap gap-x-2 gap-y-1 border-t border-line py-2">
                       {project.tech.map((tech) => (
-                        <span key={tech} className="rounded-md bg-soft px-1.5 py-0.5 text-[9px] font-semibold text-muted sm:px-2 sm:text-[10px]">
+                        <span key={tech} className="text-[10px] text-muted">
                           {tech}
                         </span>
                       ))}
                     </div>
-                    <div className="mt-3 flex justify-end sm:mt-4">
-                      {project.projectUrl ? (
-                        <a
-                          href={project.projectUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary hover:bg-primary hover:text-white sm:px-3.5 sm:py-1.5 sm:text-xs"
-                        >
-                          {t("demo")} →
-                        </a>
-                      ) : (
-                        <span
-                          className="rounded-full bg-soft px-2.5 py-1 text-[10px] font-bold text-muted ring-1 ring-line sm:px-3.5 sm:py-1.5 sm:text-xs"
-                          title={t("demoUnavailable")}
-                        >
-                          {t("demo")} · {t("demoSoon")}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                  </details>
                 </div>
               </article>
             </Reveal>
           ))}
         </div>
-        )}
+      )}
       </Container>
     </section>
   );

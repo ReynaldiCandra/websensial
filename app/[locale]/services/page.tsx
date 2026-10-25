@@ -4,7 +4,6 @@ import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
-import { GlassObject, SectionBackground } from "@/components/ui/GlassDecor";
 import ServiceCards from "@/components/marketing/ServiceCards";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -26,19 +25,17 @@ export default async function ServicesPage({ params }: Props) {
   const t = await getTranslations("services");
 
   return (
-    <section className="bg-aurora-soft relative overflow-hidden">
-      <SectionBackground imageClassName="opacity-45" />
-      <GlassObject asset="panel" className="-top-10 -right-10 hidden w-64 rotate-6 opacity-45 lg:block" float />
-      <GlassObject asset="sphere" className="-bottom-16 -left-12 hidden w-32 opacity-60 xl:block" />
-      <Container className="relative pt-14 pb-20">
+    <section className="bg-[var(--ws-bg)]">
+      <Container className="pt-12 pb-20 sm:pt-16">
         <Reveal>
+          <p className="eyebrow mb-3">{t("badge")}</p>
           <SectionHeading title={t("title")} subtitle={t("subtitle")} />
         </Reveal>
         <ServiceCards showHeading={false} />
 
         <Reveal className="mt-16">
-          <div className="glass-card rounded-3xl px-8 py-12 text-center">
-            <h2 className="text-2xl font-extrabold tracking-tight text-balance text-ink">{t("ctaTitle")}</h2>
+          <div className="border-y border-line px-8 py-10 text-center">
+            <h2 className="font-editorial text-3xl tracking-tight text-balance text-ink sm:text-4xl">{t("ctaTitle")}</h2>
             <p className="mx-auto mt-2 max-w-lg text-sm text-muted">{t("ctaText")}</p>
             <div className="mt-6">
               <ButtonLink href="/contact" size="lg">

@@ -23,12 +23,11 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-line bg-soft">
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="border-t border-line bg-[var(--ws-bg)]">
+      <div className="grid w-full gap-8 px-4 py-10 sm:grid-cols-2 sm:px-7 lg:grid-cols-4 lg:px-10 xl:px-14">
         <div className="sm:col-span-2 lg:col-span-1">
-          <div className="flex items-center gap-2.5">
-            <Logo className="h-8 w-8" />
-            <span className="text-sm font-extrabold tracking-[0.18em] text-ink">WEBSENSIAL</span>
+          <div className="flex items-center">
+            <Logo className="h-auto w-[140px]" />
           </div>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{t("tagline")}</p>
         </div>
@@ -72,8 +71,8 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-5 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} {siteConfig.name}. {t("rights")}</p>
+        <div className="flex w-full flex-col gap-2 px-4 py-4 text-[10px] text-muted sm:flex-row sm:items-center sm:justify-between sm:px-7 lg:px-10 xl:px-14">
+          <p>© {year} Websensial. {t("rights")}</p>
           <p>{t("demoNotice")}</p>
         </div>
       </div>

@@ -3,7 +3,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/motion/Reveal";
-import { GlassObject, SectionBackground } from "@/components/ui/GlassDecor";
 import ContactForm from "@/components/forms/ContactForm";
 import { siteConfig } from "@/lib/data/site";
 
@@ -26,19 +25,16 @@ export default async function ContactPage({ params }: Props) {
   const t = await getTranslations("contact");
 
   return (
-    <section className="bg-aurora-soft relative overflow-hidden">
-      <SectionBackground imageClassName="opacity-45" />
-      <GlassObject asset="diamond" className="top-10 right-[6%] hidden w-16 rotate-12 opacity-55 lg:block" float />
-      <GlassObject asset="sphere" className="-bottom-14 -left-10 hidden w-28 opacity-55 xl:block" />
-      <Container className="relative pt-14 pb-24">
+    <section className="bg-[var(--ws-bg)]">
+      <Container className="pt-12 pb-20 sm:pt-16">
         <Reveal>
           <SectionHeading title={t("title")} subtitle={t("subtitle")} />
         </Reveal>
 
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <Reveal className="order-2 lg:order-1">
-            <div className="glass-card rounded-3xl p-6">
-            <h2 className="text-sm font-extrabold tracking-wider text-muted uppercase">{t("infoTitle")}</h2>
+            <div className="border-t border-line py-6">
+            <h2 className="eyebrow">{t("infoTitle")}</h2>
             <dl className="mt-5 space-y-4 text-sm">
               <div>
                 <dt className="font-bold text-ink">{t("emailLabel")}</dt>
@@ -65,7 +61,7 @@ export default async function ContactPage({ params }: Props) {
         </Reveal>
 
         <Reveal className="order-1 lg:order-2" delay={0.1}>
-          <div className="glass-card rounded-3xl p-6 sm:p-8">
+          <div className="border-t border-line py-6 sm:py-8">
             <ContactForm />
           </div>
         </Reveal>

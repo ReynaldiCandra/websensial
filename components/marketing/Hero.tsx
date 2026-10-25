@@ -1,99 +1,108 @@
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { ButtonLink, InlineArrow } from "@/components/ui/Button";
+import { InlineArrow } from "@/components/ui/Button";
 import Reveal from "@/components/motion/Reveal";
+import { portfolioProjects } from "@/lib/data/portfolio";
 
-/**
- * Hero visual = art-directed composition from the visual asset pack
- * (`public/hero/hero-dashboard-composition.png`, converted to WebP).
- * The artwork already contains the dashboard, floating panels, glass objects
- * and the phone mockup as one coherent scene, so nothing overlaps the text,
- * CTAs or each other. Copy and CTAs stay real HTML on top of the page.
- */
-const SCENE_BLUR =
-  "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAwCdASoUAAsAPu1iqU2ppaOiMAgBMB2JYwAAXKOqCju7PHkfy/AAAP7tSMBwozlTYzznsQsXmt63NATLDG7K+kT4BnLdpakh3INIAAA=";
+const heroProjectSlugs = ["fallow-botanical-story", "offcut-furniture-atelier", "maree-coastal-bath-house"];
 
 export default function Hero() {
   const t = useTranslations("home.hero");
-  const tc = useTranslations("common");
+  const locale = useLocale() as "id" | "en";
+  const heroProjects = heroProjectSlugs
+    .map((slug) => portfolioProjects.find((project) => project.slug === slug))
+    .filter((project) => project?.previewPath) as (typeof portfolioProjects)[number][];
+  const [featured, ...stackedProjects] = heroProjects;
+
+  if (!featured?.previewPath) return null;
 
   return (
-    <section className="bg-mesh relative overflow-x-clip pt-8 pb-0 sm:pt-10 lg:pt-14">
-      {/* Ambient lavender light behind the scene so the artwork blends into the page */}
-      <div
-        aria-hidden="true"
-        className="glow-drift pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] bg-[radial-gradient(60%_70%_at_70%_45%,rgba(165,139,255,0.28),transparent_72%)] lg:block"
-      />
-
-      <div className="relative mx-auto grid max-w-[1360px] items-center gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-6">
-        <Reveal className="relative z-20 max-w-[34rem]">
-          <span className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-bold text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+    <section className="relative overflow-hidden bg-[var(--ws-bg)]">
+      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-6 px-4 pt-12 pb-7 sm:px-7 sm:pt-16 lg:min-h-[610px] lg:grid-cols-[1.06fr_1fr] lg:gap-12 lg:px-10 lg:pt-14 xl:px-14">
+        <Reveal className="relative z-10 max-w-[38rem]">
+          <p className="eyebrow mb-6 flex items-center gap-2.5">
+            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-ink" />
             {t("badge")}
-          </span>
-
-          <h1 className="mt-5 text-[2.15rem] leading-[1.08] font-extrabold tracking-tight text-balance text-ink sm:text-[2.85rem] lg:text-[2.9rem] xl:text-[3.05rem]">
-            {t("titleLine1")}{" "}
-            <span className="bg-gradient-to-r from-primary via-[#7c5cff] to-blue bg-clip-text text-transparent">
-              {t("titleHighlight")}
-            </span>{" "}
-            {t("titleLine2")}
+          </p>
+          <h1 className="text-[clamp(3.75rem,7.5vw,7.25rem)] leading-[0.88] font-bold tracking-[-0.075em] text-ink text-balance">
+            <span className="inline-flex items-start gap-2 sm:gap-4">
+              {t("titleLine1")}
+              <svg aria-hidden="true" viewBox="0 0 32 32" className="mt-[0.08em] h-[0.34em] w-[0.34em] shrink-0">
+                <path d="M16 1v30M1 16h30M5.4 5.4l21.2 21.2m0-21.2L5.4 26.6" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+              </svg>
+            </span>
+            <br />
+            <span className="mr-[0.18em] text-[0.76em]">{t("titleLine2")}</span><span className="font-editorial font-normal italic tracking-[-0.045em]">{t("titleHighlight")}</span>
           </h1>
-
-          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-muted sm:text-base">{t("subtitle")}</p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <ButtonLink
-              href="/products"
-              size="lg"
-              className="bg-gradient-to-r from-primary to-blue shadow-[0_12px_32px_-8px_rgba(99,40,245,0.55)] hover:from-primary-strong hover:to-primary"
-            >
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-muted sm:text-[15px]">{t("subtitle")}</p>
+          <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a href="#work" className="inline-flex min-h-14 items-center gap-5 rounded-full bg-ink py-2 pr-2 pl-6 text-sm font-medium text-[var(--ws-bg)] transition-transform hover:-translate-y-0.5">
               {t("primaryCta")}
-              <InlineArrow />
-            </ButtonLink>
-            <Link
-              href="/portfolio"
-              className="group inline-flex items-center gap-3 rounded-xl px-2 py-1.5 text-sm font-bold text-ink hover:text-primary"
-            >
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-white text-primary shadow-[0_6px_20px_-6px_rgba(87,65,190,0.35)] transition-transform group-hover:scale-105">
-                <svg viewBox="0 0 24 24" className="ml-0.5 h-4 w-4" fill="currentColor" aria-hidden="true">
-                  <path d="M7 4.5v15l12-7.5z" />
-                </svg>
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--ws-bg)] text-ink">
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v18m-8-8 8 8 8-8" /></svg>
               </span>
-              <span className="text-left leading-tight">
-                {t("secondaryCta")}
-                <span className="mt-0.5 block text-xs font-medium text-muted">{t("secondaryNote")}</span>
-              </span>
+            </a>
+            <Link href="/products" className="group inline-flex items-center gap-2 text-xs font-medium text-ink underline decoration-line underline-offset-4 hover:decoration-ink sm:text-sm">
+              {t("secondaryCta")}
+              <InlineArrow className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </Reveal>
 
-        <Reveal
-          delay={0.12}
-          className="relative z-0 w-full lg:-mr-6 lg:w-[calc(100%+1.5rem)] xl:-mr-12 xl:w-[calc(100%+3rem)]"
-        >
-          <span className="glass absolute -top-3 right-2 z-20 hidden items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold text-primary sm:inline-flex lg:right-6">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+        <Reveal delay={0.12} className="relative min-w-0">
+          <span className="absolute top-0 right-0 z-30 max-w-48 -rotate-3 text-right font-editorial text-sm leading-snug italic text-muted sm:text-lg">
             {t("sceneBadge")}
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="ml-1 inline h-4 w-4 rotate-90" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M5 5l14 14M5 19h14V5" /></svg>
           </span>
-
-          {/* The whole artwork drifts as one scene; nothing inside it moves on its own. */}
-          <div className="hero-scene-float">
-            <Image
-              src="/hero/hero-dashboard-composition.webp"
-              alt={tc("heroDecorationAriaLabel")}
-              width={1600}
-              height={900}
-              priority
-              quality={88}
-              placeholder="blur"
-              blurDataURL={SCENE_BLUR}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 96vw, 60vw"
-              className="hero-scene-mask h-auto w-full select-none"
-            />
+          <div className="hero-feature-stack relative mt-10 h-[320px] sm:mt-12 sm:h-[390px] lg:mt-8 lg:h-[440px]" aria-label={t("previewLabel")}>
+            <div aria-hidden="true" className="absolute inset-[4%_2%] rounded-[50%] border border-line [transform:rotate(-23deg)_scaleY(1.05)]" />
+            {stackedProjects.map((project, index) => (
+              <div
+                key={project.id}
+                aria-hidden="true"
+                className={`hero-feature-card absolute w-[94%] overflow-hidden rounded-xl border border-line bg-[var(--ws-surface)] shadow-[0_18px_35px_-12px_rgba(25,28,24,0.18)] ${index === 0 ? "left-[4%] top-[12%] z-10 rotate-[7deg] scale-[0.95]" : "left-[1%] top-[5%] z-0 -rotate-[9deg] scale-[0.9]"}`}
+              >
+                <div className="relative aspect-[16/9] overflow-hidden bg-soft">
+                  <Image src={project.previewPath!} alt="" fill sizes="(max-width: 1024px) 92vw, 42vw" className="object-cover" />
+                </div>
+                <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3 sm:px-5 sm:py-4">
+                  <span className="text-xs font-semibold text-ink sm:text-sm">{project.name[locale]}</span>
+                  <span className="text-[9px] uppercase tracking-[0.12em] text-muted sm:text-[10px]">{project.category[locale]}</span>
+                </div>
+              </div>
+            ))}
+            <a
+              href={`#${featured.slug}`}
+              aria-label={t("exploreFeatured", { name: featured.name[locale] })}
+              className="hero-feature-card absolute left-[3%] top-[19%] z-20 block w-[94%] overflow-hidden rounded-xl border border-line bg-[var(--ws-surface)] shadow-[0_24px_42px_-14px_rgba(25,28,24,0.22)] transition-transform duration-700 hover:-translate-y-2"
+            >
+              <div className="relative aspect-[16/9] overflow-hidden bg-soft">
+                <Image
+                  src={featured.previewPath}
+                  alt={`${featured.name[locale]} — ${featured.category[locale]}`}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 92vw, 42vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3 sm:px-5 sm:py-4">
+                <span>
+                  <span className="mb-1 block text-[8px] font-medium uppercase tracking-[0.12em] text-muted sm:text-[9px]">{t("featureLabel", { category: featured.category[locale] })}</span>
+                  <span className="block text-base font-semibold tracking-tight text-ink sm:text-lg">{featured.name[locale]}</span>
+                </span>
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-7 w-7 shrink-0 text-ink sm:h-8 sm:w-8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 19 19 5M5 5h14v14" /></svg>
+              </div>
+            </a>
           </div>
         </Reveal>
+      </div>
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-7 lg:px-10 xl:px-14">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line py-5 text-[11px] text-muted sm:text-xs">
+          <p><span aria-hidden="true" className="mr-2 text-ink">✳</span>{t("heroFoot")}</p>
+          <p>{t("secondaryNote")}</p>
+        </div>
       </div>
     </section>
   );

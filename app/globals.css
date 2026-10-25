@@ -2,19 +2,48 @@
 
 /* ─── Design tokens ─────────────────────────────────────────────────────── */
 :root {
-  --ws-bg: #ffffff;
-  --ws-bg-soft: #f7f8ff;
+  --ws-bg: #f8f8f6;
+  --ws-bg-soft: #f0f0ed;
+  --ws-accent-wash: rgba(99, 40, 245, 0.1);
+  --ws-surface: #ffffff;
+  --ws-cta: #171a1b;
+  --ws-cta-foreground: #ffffff;
+  --ws-cta-muted: rgba(255, 255, 255, 0.65);
+  --ws-logo-surface: transparent;
+  --ws-primary: #171a1b;
+  --ws-primary-strong: #343839;
+  --ws-blue: #79858a;
+  --ws-lavender: #d9dcda;
+  --ws-ink: #171a1b;
+  --ws-muted: #6c7271;
+  --ws-border: #dedfdb;
+  --ws-glass-bg: rgba(248, 248, 246, 0.94);
+  --ws-glass-border: rgba(222, 223, 219, 0.9);
+  --ws-shadow-soft: 0 8px 28px -18px rgba(20, 24, 24, 0.28);
+  --ws-shadow-card: 0 8px 24px -18px rgba(20, 24, 24, 0.3);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ws-bg: #111216;
+  --ws-bg-soft: #1b1c22;
+  --ws-surface: #1b1c22;
+  --ws-cta: #24173f;
+  --ws-cta-foreground: #f7f5ff;
+  --ws-cta-muted: #c6bfd6;
+  --ws-logo-surface: #ffffff;
   --ws-primary: #6328f5;
   --ws-primary-strong: #4b18d6;
-  --ws-blue: #4f6bff;
-  --ws-lavender: #a58bff;
-  --ws-ink: #171936;
-  --ws-muted: #69708a;
-  --ws-border: #e4e7f5;
-  --ws-glass-bg: rgba(255, 255, 255, 0.62);
-  --ws-glass-border: rgba(255, 255, 255, 0.85);
-  --ws-shadow-soft: 0 12px 40px -8px rgba(87, 65, 190, 0.12);
-  --ws-shadow-card: 0 4px 24px -6px rgba(87, 65, 190, 0.16);
+  --ws-blue: #8da2ff;
+  --ws-lavender: #302643;
+  --ws-accent-wash: rgba(99, 40, 245, 0.16);
+  --ws-ink: #f3f2f7;
+  --ws-muted: #a5a5b1;
+  --ws-border: #34353e;
+  --ws-glass-bg: rgba(26, 27, 33, 0.96);
+  --ws-glass-border: rgba(65, 65, 76, 0.9);
+  --ws-shadow-soft: 0 8px 28px -18px rgba(0, 0, 0, 0.72);
+  --ws-shadow-card: 0 8px 24px -18px rgba(0, 0, 0, 0.68);
 }
 
 @theme inline {
@@ -28,24 +57,55 @@
   --color-muted: var(--ws-muted);
   --color-line: var(--ws-border);
   --font-sans: var(--font-jakarta), var(--ws-fallback-sans, ui-sans-serif), system-ui, sans-serif;
+  --font-editorial: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
 }
 
 html {
+  color-scheme: light;
   --ws-fallback-sans: "Plus Jakarta Sans";
   /* Sticky header height + breathing room for in-page anchors. */
   scroll-padding-top: 6rem;
 }
 
+
 /* ─── Base ──────────────────────────────────────────────────────────────── */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-sun {
+  display: block;
+}
+
 body {
   background: var(--ws-bg);
   color: var(--ws-ink);
+  transition: background-color 250ms ease, color 250ms ease;
   font-family: var(--font-sans, "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: rgba(99, 40, 245, 0.18);
+  background: rgba(99, 40, 245, 0.22);
+}
+
+
+
+.font-editorial {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+}
+
+.eyebrow {
+  color: var(--ws-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 :focus-visible {
@@ -53,115 +113,84 @@ body {
   outline-offset: 2px;
 }
 
-/* ─── Glassmorphism (selective) ─────────────────────────────────────────── */
+/* ─── Editorial surfaces ────────────────────────────────────────────────── */
+.ws-brand-logo {
+  padding: 0.22rem;
+  border-radius: 0.35rem;
+  background: var(--ws-logo-surface);
+}
+
+:root[data-theme="dark"] .bg-white {
+  background-color: var(--ws-surface);
+}
+
+:root[data-theme="dark"] .text-black {
+  color: var(--ws-ink);
+}
+
+:root[data-theme="dark"] img[alt=""] {
+  background-color: transparent;
+}
+
+
 .glass {
   background: var(--ws-glass-bg);
-  border: 1px solid var(--ws-glass-border);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid var(--ws-border);
   box-shadow: var(--ws-shadow-soft);
   color: var(--ws-ink);
 }
 
-/* Premium glass surface for content cards. Keeps copy readable while the
-   lavender lighting and 3D decor show through the edges. */
 .glass-card {
   position: relative;
-  background: linear-gradient(
-    155deg,
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(255, 255, 255, 0.56) 48%,
-    rgba(240, 237, 255, 0.48) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 1) inset,
-    0 20px 48px -24px rgba(87, 65, 190, 0.36),
-    0 2px 8px -3px rgba(87, 65, 190, 0.12);
-  backdrop-filter: blur(16px) saturate(1.35);
-  -webkit-backdrop-filter: blur(16px) saturate(1.35);
+  background: var(--ws-surface);
+  border: 1px solid var(--ws-border);
+  box-shadow: 0 8px 24px -20px rgba(20, 24, 24, 0.35);
 }
 
-/* Diagonal light sweep, under the card content. */
+:root[data-theme="dark"] .glass-card {
+  box-shadow: 0 8px 24px -18px rgba(0, 0, 0, 0.55);
+}
+
 .glass-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: -1;
-  background: linear-gradient(
-    118deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0) 34%,
-    rgba(255, 255, 255, 0) 68%,
-    rgba(165, 139, 255, 0.14) 100%
-  );
-  opacity: 0.6;
+  content: none;
 }
 
 .glass-card-hover {
-  transition:
-    transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1),
-    box-shadow 350ms ease,
-    border-color 350ms ease;
+  transition: transform 300ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 300ms ease, border-color 300ms ease;
 }
 
 .glass-card-hover:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255, 255, 255, 1);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 1) inset,
-    0 30px 62px -26px rgba(87, 65, 190, 0.44),
-    0 6px 18px -8px rgba(79, 107, 255, 0.18);
+  transform: translateY(-3px);
+  border-color: #bfc2bd;
+  box-shadow: 0 18px 34px -24px rgba(20, 24, 24, 0.42);
 }
 
-/* Blur is the most expensive part of glass; skip it on small screens. */
-@media (max-width: 639px) {
-  .glass-card {
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.95) inset,
-      0 12px 30px -20px rgba(87, 65, 190, 0.24);
-  }
-  .glass-card::before {
-    opacity: 0.35;
-  }
-}
-
-/* ─── Decorative backgrounds ─────────────────────────────────────────────── */
-.bg-mesh {
-  background:
-    radial-gradient(48rem 30rem at 12% -10%, rgba(165, 139, 255, 0.2), transparent 60%),
-    radial-gradient(44rem 28rem at 92% 8%, rgba(99, 40, 245, 0.12), transparent 55%),
-    radial-gradient(36rem 24rem at 62% 40%, rgba(79, 107, 255, 0.08), transparent 60%),
-    linear-gradient(180deg, #ffffff 0%, #f7f8ff 55%, #eef0ff 100%);
-}
-
-/* Soft lavender band that bridges hero → value props → white content.
-   Start/end colours match `.bg-mesh` (hero) and `.bg-aurora` (next section)
-   exactly, so no hard seam shows at either edge. */
-.bg-hero-band {
-  background:
-    radial-gradient(42rem 22rem at 80% 0%, rgba(165, 139, 255, 0.14), transparent 65%),
-    linear-gradient(180deg, #eef0ff 0%, #f4f5ff 46%, #ffffff 100%);
-}
-
-/* ─── Section atmosphere behind glass cards ──────────────────────────────── */
-.bg-aurora {
-  background:
-    radial-gradient(52rem 34rem at 92% -6%, rgba(173, 158, 255, 0.32), transparent 62%),
-    radial-gradient(42rem 28rem at -4% 104%, rgba(79, 107, 255, 0.14), transparent 64%),
-    linear-gradient(180deg, #ffffff 0%, #f4f5ff 52%, #fbfbff 100%);
+/* ─── Soft paper backgrounds ────────────────────────────────────────────── */
+.bg-mesh,
+.bg-hero-band,
+.bg-aurora,
+.bg-aurora-soft {
+  background: var(--ws-bg);
 }
 
 .bg-aurora-soft {
-  background:
-    radial-gradient(50rem 32rem at 90% 2%, rgba(181, 169, 255, 0.5), transparent 62%),
-    radial-gradient(40rem 26rem at 0% 98%, rgba(165, 139, 255, 0.26), transparent 65%),
-    linear-gradient(180deg, #f4f5ff 0%, #ecefff 55%, #f6f7ff 100%);
+  background: var(--ws-bg-soft);
+}
+
+.bg-lavender\/10 {
+  background-color: var(--ws-accent-wash);
+}
+
+:root[data-theme="dark"] .bg-\[\#f2f2ef\] {
+  background-color: var(--ws-bg-soft);
+}
+
+:root[data-theme="dark"] .border-white\/70 {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+:root[data-theme="dark"] .bg-white\/90 {
+  background-color: rgba(27, 28, 34, 0.94);
 }
 
 /* ─── Hero artwork (raster composition from the asset pack) ─────────────── */
@@ -193,13 +222,149 @@ body {
 }
 
 /* Hero composition: one slow vertical drift for the whole scene. */
+.hero-ambient-glow {
+  animation: ws-ambient-glow 16s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes ws-ambient-glow {
+  from { transform: translate3d(0, 0, 0) scale(0.92); opacity: 0.65; }
+  to { transform: translate3d(-5%, 5%, 0) scale(1.12); opacity: 1; }
+}
+
 @keyframes ws-hero-drift {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50% { transform: translate3d(0, -9px, 0); }
 }
 
 .hero-scene-float {
-  animation: ws-hero-drift 11s ease-in-out infinite;
+  animation: ws-hero-drift 12s ease-in-out infinite;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hero-layer-back {
+  transform: translate3d(5%, -9%, -70px) rotate(4deg);
+  animation: ws-hero-back 9s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-layer-front {
+  transform: translate3d(-3%, 8%, 55px) rotate(-3deg);
+  animation: ws-hero-front 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-layer-phone {
+  animation: ws-hero-phone 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes ws-hero-back {
+  0%, 100% { transform: translate3d(5%, -9%, -70px) rotate(4deg); }
+  50% { transform: translate3d(5%, -12%, -70px) rotate(5.2deg); }
+}
+
+@keyframes ws-hero-front {
+  0%, 100% { transform: translate3d(-3%, 8%, 55px) rotate(-3deg); }
+  50% { transform: translate3d(-3%, 5%, 55px) rotate(-4.2deg); }
+}
+
+@keyframes ws-hero-phone {
+  0%, 100% { transform: translate3d(0, 0, 20px) rotate(5deg); }
+  50% { transform: translate3d(0, -9px, 20px) rotate(7deg); }
+}
+
+.portfolio-card {
+  perspective: 1200px;
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portfolio-card:hover {
+  transform: translateY(-3px);
+}
+
+.portfolio-collection-section {
+  --ws-bg-soft: #f1f0ec;
+  background: var(--ws-bg-soft);
+}
+
+:root[data-theme="dark"] .portfolio-collection-section {
+  --ws-bg-soft: #1b1c22;
+}
+
+.portfolio-collection-preview {
+  background: #e3e2de;
+}
+
+:root[data-theme="dark"] .portfolio-collection-preview {
+  background: #292a31;
+}
+
+.portfolio-collection-section .portfolio-card {
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+}
+
+.portfolio-collection-section .portfolio-preview-motion {
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), filter 700ms ease;
+}
+
+.portfolio-collection-section .portfolio-card:hover .portfolio-preview-motion {
+  transform: translateY(-3px) scale(1.015);
+  filter: saturate(1.04);
+}
+
+.portfolio-preview-motion {
+  transform: translateY(0) scale(1);
+  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1), filter 800ms ease;
+  will-change: transform;
+}
+
+.portfolio-card:hover .portfolio-preview-motion {
+  transform: translateY(-7px) scale(1.035);
+  filter: saturate(1.08);
+}
+
+.portfolio-marquee {
+  --marquee-duration: 34s;
+}
+
+.portfolio-marquee-track,
+.portfolio-marquee-group {
+  display: flex;
+  width: max-content;
+  align-items: center;
+}
+
+.portfolio-marquee-track {
+  animation: ws-marquee var(--marquee-duration) linear infinite;
+}
+
+.portfolio-marquee-track.is-paused {
+  animation-play-state: paused;
+}
+
+.portfolio-marquee-group {
+  flex-shrink: 0;
+}
+
+.portfolio-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(2rem, 6vw, 6rem);
+  padding-inline: clamp(1.25rem, 3.5vw, 4rem);
+  color: white;
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  font-weight: 500;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@keyframes ws-marquee {
+  to { transform: translateX(-50%); }
 }
 
 /* Ambient lavender glow behind the hero scene. */
@@ -225,13 +390,39 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .float-slow,
   .float-fast,
+  .hero-ambient-glow,
   .hero-scene-float,
+  .hero-layer-back,
+  .hero-layer-front,
+  .hero-layer-phone,
   .glow-drift {
     animation: none !important;
+    will-change: auto;
   }
+
   .tilt-3d {
     transform: none !important;
     transition: none !important;
+  }
+
+  .glass-card-hover,
+  .portfolio-card,
+  .portfolio-preview-motion {
+    transition: none !important;
+    will-change: auto;
+  }
+
+  .portfolio-card:hover,
+  .portfolio-card:hover .portfolio-preview-motion {
+    transform: none !important;
+    filter: none !important;
+  }
+  .portfolio-marquee-track {
+    animation: none !important;
+    transform: translateX(0) !important;
+  }
+  .portfolio-marquee-group:nth-child(2) {
+    display: none;
   }
   .glass-card-hover:hover {
     transform: none !important;

@@ -69,8 +69,17 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className={`${jakarta.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-white text-ink">
+    <html lang={locale} className={`${jakarta.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <script
+          type={typeof window === "undefined" ? "text/javascript" : "text/plain"}
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('ws-theme');document.documentElement.dataset.theme=t==='light'||t==='dark'?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch{document.documentElement.dataset.theme='light'}`,
+          }}
+        />
+      </head>
+      <body className="flex min-h-full flex-col bg-[var(--ws-bg)] text-ink">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-100 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-white"

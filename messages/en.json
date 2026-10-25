@@ -16,11 +16,16 @@
     "home": "Home",
     "products": "Templates",
     "services": "Services",
-    "portfolio": "Portfolio",
-    "contact": "Contact",
+    "portfolio": "Our Work",
+    "contact": "About",
     "openMenu": "Open navigation menu",
     "closeMenu": "Close navigation menu",
-    "language": "Language"
+    "language": "Language",
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode",
+    "themeToggle": "Toggle light or dark theme",
+    "about": "About",
+    "bookCall": "Book a call"
   },
   "common": {
     "viewDetails": "View Details",
@@ -44,16 +49,20 @@
   },
   "home": {
     "hero": {
-      "badge": "Digital agency & premium templates",
-      "titleLine1": "Premium websites &",
-      "titleHighlight": "ready-made templates",
-      "titleLine2": "for your business growth.",
-      "subtitle": "Websensial designs conversion-focused websites and landing pages for your business — and sells premium templates you can put to work right away.",
-      "primaryCta": "Browse Templates",
-      "secondaryCta": "View Portfolio",
-      "secondaryNote": "Concept & demo work",
-      "sceneBadge": "Digital solutions for modern business",
-      "floatChip": "UI preview"
+      "badge": "A small collection. A big range.",
+      "titleLine1": "Different",
+      "titleHighlight": "design.",
+      "titleLine2": "by",
+      "subtitle": "Websites and ready-made templates with a point of view — designed for real businesses, shaped with care.",
+      "primaryCta": "Explore our work",
+      "secondaryCta": "Browse templates",
+      "secondaryNote": "Studio concepts, clearly labeled.",
+      "sceneBadge": "A different kind of starting point",
+      "floatChip": "Selected concept",
+      "previewLabel": "Featured concept preview",
+      "exploreFeatured": "Explore {name} concept",
+      "featureLabel": "{category} concept",
+      "heroFoot": "Built with intention. Made to fit your world."
     },
     "valueProps": [
       {
@@ -74,6 +83,7 @@
       }
     ],
     "featured": {
+      "badge": "Curated templates",
       "title": "Featured templates",
       "subtitle": "Ready-made digital products — buy, download, and host them yourself.",
       "seeAll": "See all templates"
@@ -85,7 +95,8 @@
     "services": {
       "title": "Agency services",
       "subtitle": "Need more than a template? We build websites tailored to you.",
-      "seeAll": "View services"
+      "seeAll": "View services",
+      "badge": "What we do"
     },
     "portfolio": {
       "title": "Selected work",
@@ -111,7 +122,8 @@
       ]
     },
     "cta": {
-      "title": "Ready to show your business off this beautifully?",
+      "badge": "Let's talk",
+      "title": "Turn your ideas into extraordinary digital products.",
       "text": "Start with a ready-made template, or discuss a fully custom build.",
       "primary": "Browse Templates",
       "secondary": "Contact us"
@@ -119,7 +131,8 @@
   },
   "products": {
     "title": "Template Catalog",
-    "subtitle": "Premium ready-made templates — purchase once, host yourself, own a conversion channel.",
+    "subtitle": "Buy once, download the files, then host your template yourself.",
+    "badge": "Ready-made templates",
     "searchLabel": "Search templates",
     "searchPlaceholder": "Search by name or keyword…",
     "previewAlt": "Template preview",
@@ -161,12 +174,14 @@
     "subtitle": "The Websensial team designs and builds web experiences for your business — from zero to live.",
     "ctaTitle": "Have something specific in mind?",
     "ctaText": "Tell us about your website needs — we'll reply with a realistic estimate.",
-    "ctaButton": "Contact us"
+    "ctaButton": "Contact us",
+    "badge": "What we do"
   },
   "portfolio": {
-    "title": "Selected Projects",
-    "subtitle": "A collection of concept work and visual explorations. Every piece is clearly labeled, never presented as client work.",
-    "badge": "Portfolio",
+    "title": "Pick your personality.",
+    "subtitle": "Fourteen original directions exploring a wide range of styles. Every concept is identified clearly, never presented as client work.",
+    "badge": "01 / The collection",
+    "conceptNote": "Original studio concepts, built as visual explorations — not client deliveries.",
     "filterLabel": "Filter portfolio",
     "filters": { "all": "All", "website": "Website", "dashboard": "Dashboard", "landing": "Landing Page" },
     "demo": "Demo",
@@ -176,7 +191,12 @@
     "conceptBadge": "Concept",
     "clientBadge": "Client",
     "visitProject": "Open project",
-    "notConfigured": "Project link not configured yet."
+    "notConfigured": "Project link not configured yet.",
+    "sourceCodeUnavailable": "Source code not configured",
+    "behindDesign": "Behind the design",
+    "tickerItems": ["Responsive websites", "Premium ready-to-use templates", "Thoughtful digital design", "Ideas brought to digital"],
+    "tickerPause": "Pause scrolling text",
+    "tickerResume": "Resume scrolling text"
   },
   "contact": {
     "title": "Contact us",

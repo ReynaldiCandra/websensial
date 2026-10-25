@@ -1,50 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" fill="none">
   <defs>
-    <linearGradient id="b" x1="0" y1="0" x2="720" y2="460" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6328F5"/>
-      <stop offset="1" stop-color="#4F6BFF"/>
-    </linearGradient>
-    <linearGradient id="f" x1="0" y1="0" x2="0" y2="460" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFFFFF" stop-opacity="0.96"/>
-      <stop offset="1" stop-color="#F7F8FF" stop-opacity="0.96"/>
-    </linearGradient>
+    <linearGradient id="sand" x1="80" y1="110" x2="1180" y2="740" gradientUnits="userSpaceOnUse"><stop stop-color="#F9F5EE"/><stop offset="1" stop-color="#E8E0D4"/></linearGradient>
+    <linearGradient id="vase" x1="780" y1="280" x2="1010" y2="650" gradientUnits="userSpaceOnUse"><stop stop-color="#D5A982"/><stop offset="1" stop-color="#A96F50"/></linearGradient>
+    <linearGradient id="ceramic" x1="980" y1="370" x2="1180" y2="700" gradientUnits="userSpaceOnUse"><stop stop-color="#E9D8C5"/><stop offset="1" stop-color="#C4A98E"/></linearGradient>
   </defs>
-  <rect width="720" height="460" rx="24" fill="url(#b)" transform="rotate(0 360 230)"/>
-  <rect x="46" y="40" width="628" height="400" rx="20" fill="url(#f)"/>
-  <circle cx="72" cy="58" r="5" fill="#E4E7F5"/>
-  <circle cx="90" cy="58" r="5" fill="#E4E7F5"/>
-  <rect x="120" y="48" width="360" height="20" rx="10" fill="#EDF0FA"/>
-  <!-- nav -->
-  <rect x="70" y="92" width="76" height="20" rx="10" fill="#6328F5" opacity="0.9"/>
-  <rect x="154" y="92" width="50" height="14" rx="7" fill="#E4E7F5"/>
-  <rect x="212" y="92" width="50" height="14" rx="7" fill="#E4E7F5"/>
-  <rect x="540" y="88" width="110" height="24" rx="12" fill="#6328F5"/>
-  <!-- hero headline -->
-  <rect x="70" y="140" width="300" height="22" rx="11" fill="#171936" opacity="0.85"/>
-  <rect x="70" y="172" width="240" height="22" rx="11" fill="#6328F5" opacity="0.75"/>
-  <rect x="70" y="210" width="260" height="10" rx="5" fill="#DDE2F0"/>
-  <rect x="70" y="228" width="200" height="10" rx="5" fill="#DDE2F0"/>
-  <rect x="70" y="258" width="120" height="26" rx="13" fill="#6328F5"/>
-  <rect x="202" y="258" width="120" height="26" rx="13" fill="#FFFFFF" stroke="#E4E7F5"/>
-  <!-- floating glass panels -->
-  <g opacity="0.9">
-    <rect x="420" y="130" width="230" height="150" rx="16" fill="#FFFFFF" opacity="0.75" stroke="#FFFFFF"/>
-    <rect x="438" y="150" width="90" height="10" rx="5" fill="#C9CBDD" opacity="0.8"/>
-    <rect x="438" y="172" width="194" height="34" rx="8" fill="url(#b)" opacity="0.85"/>
-    <rect x="438" y="218" width="60" height="48" rx="8" fill="#EDEFFB"/>
-    <rect x="506" y="218" width="60" height="48" rx="8" fill="#E3E0FB"/>
-    <rect x="574" y="218" width="58" height="48" rx="8" fill="#EDEFFB"/>
-  </g>
-  <g opacity="0.85">
-    <rect x="360" y="300" width="290" height="110" rx="16" fill="#FFFFFF" opacity="0.62" stroke="#FFFFFF"/>
-    <rect x="378" y="318" width="120" height="10" rx="5" fill="#C9CBDD"/>
-    <rect x="378" y="340" width="180" height="8" rx="4" fill="#DDE2F0"/>
-    <rect x="378" y="356" width="150" height="8" rx="4" fill="#DDE2F0"/>
-    <rect x="378" y="374" width="80" height="20" rx="10" fill="#A58BFF"/>
-  </g>
-  <rect x="70" y="330" width="230" height="80" rx="16" fill="#EFF1FC"/>
-  <rect x="86" y="348" width="120" height="10" rx="5" fill="#B9BEDD"/>
-  <rect x="86" y="368" width="170" height="8" rx="4" fill="#D5DAEC"/>
-  <rect x="86" y="384" width="140" height="8" rx="4" fill="#D5DAEC"/>
-  <text x="70" y="428" font-family="system-ui, sans-serif" font-size="12" fill="#69708A" opacity="0.9">Lumen Store — preview placeholder 4</text>
+  <rect width="1280" height="800" fill="#E3DDD4"/>
+  <rect x="32" y="24" width="1216" height="744" rx="20" fill="#FBF9F5" stroke="#E1DBD2" stroke-width="2"/>
+  <path d="M52 24h1176a20 20 0 0 1 20 20v42H32V44a20 20 0 0 1 20-20Z" fill="#FFFFFF"/>
+  <circle cx="62" cy="54" r="6" fill="#F28B82"/><circle cx="84" cy="54" r="6" fill="#FBCB6B"/><circle cx="106" cy="54" r="6" fill="#81C995"/><rect x="420" y="43" width="430" height="22" rx="11" fill="#F3F1EC"/>
+  <path d="M32 86h1216" stroke="#EAE5DD" stroke-width="2"/>
+  <text x="82" y="145" fill="#292821" font-family="Georgia,serif" font-size="29" letter-spacing="2">LUMEN</text><text x="84" y="164" fill="#8D867B" font-family="Arial,sans-serif" font-size="8" letter-spacing="2">OBJECTS FOR EVERYDAY</text>
+  <text x="662" y="143" fill="#777268" font-family="Arial,sans-serif" font-size="13">Furniture</text><text x="757" y="143" fill="#777268" font-family="Arial,sans-serif" font-size="13">Lighting</text><text x="846" y="143" fill="#777268" font-family="Arial,sans-serif" font-size="13">Objects</text><text x="929" y="143" fill="#777268" font-family="Arial,sans-serif" font-size="13">Our story</text>
+  <circle cx="1122" cy="137" r="18" fill="#F3F0E9"/><path d="M1116 132h12l-1 13h-10l-1-13Zm3 0a3 3 0 0 1 6 0" stroke="#464239" stroke-width="1.5"/><circle cx="1156" cy="137" r="18" fill="#F3F0E9"/><circle cx="1156" cy="134" r="6" stroke="#464239" stroke-width="1.5"/><path d="M1146 148c1-6 4-8 10-8s9 2 10 8" stroke="#464239" stroke-width="1.5"/>
+  <rect x="68" y="202" width="1144" height="420" rx="8" fill="url(#sand)"/>
+  <text x="112" y="264" fill="#887D70" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="2">THE SLOW LIVING EDIT</text>
+  <text x="108" y="350" fill="#332F28" font-family="Georgia,serif" font-size="61" letter-spacing="-2">Objects with</text><text x="108" y="420" fill="#332F28" font-family="Georgia,serif" font-size="61" font-style="italic" letter-spacing="-2">a little soul.</text>
+  <text x="112" y="465" fill="#777064" font-family="Arial,sans-serif" font-size="15">Considered pieces for the quiet rituals</text><text x="112" y="490" fill="#777064" font-family="Arial,sans-serif" font-size="15">that make a house feel like home.</text>
+  <rect x="110" y="523" width="156" height="48" rx="24" fill="#38352D"/><text x="141" y="553" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="12" font-weight="700">Shop the edit</text><path d="M241 547h11m-5-5 5 5-5 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="1029" cy="278" r="123" fill="#D8C8B5" opacity=".6"/>
+  <path d="M811 597c0-26 26-47 57-47s57 21 57 47v14H811v-14Z" fill="#9C6F56"/><path d="M828 550c0-40 7-75 23-101 7-12 9-31 8-56h20c-1 25 1 44 8 56 16 26 23 61 23 101v22h-82v-22Z" fill="url(#vase)"/><ellipse cx="869" cy="392" rx="10" ry="6" fill="#8B6049"/><path d="M869 393v-69m0 37c-21-15-33-35-34-58m35 46c18-14 29-33 32-55" stroke="#65765A" stroke-width="5" stroke-linecap="round"/><ellipse cx="831" cy="310" rx="18" ry="8" transform="rotate(34 831 310)" fill="#8A9A76"/><ellipse cx="906" cy="302" rx="19" ry="8" transform="rotate(-35 906 302)" fill="#788B68"/>
+  <path d="M992 613c0-23 18-41 40-41h84c22 0 40 18 40 41v9H992v-9Z" fill="#766F63"/><path d="M1023 571V451c0-23 18-41 41-41h20c23 0 41 18 41 41v120h-102Z" fill="url(#ceramic)"/><ellipse cx="1074" cy="450" rx="51" ry="15" fill="#C7AF97"/><ellipse cx="1074" cy="448" rx="37" ry="9" fill="#F2E7D9"/><path d="M1047 492h54" stroke="#E9D8C5" stroke-width="3" opacity=".75"/>
+  <path d="M925 602c0-17 13-30 30-30h31c17 0 30 13 30 30v20H925v-20Z" fill="#C08F62"/><path d="M943 573v-53c0-14 11-25 25-25s25 11 25 25v53h-50Z" fill="#D8B890"/><ellipse cx="968" cy="520" rx="25" ry="9" fill="#C49B70"/>
+  <text x="109" y="660" fill="#857C70" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="1.8">MADE SLOWLY · CHOSEN TO LAST</text>
+  <text x="70" y="701" fill="#39362F" font-family="Georgia,serif" font-size="24">A home, more thoughtfully.</text><text x="996" y="702" fill="#857C70" font-family="Arial,sans-serif" font-size="12">Discover the collection</text><path d="M1159 698h28m-8-8 8 8-8 8" stroke="#857C70" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

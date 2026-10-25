@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { GlassObject, SectionBackground } from "@/components/ui/GlassDecor";
 import ProductsBrowser from "@/components/products/ProductsBrowser";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -28,11 +27,9 @@ export default async function ProductsPage({ params }: Props) {
   const t = await getTranslations("products");
 
   return (
-    <section className="bg-aurora-soft relative overflow-hidden">
-      <SectionBackground imageClassName="opacity-40" />
-      <GlassObject asset="ring" className="-top-16 -right-20 hidden w-72 rotate-12 opacity-45 lg:block" float />
-      <GlassObject asset="sphere" className="-bottom-12 -left-12 hidden w-28 opacity-60 xl:block" />
-      <Container className="relative pt-14 pb-24">
+    <section className="bg-[var(--ws-bg)]">
+      <Container className="pt-12 pb-20 sm:pt-16">
+        <p className="eyebrow mb-3">{t("badge")}</p>
         <SectionHeading title={t("title")} subtitle={t("subtitle")} align="left" />
         <Suspense fallback={<p className="text-sm text-muted">{t("searchLabel")}…</p>}>
           <ProductsBrowser />

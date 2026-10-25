@@ -56,7 +56,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const related = getRelatedProducts(product);
 
   return (
-    <Container className="pt-10 pb-24">
+    <Container className="pt-10 pb-20">
       <nav aria-label={t("backToCatalog")} className="mb-6 text-sm">
         <Link href="/products" className="font-semibold text-muted hover:text-primary">
           ← {t("backToCatalog")}
@@ -80,7 +80,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </span>
           </div>
 
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-ink">{product.name[locale]}</h1>
+          <h1 className="mt-3 font-editorial text-4xl tracking-tight text-ink sm:text-5xl">{product.name[locale]}</h1>
           <p className="mt-2 text-[15px] leading-relaxed text-muted">{product.summary[locale]}</p>
 
           <div className="mt-5 flex items-baseline gap-2">
@@ -99,7 +99,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <DetailRow label={t("compatibilityLabel")} values={product.compatibility[locale]} />
           </dl>
 
-          <div className="mt-6 rounded-2xl border border-line bg-white p-5">
+          <div className="mt-6 border-y border-line py-5">
             <h2 className="text-sm font-extrabold text-ink">{t("licenseLabel")}</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">{product.license[locale]}</p>
           </div>
@@ -108,14 +108,14 @@ export default async function ProductDetailPage({ params }: Props) {
 
       <div className="mt-14 grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
         <section aria-labelledby="full-desc">
-          <h2 id="full-desc" className="text-xl font-extrabold text-ink">
+          <h2 id="full-desc" className="font-editorial text-3xl text-ink sm:text-4xl">
             {t("descriptionLabel")}
           </h2>
           <p className="mt-3 leading-relaxed text-ink/80">{product.description[locale]}</p>
         </section>
 
         <aside className="space-y-6">
-          <section aria-labelledby="features" className="rounded-2xl border border-line bg-white p-5">
+          <section aria-labelledby="features" className="border-t border-line py-5">
             <h2 id="features" className="text-sm font-extrabold text-ink">
               {t("featuresLabel")}
             </h2>
@@ -129,7 +129,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </ul>
           </section>
 
-          <section aria-labelledby="files" className="rounded-2xl border border-line bg-white p-5">
+          <section aria-labelledby="files" className="border-t border-line py-5">
             <h2 id="files" className="text-sm font-extrabold text-ink">
               {t("includedFilesLabel")}
             </h2>
@@ -155,7 +155,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </ul>
           </section>
 
-          <section aria-labelledby="install" className="rounded-2xl border border-line bg-white p-5">
+          <section aria-labelledby="install" className="border-t border-line py-5">
             <h2 id="install" className="text-sm font-extrabold text-ink">
               {t("installLabel")}
             </h2>
@@ -170,7 +170,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
       {related.length > 0 ? (
         <section aria-labelledby="related" className="mt-16">
-          <h2 id="related" className="text-xl font-extrabold text-ink">
+          <h2 id="related" className="font-editorial text-3xl text-ink sm:text-4xl">
             {t("relatedLabel")}
           </h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
