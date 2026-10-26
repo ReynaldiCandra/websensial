@@ -106,10 +106,10 @@
     "process": {
       "title": "Cara kerja kami",
       "steps": [
-        { "title": "Brief & strategi", "text": "Diskusi singkat tujuan, audiens, dan konten." },
-        { "title": "Desain & build", "text": "Desain premium dikomposisi lalu ditangani frontend." },
-        { "title": "Review & rafinasi", "text": "Anda review visual, kami poles detail." },
-        { "title": "Delivery & support", "text": "File dihanakan dan diberi panduan penggunaan." }
+        { "title": "Brief & strategi", "text": "Kita menyelaraskan tujuan, audiens, dan kebutuhan konten sejak awal." },
+        { "title": "Desain & pengembangan", "text": "Kami merancang tampilan, lalu membangun website yang responsif." },
+        { "title": "Tinjau & sempurnakan", "text": "Anda meninjau hasilnya; kami menyempurnakan detail berdasarkan masukan." },
+        { "title": "Serah terima & panduan", "text": "Website atau file final diserahkan lengkap dengan panduan penggunaan." }
       ]
     },
     "reasons": {

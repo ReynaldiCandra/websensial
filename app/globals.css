@@ -31,7 +31,7 @@
   --ws-cta: #24173f;
   --ws-cta-foreground: #f7f5ff;
   --ws-cta-muted: #c6bfd6;
-  --ws-logo-surface: #ffffff;
+  --ws-logo-surface: transparent;
   --ws-primary: #6328f5;
   --ws-primary-strong: #4b18d6;
   --ws-blue: #8da2ff;
@@ -116,9 +116,59 @@ body {
 /* ─── Editorial surfaces ────────────────────────────────────────────────── */
 .ws-brand-logo {
   display: none;
-  padding: 0.22rem;
-  border-radius: 0.35rem;
+  padding: 0;
+  border-radius: 0;
   background: var(--ws-logo-surface);
+}
+
+.ws-cta {
+  --ws-cta-button-primary-fg: #ffffff;
+  --ws-cta-button-secondary-fg: #ffffff;
+  --ws-cta-eyebrow: rgba(255, 255, 255, 0.78);
+}
+
+:root[data-theme="dark"] .ws-cta {
+  --ws-cta-button-primary-fg: #ffffff;
+  --ws-cta-button-secondary-fg: #ffffff;
+  --ws-cta-eyebrow: #ded5f2;
+}
+
+.ws-cta .eyebrow {
+  color: var(--ws-cta-eyebrow);
+}
+
+.ws-cta-button-secondary,
+.ws-cta-button-secondary:hover {
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background-color: rgba(255, 255, 255, 0.12);
+  color: var(--ws-cta-button-secondary-fg);
+  box-shadow: 0 6px 18px -12px rgba(0, 0, 0, 0.7);
+}
+
+.ws-cta-button-secondary:hover {
+  transform: translateY(-2px);
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.65);
+}
+
+.ws-cta-button-secondary:focus-visible {
+  outline-color: #ffffff;
+  outline-offset: 3px;
+}
+
+.ws-cta-button-primary {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: linear-gradient(110deg, #7547f5 0%, #4f6bff 100%);
+  color: var(--ws-cta-button-primary-fg);
+  box-shadow: 0 10px 26px -12px rgba(99, 40, 245, 0.9);
+}
+
+.ws-cta-button-primary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(110deg, #895fff 0%, #6680ff 100%);
+  box-shadow: 0 14px 30px -10px rgba(99, 40, 245, 0.95);
 }
 
 :root[data-theme="light"] .ws-brand-logo-light,
@@ -138,9 +188,6 @@ body {
   color: var(--ws-ink);
 }
 
-:root[data-theme="dark"] img[alt=""] {
-  background-color: transparent;
-}
 
 
 .glass {

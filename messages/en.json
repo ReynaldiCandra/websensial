@@ -106,10 +106,10 @@
     "process": {
       "title": "How we work",
       "steps": [
-        { "title": "Brief & strategy", "text": "A quick conversation about goals, audience, and content." },
-        { "title": "Design & build", "text": "Premium visual composition, then production frontend work." },
-        { "title": "Review & refine", "text": "You review the visuals; we polish the details." },
-        { "title": "Delivery & support", "text": "Files are handed over with usage guidance." }
+        { "title": "Brief & strategy", "text": "We align on your goals, audience, and content needs from the start." },
+        { "title": "Design & development", "text": "We shape the visual direction, then build a responsive website." },
+        { "title": "Review & refine", "text": "You review the work; we refine the details around your feedback." },
+        { "title": "Handover & guidance", "text": "Your finished website or files come with clear usage guidance." }
       ]
     },
     "reasons": {
