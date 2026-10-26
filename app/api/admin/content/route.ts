@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthorizedAdminId } from "@/lib/admin/auth";
-import { getWebContent, saveWebContent, type WebContent } from "@/lib/admin/site-content";
+import { getWebContent, saveWebContent, validateWebContent, type WebContent } from "@/lib/admin/site-content";
 
 export async function GET() {
   if (!(await getAuthorizedAdminId())) return NextResponse.json({ error: "Silakan masuk sebagai admin." }, { status: 401 });
@@ -18,12 +18,11 @@ export async function PUT(request: Request) {
   } catch {
     return NextResponse.json({ error: "Format konten tidak valid." }, { status: 400 });
   }
-  if (!content || typeof content !== "object" || !Array.isArray((content as WebContent).portfolio) || !Array.isArray((content as WebContent).products)) {
-    return NextResponse.json({ error: "Data portofolio dan template harus berupa daftar." }, { status: 400 });
-  }
   if (JSON.stringify(content).length > 2_000_000) {
     return NextResponse.json({ error: "Ukuran data konten melebihi batas." }, { status: 413 });
   }
+  const validationError = validateWebContent(content);
+  if (validationError) return NextResponse.json({ error: validationError }, { status: 400 });
 
   try {
     await saveWebContent(content as WebContent);

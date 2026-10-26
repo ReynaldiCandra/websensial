@@ -31,9 +31,9 @@ export function getBundledWebContent(): WebContent {
   };
 }
 
-export async function getWebContent(): Promise<WebContent> {
+export async function getStoredWebContent(): Promise<WebContent | null> {
   const client = getCmsClient();
-  if (!client) return fallbackContent;
+  if (!client) return null;
 
   try {
     const { data, error } = await client
@@ -42,16 +42,115 @@ export async function getWebContent(): Promise<WebContent> {
       .eq("content_key", CONTENT_KEY)
       .maybeSingle();
     if (error) throw error;
-    if (!data?.content || typeof data.content !== "object") return fallbackContent;
+    if (!data?.content) return getBundledWebContent();
+    if (typeof data.content !== "object") return null;
     const content = data.content as Partial<WebContent>;
-    return {
-      portfolio: Array.isArray(content.portfolio) ? content.portfolio : fallbackContent.portfolio,
-      products: Array.isArray(content.products) ? content.products : fallbackContent.products,
-    };
+    if (!Array.isArray(content.portfolio) || !Array.isArray(content.products)) return null;
+    return { portfolio: content.portfolio, products: content.products };
   } catch (error) {
-    console.error("Failed to load CMS content; serving bundled content instead.", error);
-    return fallbackContent;
+    console.error("Failed to load stored CMS content for media safety check.", error);
+    return null;
   }
+}
+
+export async function getWebContent(): Promise<WebContent> {
+  return (await getStoredWebContent()) ?? fallbackContent;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isText(value: unknown, required = false): value is string {
+  return typeof value === "string" && value.length <= 20_000 && (!required || value.trim().length > 0);
+}
+
+function isLocalizedText(value: unknown, required = false): boolean {
+  return isRecord(value) && isText(value.id, required) && isText(value.en, required);
+}
+
+function isLocalizedList(value: unknown): boolean {
+  return isRecord(value) && Array.isArray(value.id) && Array.isArray(value.en)
+    && value.id.every((item) => isText(item, true))
+    && value.en.every((item) => isText(item, true));
+}
+
+function isSafeOptionalUrl(value: unknown): boolean {
+  if (value === null) return true;
+  if (typeof value !== "string" || value.length > 2048) return false;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "https:" || parsed.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
+function isSafeImagePath(value: unknown): value is string {
+  if (typeof value !== "string" || value.length > 2048) return false;
+  if (value.startsWith("/")) return value.startsWith("/previews/") && !value.includes("..");
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "https:" && parsed.pathname.includes("/storage/v1/object/public/websensial-media/");
+  } catch {
+    return false;
+  }
+}
+
+export function validateWebContent(value: unknown): string | null {
+  if (!isRecord(value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)) {
+    return "Data portofolio dan template harus berupa daftar.";
+  }
+  if (value.portfolio.length > 500 || value.products.length > 500) return "Jumlah konten melebihi batas.";
+
+  const validateIdsAndSlugs = (items: unknown[], label: string) => {
+    const ids = new Set<string>();
+    const slugs = new Set<string>();
+    for (const item of items) {
+      if (!isRecord(item) || !isText(item.id, true) || !isText(item.slug, true)) return `ID atau slug ${label} tidak valid.`;
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug)) return `Slug ${label} harus huruf kecil, angka, dan tanda hubung.`;
+      if (ids.has(item.id) || slugs.has(item.slug)) return `ID dan slug ${label} harus unik.`;
+      ids.add(item.id);
+      slugs.add(item.slug);
+    }
+    return null;
+  };
+
+  const portfolioIdentityError = validateIdsAndSlugs(value.portfolio, "portofolio");
+  if (portfolioIdentityError) return portfolioIdentityError;
+  const productIdentityError = validateIdsAndSlugs(value.products, "template");
+  if (productIdentityError) return productIdentityError;
+
+  for (const [index, item] of value.portfolio.entries()) {
+    if (!isRecord(item) || !isLocalizedText(item.name, true) || !isLocalizedText(item.category, true) || !isLocalizedText(item.description)
+      || !Array.isArray(item.tech) || !item.tech.every((tag) => isText(tag, true))
+      || !(item.previewPath === null || isSafeImagePath(item.previewPath))
+      || !isSafeOptionalUrl(item.projectUrl)
+      || !["website", "dashboard", "landing"].includes(String(item.filter))
+      || !["concept", "client"].includes(String(item.kind))) {
+      return `Data portofolio nomor ${index + 1} tidak valid.`;
+    }
+  }
+
+  const productListFields = ["tech", "compatibility", "includedFiles", "features", "installRequirements"] as const;
+  for (const [index, item] of value.products.entries()) {
+    if (!isRecord(item)) return `Data template nomor ${index + 1} tidak valid.`;
+    const coreValid = isLocalizedText(item.name, true) && isLocalizedText(item.summary, item.status === "published")
+      && isLocalizedText(item.description, item.status === "published") && isLocalizedText(item.license)
+      && ["landing-pages", "business-websites", "portfolio", "ecommerce"].includes(String(item.category))
+      && Number.isSafeInteger(item.price) && Number(item.price) >= 0
+      && ["IDR", "USD"].includes(String(item.currency))
+      && ["html", "nextjs", "figma"].includes(String(item.format))
+      && typeof item.featured === "boolean" && ["draft", "published"].includes(String(item.status))
+      && Array.isArray(item.previews) && item.previews.every(isSafeImagePath)
+      && isSafeOptionalUrl(item.liveDemoUrl) && isSafeOptionalUrl(item.purchaseUrl)
+      && productListFields.every((field) => isLocalizedList(item[field]));
+    if (!coreValid) return `Data template nomor ${index + 1} tidak valid.`;
+    const previews = item.previews as string[];
+    if (item.status === "published" && previews.length === 0) return `Template “${String((item.name as { id: string }).id)}” yang terbit wajib memiliki gambar pratinjau.`;
+  }
+
+  return null;
 }
 
 export async function saveWebContent(content: WebContent) {

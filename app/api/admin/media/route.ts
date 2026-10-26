@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getAuthorizedAdminId } from "@/lib/admin/auth";
-import { getCmsAdminClient } from "@/lib/admin/site-content";
+import { getCmsAdminClient, getStoredWebContent } from "@/lib/admin/site-content";
 
 const bucket = "websensial-media";
 const maxBytes = 10 * 1024 * 1024;
@@ -82,6 +82,13 @@ export async function DELETE(request: Request) {
   }
   const path = typeof body.url === "string" ? await storageObject(client, body.url) : null;
   if (!path) return NextResponse.json({ error: "Gambar ini bukan bagian dari media Websensial." }, { status: 400 });
+  const currentContent = await getStoredWebContent();
+  if (!currentContent) return NextResponse.json({ error: "Konten CMS tidak dapat diverifikasi; file tidak dihapus." }, { status: 503 });
+  const isReferenced = [
+    ...currentContent.portfolio.map((item) => item.previewPath),
+    ...currentContent.products.flatMap((item) => item.previews),
+  ].includes(body.url as string);
+  if (isReferenced) return NextResponse.json({ error: "Gambar masih digunakan. Lepas referensinya dan simpan perubahan terlebih dahulu." }, { status: 409 });
   const { error } = await client.storage.from(bucket).remove([path]);
   if (error) return NextResponse.json({ error: "Gambar gagal dihapus." }, { status: 500 });
   return NextResponse.json({ ok: true });
