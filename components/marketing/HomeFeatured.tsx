@@ -4,11 +4,11 @@ import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/motion/Reveal";
 import ProductCard from "@/components/products/ProductCard";
-import { getPublishedProducts } from "@/lib/data/products";
+import type { Product } from "@/lib/data/products";
 
-export default function HomeFeatured() {
+export default function HomeFeatured({ products }: { products: Product[] }) {
   const t = useTranslations("home.featured");
-  const featured = getPublishedProducts().filter((p) => p.featured).slice(0, 3);
+  const featured = products.filter((product) => product.status === "published" && product.featured).slice(0, 3);
 
   if (featured.length === 0) return null;
 

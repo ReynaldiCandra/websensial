@@ -4,8 +4,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ProductsBrowser from "@/components/products/ProductsBrowser";
+import { getWebContent } from "@/lib/admin/site-content";
 
 type Props = { params: Promise<{ locale: string }> };
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -24,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("products");
+  const [t, content] = await Promise.all([getTranslations("products"), getWebContent()]);
 
   return (
     <section className="bg-[var(--ws-bg)]">
@@ -32,7 +35,7 @@ export default async function ProductsPage({ params }: Props) {
         <p className="eyebrow mb-3">{t("badge")}</p>
         <SectionHeading title={t("title")} subtitle={t("subtitle")} align="left" />
         <Suspense fallback={<p className="text-sm text-muted">{t("searchLabel")}…</p>}>
-          <ProductsBrowser />
+          <ProductsBrowser products={content.products} />
         </Suspense>
       </Container>
     </section>

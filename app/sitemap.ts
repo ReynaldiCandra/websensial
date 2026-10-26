@@ -1,13 +1,16 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { siteConfig } from "@/lib/data/site";
-import { getPublishedProducts } from "@/lib/data/products";
+import { getWebContent } from "@/lib/admin/site-content";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [content] = await Promise.all([getWebContent()]);
   const base = siteConfig.url;
   const locales = routing.locales;
   const staticPaths = ["", "/products", "/services", "/portfolio", "/contact"];
-  const productPaths = getPublishedProducts().map((product) => `/products/${product.slug}`);
+  const productPaths = content.products.filter((product) => product.status === "published").map((product) => `/products/${product.slug}`);
 
   const entries: MetadataRoute.Sitemap = [];
 

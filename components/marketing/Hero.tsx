@@ -3,11 +3,11 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { InlineArrow } from "@/components/ui/Button";
 import Reveal from "@/components/motion/Reveal";
-import { portfolioProjects } from "@/lib/data/portfolio";
+import type { PortfolioProject } from "@/lib/data/portfolio";
 
 const heroProjectSlugs = ["fallow-botanical-story", "offcut-furniture-atelier", "maree-coastal-bath-house"];
 
-export default function Hero() {
+export default function Hero({ portfolioProjects }: { portfolioProjects: PortfolioProject[] }) {
   const t = useTranslations("home.hero");
   const locale = useLocale() as "id" | "en";
   const heroProjects = heroProjectSlugs

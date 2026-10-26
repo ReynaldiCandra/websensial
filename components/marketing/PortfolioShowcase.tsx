@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Reveal from "@/components/motion/Reveal";
 import Container from "@/components/ui/Container";
 import { InlineArrow } from "@/components/ui/Button";
-import { portfolioFilters, portfolioProjects, type PortfolioFilter } from "@/lib/data/portfolio";
+import { portfolioFilters, type PortfolioFilter, type PortfolioProject } from "@/lib/data/portfolio";
 
 type FilterValue = "all" | PortfolioFilter;
 
@@ -49,14 +49,14 @@ export function PortfolioTicker() {
   );
 }
 
-export default function PortfolioShowcase({ showHeader = true, limit }: { showHeader?: boolean; limit?: number }) {
+export default function PortfolioShowcase({ projects: allProjects, showHeader = true, limit }: { projects: PortfolioProject[]; showHeader?: boolean; limit?: number }) {
   const t = useTranslations("portfolio");
   const locale = useLocale() as "id" | "en";
   const [filter, setFilter] = useState<FilterValue>("all");
   const projects = useMemo(() => {
-    const matching = portfolioProjects.filter((p) => filter === "all" || p.filter === filter);
+    const matching = allProjects.filter((p) => filter === "all" || p.filter === filter);
     return matching.slice(0, limit ?? matching.length);
-  }, [filter, limit]);
+  }, [allProjects, filter, limit]);
 
   const filterOptions: FilterValue[] = ["all", ...portfolioFilters];
 

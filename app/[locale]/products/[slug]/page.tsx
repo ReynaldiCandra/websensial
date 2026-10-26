@@ -8,19 +8,27 @@ import DemoPurchaseActions from "@/components/products/DemoPurchaseActions";
 import ProductCard from "@/components/products/ProductCard";
 import { formatPrice, formatValue } from "@/components/ui/format";
 import { getCategory } from "@/lib/data/categories";
-import { getProductBySlug, getPublishedProducts, getRelatedProducts } from "@/lib/data/products";
+import { getWebContent } from "@/lib/admin/site-content";
+import type { Product } from "@/lib/data/products";
+
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
-export function generateStaticParams() {
-  return getPublishedProducts().map((product) => ({ slug: product.slug }));
+function getRelatedProducts(products: Product[], product: Product, limit = 3): Product[] {
+  return products
+    .filter((candidate) => candidate.id !== product.id)
+    .sort((a, b) => Number(b.category === product.category) - Number(a.category === product.category))
+    .slice(0, limit);
 }
 
 async function resolveProduct(params: Props["params"]) {
-  const { locale, slug } = await params;
+  const [{ locale, slug }, content] = await Promise.all([params, getWebContent()]);
+  const publishedProducts = content.products.filter((product) => product.status === "published");
   return {
     locale: locale === "en" ? ("en" as const) : ("id" as const),
-    product: getProductBySlug(slug),
+    product: publishedProducts.find((candidate) => candidate.slug === slug),
+    publishedProducts,
   };
 }
 
@@ -46,14 +54,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductDetailPage({ params }: Props) {
-  const { locale, product } = await resolveProduct(params);
+  const { locale, product, publishedProducts } = await resolveProduct(params);
   if (!product) notFound();
   setRequestLocale(locale);
 
   const t = await getTranslations("product");
   const tp = await getTranslations("common");
   const category = getCategory(product.category);
-  const related = getRelatedProducts(product);
+  const related = getRelatedProducts(publishedProducts, product);
 
   return (
     <Container className="pt-10 pb-20">

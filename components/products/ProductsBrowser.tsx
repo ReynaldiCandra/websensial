@@ -5,14 +5,14 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { categories, type CategoryId } from "@/lib/data/categories";
-import { getPublishedProducts } from "@/lib/data/products";
+import type { Product } from "@/lib/data/products";
 import ProductCard from "./ProductCard";
 import Reveal from "@/components/motion/Reveal";
 
 const FORMAT_OPTIONS = ["all", "nextjs", "html", "figma"] as const;
 type FormatFilter = (typeof FORMAT_OPTIONS)[number];
 
-export default function ProductsBrowser() {
+export default function ProductsBrowser({ products }: { products: Product[] }) {
   const t = useTranslations("products");
   const locale = useLocale() as "id" | "en";
   const searchParams = useSearchParams();
@@ -23,11 +23,11 @@ export default function ProductsBrowser() {
   const [query, setQuery] = useState("");
   const [formatFilter, setFormatFilter] = useState<FormatFilter>("all");
 
-  const products = useMemo(() => getPublishedProducts(), []);
+  const publishedProducts = useMemo(() => products.filter((product) => product.status === "published"), [products]);
 
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return products.filter((product) => {
+    return publishedProducts.filter((product) => {
       const matchesQuery =
         normalizedQuery.length === 0 ||
         product.name[locale].toLowerCase().includes(normalizedQuery) ||
@@ -38,7 +38,7 @@ export default function ProductsBrowser() {
       const matchesFormat = formatFilter === "all" || product.format === formatFilter;
       return matchesQuery && matchesCategory && matchesFormat;
     });
-  }, [products, query, selectedCategory, formatFilter, locale]);
+  }, [publishedProducts, query, selectedCategory, formatFilter, locale]);
 
   const hasActiveFilters =
     selectedCategory !== "all" || formatFilter !== "all" || query.trim().length > 0;
