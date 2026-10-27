@@ -1,15 +1,16 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { siteConfig } from "@/lib/data/site";
+import { getWebContent } from "@/lib/admin/site-content";
+import { getWhatsAppUrl } from "@/lib/data/site";
 import Logo from "./Logo";
 
 /** Evaluated once per process — stable for prerendered output. */
 const currentYear = new Date().getFullYear();
 
-export default function Footer() {
-  const t = useTranslations("footer");
-  const tn = useTranslations("nav");
+export default async function Footer() {
+  const [t, tn, content] = await Promise.all([getTranslations("footer"), getTranslations("nav"), getWebContent()]);
   const year = currentYear;
+  const whatsappUrl = getWhatsAppUrl(content.contact.whatsapp, "Hello Websensial, I would like to discuss a project.");
 
   const productLinks = [
     { href: "/products" as const, query: "?category=landing-pages", label: "Landing Pages" },
@@ -64,10 +65,11 @@ export default function Footer() {
           <h2 className="text-xs font-bold tracking-widest text-primary uppercase">{t("colContact")}</h2>
           <ul className="mt-4 space-y-3 text-sm">
             <li>
-              <a className="text-muted transition-colors hover:text-primary" href={`mailto:${siteConfig.contact.email}`}>
-                {siteConfig.contact.email}
+              <a className="text-muted transition-colors hover:text-primary" href={`mailto:${content.contact.email}`}>
+                {content.contact.email}
               </a>
             </li>
+            {whatsappUrl ? <li><a className="text-muted transition-colors hover:text-primary" href={whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp · {content.contact.whatsapp}</a></li> : null}
           </ul>
         </div>
       </div>

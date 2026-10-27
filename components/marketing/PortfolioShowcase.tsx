@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Reveal from "@/components/motion/Reveal";
 import Container from "@/components/ui/Container";
 import { InlineArrow } from "@/components/ui/Button";
+import { Link } from "@/i18n/navigation";
 import { portfolioFilters, type PortfolioFilter, type PortfolioProject } from "@/lib/data/portfolio";
 
 type FilterValue = "all" | PortfolioFilter;
@@ -119,15 +120,14 @@ export default function PortfolioShowcase({ projects: allProjects, showHeader = 
                 <div className="flex flex-1 flex-col pt-3">
                   <div className="flex items-baseline gap-2">
                     <span className="text-[9px] tabular-nums text-muted">{String(index + 1).padStart(2, "0")}</span>
-                    <h3 className="text-base font-semibold tracking-tight text-ink sm:text-lg">
+                    <Link href={`/portfolio/${project.slug}`} className="text-base font-semibold tracking-tight text-ink hover:text-muted sm:text-lg">
                       {project.name[locale]}
-                    </h3>
+                    </Link>
                     <span className="ml-auto text-right text-[9px] text-muted sm:text-[10px]">
                       {project.category[locale]}
                     </span>
                   </div>
-                  <p className="mt-1 line-clamp-1 text-xs text-muted">{project.description[locale]}</p>
-
+                  <Link href={`/portfolio/${project.slug}`} className="mt-1 line-clamp-1 text-xs text-muted hover:text-ink">{project.description[locale]}</Link>
                   <div className="mt-3 flex items-center justify-between border-y border-line py-2 text-[10px]">
                     {project.projectUrl ? (
                       <a
@@ -143,7 +143,7 @@ export default function PortfolioShowcase({ projects: allProjects, showHeader = 
                         {t("demo")} · {t("demoSoon")}
                       </span>
                     )}
-                    <span className="text-muted">{t("sourceCodeUnavailable")}</span>
+                    <Link href={`/portfolio/${project.slug}`} className="inline-flex items-center gap-1 text-muted hover:text-ink">{t("visitProject")} <InlineArrow className="h-3 w-3" /></Link>
                   </div>
                   <details className="group/details">
                     <summary className="flex cursor-pointer list-none items-center justify-between py-2 text-[10px] text-muted [&::-webkit-details-marker]:hidden">

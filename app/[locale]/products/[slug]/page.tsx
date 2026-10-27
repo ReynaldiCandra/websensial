@@ -9,6 +9,7 @@ import ProductCard from "@/components/products/ProductCard";
 import { formatPrice, formatValue } from "@/components/ui/format";
 import { getCategory } from "@/lib/data/categories";
 import { getWebContent } from "@/lib/admin/site-content";
+import { getWhatsAppUrl } from "@/lib/data/site";
 import type { Product } from "@/lib/data/products";
 
 export const dynamic = "force-dynamic";
@@ -54,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductDetailPage({ params }: Props) {
-  const { locale, product, publishedProducts } = await resolveProduct(params);
+  const [{ locale, product, publishedProducts }, content] = await Promise.all([resolveProduct(params), getWebContent()]);
   if (!product) notFound();
   setRequestLocale(locale);
 
@@ -62,6 +63,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const tp = await getTranslations("common");
   const category = getCategory(product.category);
   const related = getRelatedProducts(publishedProducts, product);
+  const whatsappUrl = getWhatsAppUrl(content.contact.whatsapp, locale === "en" ? `Hello Websensial, I would like to purchase the ${product.name.en} template.` : `Halo Websensial, saya ingin membeli template ${product.name.id}.`);
 
   return (
     <Container className="pt-10 pb-20">
@@ -99,7 +101,7 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
 
           <div className="mt-6">
-            <DemoPurchaseActions demoUrl={product.liveDemoUrl} purchaseUrl={product.purchaseUrl} />
+            <DemoPurchaseActions demoUrl={product.liveDemoUrl} purchaseUrl={product.purchaseUrl} whatsappUrl={whatsappUrl} />
           </div>
 
           <dl className="mt-6 grid grid-cols-1 gap-3 text-sm">

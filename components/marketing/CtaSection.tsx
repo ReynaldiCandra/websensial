@@ -1,10 +1,13 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
+import { getWhatsAppUrl } from "@/lib/data/site";
+import { getWebContent } from "@/lib/admin/site-content";
 
-export default function CtaSection() {
-  const t = useTranslations("home.cta");
+export default async function CtaSection() {
+  const [t, content] = await Promise.all([getTranslations("home.cta"), getWebContent()]);
+  const whatsappUrl = getWhatsAppUrl(content.contact.whatsapp, "Hello Websensial, I would like to discuss a custom website project.");
 
   return (
     <Container className="relative py-20">
@@ -21,9 +24,7 @@ export default function CtaSection() {
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-[var(--ws-cta-muted)]">{t("text")}</p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <ButtonLink href="/contact" size="md" variant="ghost" className="ws-cta-button-secondary rounded-full px-5 py-3 text-xs transition-all">
-                {t("secondary")}
-              </ButtonLink>
+              {whatsappUrl ? <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="ws-cta-button-secondary inline-flex items-center justify-center rounded-full px-5 py-3 text-xs transition-all">{t("secondary")} ↗</a> : <ButtonLink href="/contact" size="md" variant="ghost" className="ws-cta-button-secondary rounded-full px-5 py-3 text-xs transition-all">{t("secondary")}</ButtonLink>}
               <ButtonLink href="/products" size="md" className="ws-cta-button-primary rounded-full px-5 py-3 text-xs hover:opacity-90">
                 {t("primary")}
               </ButtonLink>

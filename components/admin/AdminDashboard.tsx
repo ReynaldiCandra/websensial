@@ -6,7 +6,7 @@ import Link from "next/link";
 import type { PortfolioProject } from "@/lib/data/portfolio";
 import type { Product } from "@/lib/data/products";
 
-type Content = { portfolio: PortfolioProject[]; products: Product[] };
+type Content = { portfolio: PortfolioProject[]; products: Product[]; contact: { email: string; whatsapp: string | null } };
 type Section = "portfolio" | "products";
 type Toast = { message: string; kind: "success" | "error" | "info" };
 type Asset = { name: string; url: string; width: number; height: number; bytes: number };
@@ -36,6 +36,13 @@ const emptyProduct = (): Product => ({
   status: "draft",
 });
 
+const emptyCaseStudy = () => ({
+  challenge: { id: "", en: "" },
+  approach: { id: "", en: "" },
+  solution: { id: "", en: "" },
+  outcome: { id: "", en: "" },
+});
+
 const emptyPortfolio = (): PortfolioProject => ({
   id: `pf-${crypto.randomUUID()}`,
   slug: "proyek-baru",
@@ -47,6 +54,7 @@ const emptyPortfolio = (): PortfolioProject => ({
   previewPath: null,
   projectUrl: null,
   kind: "concept",
+  caseStudy: emptyCaseStudy(),
 });
 
 const isProduct = (record: PortfolioProject | Product): record is Product => "previews" in record;
@@ -157,6 +165,15 @@ export default function AdminDashboard() {
     updateSelected((record) => {
       const current = isProduct(record) ? record[field as keyof Product] : record[field as keyof PortfolioProject];
       return { ...record, [field]: { ...(current as { id: string; en: string }), [locale]: value } } as PortfolioProject | Product;
+    });
+  }
+
+  function updateCaseStudy(field: "challenge" | "approach" | "solution" | "outcome", locale: "id" | "en", value: string) {
+    if (!selected || isProduct(selected)) return;
+    updateSelected((record) => {
+      if (isProduct(record)) return record;
+      const caseStudy = record.caseStudy ?? emptyCaseStudy();
+      return { ...record, caseStudy: { ...caseStudy, [field]: { ...caseStudy[field], [locale]: value } } };
     });
   }
 
@@ -341,6 +358,14 @@ export default function AdminDashboard() {
           </div>
           <p className="admin-demo-note">Editor Websensial. Perubahan item disimpan saat tombol Simpan ditekan; penghapusan file cloud hanya tersedia untuk gambar yang tidak direferensikan.</p>
           <form id="admin-content-form" onSubmit={save}>
+            <section className="admin-form-card admin-settings-group">
+              <h3>Kontak global situs</h3>
+              <p className="ws-cms-hint">Kontak ini tampil di halaman Kontak, footer, dan tombol chat calon klien.</p>
+              <div className="admin-form-grid">
+                <label>Email agency<input type="email" value={content.contact.email} onChange={(event) => setContent((current) => current ? { ...current, contact: { ...current.contact, email: event.target.value } } : current)} required /></label>
+                <label>WhatsApp (format internasional)<input type="tel" placeholder="+6281234567890" value={content.contact.whatsapp ?? ""} onChange={(event) => setContent((current) => current ? { ...current, contact: { ...current.contact, whatsapp: event.target.value.trim() || null } } : current)} /></label>
+              </div>
+            </section>
             <div className="ws-cms-layout">
               <aside className="ws-cms-list admin-form-card">
                 <label className="ws-cms-search">Daftar konten<select value={selected?.id ?? ""} onChange={(event) => setSelectedId(event.target.value)} size={Math.min(Math.max(records.length, 4), 10)}>
@@ -372,6 +397,10 @@ export default function AdminDashboard() {
                     </>}
                     <LocalizedTextArea label="Deskripsi · Indonesia" value={selected.description.id} onChange={(value) => updateLocalized("description", "id", value)} />
                     <LocalizedTextArea label="Description · English" value={selected.description.en} onChange={(value) => updateLocalized("description", "en", value)} />
+                    {!isProduct(selected) ? <>
+                      <h3 className="span-two">Studi kasus (opsional)</h3>
+                      {(["challenge", "approach", "solution", "outcome"] as const).map((field) => <div key={field} className="span-two grid gap-3 sm:grid-cols-2"><LocalizedTextArea label={`${{ challenge: "Tantangan", approach: "Pendekatan", solution: "Solusi", outcome: "Hasil" }[field]} · Indonesia`} value={selected.caseStudy?.[field].id ?? ""} onChange={(value) => updateCaseStudy(field, "id", value)} /><LocalizedTextArea label={`${{ challenge: "Challenge", approach: "Approach", solution: "Solution", outcome: "Outcome" }[field]} · English`} value={selected.caseStudy?.[field].en ?? ""} onChange={(value) => updateCaseStudy(field, "en", value)} /></div>)}
+                    </> : null}
                     {isProduct(selected) ? <>
                       <LocalizedListArea label="Teknologi · Indonesia (satu per baris)" value={selected.tech.id} onChange={(value) => updateProductList("tech", "id", value)} />
                       <LocalizedListArea label="Technology · English (one per line)" value={selected.tech.en} onChange={(value) => updateProductList("tech", "en", value)} />

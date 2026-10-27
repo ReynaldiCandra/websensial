@@ -20,6 +20,13 @@ export type PortfolioProject = {
   projectUrl: string | null;
   /** Showcase concepts must never be presented as client deliveries. */
   kind: "concept" | "client";
+  /** Optional case-study copy; only render sections with authored content. */
+  caseStudy?: {
+    challenge: LocalizedText;
+    approach: LocalizedText;
+    solution: LocalizedText;
+    outcome: LocalizedText;
+  };
 };
 
 /**

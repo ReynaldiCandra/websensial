@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import RichText from "@/components/ui/RichText";
-import { siteConfig } from "@/lib/data/site";
+import { getWhatsAppUrl } from "@/lib/data/site";
 
 type FieldErrors = { name?: string; email?: string; message?: string };
 
 const TOPIC_KEYS = ["templateQuestion", "serviceInquiry", "partnership", "other"] as const;
 
-export default function ContactForm() {
+export default function ContactForm({ recipientEmail, whatsapp }: { recipientEmail: string; whatsapp: string | null }) {
   const t = useTranslations("contact.form");
   const locale = useLocale() as "id" | "en";
 
@@ -19,6 +19,7 @@ export default function ContactForm() {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [mailDraft, setMailDraft] = useState<string | null>(null);
+  const [whatsappDraft, setWhatsappDraft] = useState<string | null>(null);
 
   function validate(): boolean {
     const nextErrors: FieldErrors = {};
@@ -33,12 +34,14 @@ export default function ContactForm() {
     event.preventDefault();
     if (!validate()) return;
 
-    // No email backend is configured yet: @see siteConfig. Compose an
-    // honest mailto draft instead of pretending a delivery occurred.
+    // No email backend is configured yet. Compose a mailto draft instead of
+    // pretending a delivery occurred.
     const subject = `[Websensial] ${t(`topics.${topic}`)} — ${name.trim()}`;
     const body = `${message.trim()}\n\n—\n${name.trim()}\n${email.trim()}`;
-    const mailto = `mailto:${siteConfig.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const whatsappMessage = `${t(`topics.${topic}`)}\n\n${message.trim()}\n\n—\n${name.trim()}\n${email.trim()}`;
     setMailDraft(mailto);
+    setWhatsappDraft(getWhatsAppUrl(whatsapp, whatsappMessage));
   }
 
   if (mailDraft) {
@@ -46,12 +49,15 @@ export default function ContactForm() {
       <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6">
         <h3 className="text-lg font-extrabold text-ink">{t("successTitle")}</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted">{t("successText")}</p>
-        <a
-          href={mailDraft}
-          className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-primary-strong"
-        >
-          {t("openMailApp")} ↗
-        </a>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <a
+            href={mailDraft}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-primary-strong"
+          >
+            {t("openMailApp")} ↗
+          </a>
+          {whatsappDraft ? <a href={whatsappDraft} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-white px-5 py-3 text-sm font-bold text-ink hover:bg-soft">{t("openWhatsApp")} ↗</a> : null}
+        </div>
         <p className="mt-5 text-xs leading-relaxed text-muted">
           <RichText text={t("integrationNote")} strongClassName="font-semibold text-ink" />
         </p>

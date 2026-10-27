@@ -40,6 +40,7 @@
     "notConfiguredTitle": { "demo": "Demo belum dikonfigurasi", "purchase": "Pembelian belum dikonfigurasi" },
     "notConfiguredBody": "**Kami sedang menyiapkan kanal ini.** Saat ini belum ada tujuan {kind} yang diatur untuk produk ini. Hubungi kami dan tim Websensial akan membantu proses lebih lanjut.",
     "contactToBuy": "Hubungi untuk pembelian",
+    "contactOnWhatsApp": "Tanya via WhatsApp",
     "price": "Harga",
     "oneTime": "sekali bayar",
     "loading": "Memuat…",
@@ -193,7 +194,18 @@
     "behindDesign": "Di balik desain",
     "tickerItems": ["Website responsif", "Template premium siap pakai", "Desain dibuat dengan perhatian", "Dari ide menuju digital"],
     "tickerPause": "Jeda teks berjalan",
-    "tickerResume": "Lanjutkan teks berjalan"
+    "tickerResume": "Lanjutkan teks berjalan",
+    "backToPortfolio": "Kembali ke portofolio",
+    "discussProject": "Diskusikan proyek",
+    "caseStudy": "Studi kasus",
+    "challenge": "Tantangan",
+    "approach": "Pendekatan",
+    "solution": "Solusi",
+    "outcome": "Hasil",
+    "discussProjectDescription": "Suka arah desain ini? Ceritakan kebutuhan Anda kepada kami.",
+    "openLiveProject": "Lihat proyek live",
+    "chatOnWhatsApp": "Chat via WhatsApp",
+    "contactUs": "Hubungi kami"
   },
   "contact": {
     "title": "Hubungi kami",
@@ -216,6 +228,7 @@
       "successTitle": "Form Anda siap dikirim lewat aplikasi email",
       "successText": "Pesan Anda sudah dirangkai menjadi email siap kirim. Klik tombol di bawah untuk membuka aplikasi email Anda.",
       "openMailApp": "Buka aplikasi email",
+      "openWhatsApp": "Lanjutkan via WhatsApp",
       "integrationNote": "**Status integrasi:** Belum ada backend email yang terkonfigurasi, sehingga pengiriman dilakukan via aplikasi email Anda. Saat layanan tertentu sudah diaktivasi (contoh: Resend, Formspree), pesan akan langsung diterima tim kami.",
       "errors": {
         "nameRequired": "Nama wajib diisi.",

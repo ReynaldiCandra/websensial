@@ -11,10 +11,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const locales = routing.locales;
   const staticPaths = ["", "/products", "/services", "/portfolio", "/contact"];
   const productPaths = content.products.filter((product) => product.status === "published").map((product) => `/products/${product.slug}`);
+  const portfolioPaths = content.portfolio.map((project) => `/portfolio/${project.slug}`);
 
   const entries: MetadataRoute.Sitemap = [];
 
-  for (const path of [...staticPaths, ...productPaths]) {
+  for (const path of [...staticPaths, ...productPaths, ...portfolioPaths]) {
     for (const locale of locales) {
       entries.push({
         url: `${base}/${locale}${path}`,

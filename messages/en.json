@@ -40,6 +40,7 @@
     "notConfiguredTitle": { "demo": "Demo not configured yet", "purchase": "Checkout not configured yet" },
     "notConfiguredBody": "**This channel is still being set up.** No {kind} destination has been configured for this product yet. Contact us and the Websensial team will help you proceed.",
     "contactToBuy": "Contact us to purchase",
+    "contactOnWhatsApp": "Ask on WhatsApp",
     "price": "Price",
     "oneTime": "one-time payment",
     "loading": "Loading…",
@@ -196,7 +197,18 @@
     "behindDesign": "Behind the design",
     "tickerItems": ["Responsive websites", "Premium ready-to-use templates", "Thoughtful digital design", "Ideas brought to digital"],
     "tickerPause": "Pause scrolling text",
-    "tickerResume": "Resume scrolling text"
+    "tickerResume": "Resume scrolling text",
+    "backToPortfolio": "Back to portfolio",
+    "discussProject": "Discuss a project",
+    "caseStudy": "Case study",
+    "challenge": "Challenge",
+    "approach": "Approach",
+    "solution": "Solution",
+    "outcome": "Outcome",
+    "discussProjectDescription": "Like this direction? Tell us what you have in mind.",
+    "openLiveProject": "Open live project",
+    "chatOnWhatsApp": "Chat on WhatsApp",
+    "contactUs": "Contact us"
   },
   "contact": {
     "title": "Contact us",
@@ -219,6 +231,7 @@
       "successTitle": "Your message is ready to send via your email app",
       "successText": "We've composed your message into a ready-to-send email. Click the button below to open your email app.",
       "openMailApp": "Open email app",
+      "openWhatsApp": "Continue on WhatsApp",
       "integrationNote": "**Integration status:** No email backend is configured yet, so sending happens through your own email app. Once a delivery provider is configured (e.g. Resend, Formspree), messages will reach our team directly.",
       "errors": {
         "nameRequired": "Please enter your name.",

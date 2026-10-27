@@ -3,12 +3,22 @@ import { createClient } from "@supabase/supabase-js";
 import { portfolioProjects, type PortfolioProject } from "@/lib/data/portfolio";
 import { products, type Product } from "@/lib/data/products";
 
+export type SiteContact = {
+  email: string;
+  whatsapp: string | null;
+};
+
 export type WebContent = {
   portfolio: PortfolioProject[];
   products: Product[];
+  contact: SiteContact;
 };
 
-const fallbackContent: WebContent = { portfolio: portfolioProjects, products };
+const fallbackContent: WebContent = {
+  portfolio: portfolioProjects,
+  products,
+  contact: { email: "agencywebsensial@gmail.com", whatsapp: "+6281319963253" },
+};
 const CONTENT_KEY = "site-v1";
 
 function getCmsClient() {
@@ -28,6 +38,7 @@ export function getBundledWebContent(): WebContent {
   return {
     portfolio: structuredClone(fallbackContent.portfolio),
     products: structuredClone(fallbackContent.products),
+    contact: structuredClone(fallbackContent.contact),
   };
 }
 
@@ -46,7 +57,11 @@ export async function getStoredWebContent(): Promise<WebContent | null> {
     if (typeof data.content !== "object") return null;
     const content = data.content as Partial<WebContent>;
     if (!Array.isArray(content.portfolio) || !Array.isArray(content.products)) return null;
-    return { portfolio: content.portfolio, products: content.products };
+    return {
+      portfolio: content.portfolio,
+      products: content.products,
+      contact: content.contact ?? fallbackContent.contact,
+    };
   } catch (error) {
     console.error("Failed to load stored CMS content for media safety check.", error);
     return null;
@@ -98,8 +113,18 @@ function isSafeImagePath(value: unknown): value is string {
 }
 
 export function validateWebContent(value: unknown): string | null {
-  if (!isRecord(value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)) {
-    return "Data portofolio dan template harus berupa daftar.";
+  if (!isRecord(value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)
+    || !isRecord(value.contact)) {
+    return "Data portofolio, template, dan kontak harus valid.";
+  }
+  if (!isText(value.contact.email, true) || value.contact.email.length > 254
+    || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.contact.email)) {
+    return "Alamat email kontak tidak valid.";
+  }
+  if (value.contact.whatsapp !== null
+    && (!isText(value.contact.whatsapp, true) || value.contact.whatsapp.length > 32
+      || !/^\+?[1-9]\d{7,14}$/.test(value.contact.whatsapp))) {
+    return "Nomor WhatsApp harus menggunakan format internasional, contoh +6281234567890.";
   }
   if (value.portfolio.length > 500 || value.products.length > 500) return "Jumlah konten melebihi batas.";
 
@@ -129,6 +154,12 @@ export function validateWebContent(value: unknown): string | null {
       || !["website", "dashboard", "landing"].includes(String(item.filter))
       || !["concept", "client"].includes(String(item.kind))) {
       return `Data portofolio nomor ${index + 1} tidak valid.`;
+    }
+    if (item.caseStudy !== undefined) {
+      if (!isRecord(item.caseStudy)
+        || !["challenge", "approach", "solution", "outcome"].every((field) => isLocalizedText((item.caseStudy as Record<string, unknown>)[field]))) {
+        return `Studi kasus portofolio nomor ${index + 1} tidak valid.`;
+      }
     }
   }
 

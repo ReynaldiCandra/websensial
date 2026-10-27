@@ -16,6 +16,15 @@ create table if not exists public.websensial_content (
 alter table public.websensial_admins enable row level security;
 alter table public.websensial_content enable row level security;
 
+-- Keep policy setup safe to rerun after a partial or successful installation.
+drop policy if exists "websensial admin checks own membership" on public.websensial_admins;
+drop policy if exists "websensial admins can read content" on public.websensial_content;
+drop policy if exists "websensial admins can edit content" on public.websensial_content;
+drop policy if exists "public reads Websensial CMS media" on storage.objects;
+drop policy if exists "Websensial admins upload CMS media" on storage.objects;
+drop policy if exists "Websensial admins update CMS media" on storage.objects;
+drop policy if exists "Websensial admins delete CMS media" on storage.objects;
+
 create policy "websensial admin checks own membership"
   on public.websensial_admins for select to authenticated
   using (user_id = auth.uid());

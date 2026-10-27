@@ -5,9 +5,11 @@ import RichText from "@/components/ui/RichText";
 export default function DemoPurchaseActions({
   demoUrl,
   purchaseUrl,
+  whatsappUrl,
 }: {
   demoUrl: string | null;
   purchaseUrl: string | null;
+  whatsappUrl: string | null;
 }) {
   const tc = useTranslations("common");
   const allConfigured = Boolean(demoUrl) && Boolean(purchaseUrl);
@@ -28,6 +30,10 @@ export default function DemoPurchaseActions({
           <ButtonLink href={purchaseUrl} external size="lg" className="flex-1">
             {tc("buy")}
           </ButtonLink>
+        ) : whatsappUrl ? (
+          <ButtonLink href={whatsappUrl} external size="lg" className="flex-1">
+            {tc("contactOnWhatsApp")}
+          </ButtonLink>
         ) : (
           <ButtonLink href="/contact" variant="secondary" size="lg" className="flex-1">
             {tc("contactToBuy")}
@@ -39,7 +45,7 @@ export default function DemoPurchaseActions({
         <p className="mt-3 text-xs leading-relaxed text-muted">
           <RichText
             text={tc("notConfiguredBody", {
-              kind: [tc("liveDemo"), tc("buy")].filter((_, index) => (index === 0 ? !demoUrl : !purchaseUrl)).join(" / "),
+              kind: [tc("liveDemo"), tc("buy")].filter((_, index) => (index === 0 ? !demoUrl : !purchaseUrl && !whatsappUrl)).join(" / "),
             })}
             strongClassName="font-semibold text-ink"
           />

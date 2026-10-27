@@ -9,9 +9,8 @@ export const siteConfig = {
   ogImage: "/og.svg",
   /** Contact channels surfaced on the contact page + footer. */
   contact: {
-    email: "hello@websensial.com",
-    /** Not configured yet — surfaces an honest unavailable state when null. */
-    whatsapp: null as string | null,
+    email: "agencywebsensial@gmail.com",
+    whatsapp: "+6281319963253",
   },
   /** Optional social links (null = intentionally not configured, not hidden). */
   socials: {
@@ -22,3 +21,9 @@ export const siteConfig = {
 } as const;
 
 export type SiteConfig = typeof siteConfig;
+
+export function getWhatsAppUrl(phone: string | null, message: string) {
+  const number = phone?.replace(/\D/g, "");
+  if (!number) return null;
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+}
