@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { portfolioProjects, type PortfolioProject } from "@/lib/data/portfolio";
 import { products, type Product } from "@/lib/data/products";
+import { defaultHomeContent, defaultServices, normalizeHomeContent, validateHomeContent, validateServices, type HomeContent } from "@/lib/admin/home-content";
 
 export type SiteContact = {
   email: string;
@@ -12,12 +13,16 @@ export type WebContent = {
   portfolio: PortfolioProject[];
   products: Product[];
   contact: SiteContact;
+  home: HomeContent;
+  services: typeof defaultServices;
 };
 
 const fallbackContent: WebContent = {
   portfolio: portfolioProjects,
   products,
   contact: { email: "agencywebsensial@gmail.com", whatsapp: "+6281319963253" },
+  home: defaultHomeContent,
+  services: defaultServices,
 };
 const CONTENT_KEY = "site-v1";
 
@@ -39,6 +44,8 @@ export function getBundledWebContent(): WebContent {
     portfolio: structuredClone(fallbackContent.portfolio),
     products: structuredClone(fallbackContent.products),
     contact: structuredClone(fallbackContent.contact),
+    home: structuredClone(fallbackContent.home),
+    services: structuredClone(fallbackContent.services),
   };
 }
 
@@ -61,6 +68,8 @@ export async function getStoredWebContent(): Promise<WebContent | null> {
       portfolio: content.portfolio,
       products: content.products,
       contact: content.contact ?? fallbackContent.contact,
+      home: normalizeHomeContent(content.home),
+      services: Array.isArray(content.services) ? content.services as WebContent["services"] : structuredClone(fallbackContent.services),
     };
   } catch (error) {
     console.error("Failed to load stored CMS content for media safety check.", error);
@@ -145,6 +154,11 @@ export function validateWebContent(value: unknown): string | null {
   if (portfolioIdentityError) return portfolioIdentityError;
   const productIdentityError = validateIdsAndSlugs(value.products, "template");
   if (productIdentityError) return productIdentityError;
+
+  const homeError = validateHomeContent(value.home, value.portfolio, value.products);
+  if (homeError) return homeError;
+  const servicesError = validateServices(value.services);
+  if (servicesError) return servicesError;
 
   for (const [index, item] of value.portfolio.entries()) {
     if (!isRecord(item) || !isLocalizedText(item.name, true) || !isLocalizedText(item.category, true) || !isLocalizedText(item.description)

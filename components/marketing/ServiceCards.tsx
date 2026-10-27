@@ -2,13 +2,15 @@ import { useLocale, useTranslations } from "next-intl";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/motion/Reveal";
 import { Link } from "@/i18n/navigation";
-import { services } from "@/lib/data/services";
+import { services as defaultServices, type Service } from "@/lib/data/services";
+import type { HomeContent } from "@/lib/admin/home-content";
 
-export default function ServiceCards({ showHeading = true }: { showHeading?: boolean }) {
+export default function ServiceCards({ showHeading = true, homeContent, services = defaultServices }: { showHeading?: boolean; homeContent?: HomeContent["services"]; services?: Service[] }) {
   const t = useTranslations("home.services");
   const locale = useLocale() as "id" | "en";
+  const sectionCopy = homeContent ?? { badge: { id: t("badge"), en: t("badge") }, title: { id: t("title"), en: t("title") }, subtitle: { id: t("subtitle"), en: t("subtitle") }, seeAll: { id: t("seeAll"), en: t("seeAll") } };
 
-  const content = (
+  const cards = (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {services.map((service, index) => (
         <Reveal key={service.id} delay={index * 0.07}>
@@ -43,7 +45,7 @@ export default function ServiceCards({ showHeading = true }: { showHeading?: boo
     </div>
   );
 
-  if (!showHeading) return content;
+  if (!showHeading) return cards;
 
   return (
     <section className="relative isolate overflow-hidden border-y border-line bg-[var(--ws-bg-soft)]">
@@ -52,17 +54,17 @@ export default function ServiceCards({ showHeading = true }: { showHeading?: boo
         <Reveal>
           <div className="mb-8 flex flex-col gap-5 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="eyebrow">{t("badge")}</p>
-              <h2 className="mt-3 font-editorial text-4xl leading-[0.98] tracking-[-0.035em] text-ink text-balance sm:text-5xl">{t("title")}</h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">{t("subtitle")}</p>
+              <p className="eyebrow">{sectionCopy.badge[locale]}</p>
+              <h2 className="mt-3 font-editorial text-4xl leading-[0.98] tracking-[-0.035em] text-ink text-balance sm:text-5xl">{sectionCopy.title[locale]}</h2>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">{sectionCopy.subtitle[locale]}</p>
             </div>
             <Link href="/services" className="group inline-flex min-h-11 items-center gap-3 self-start rounded-full border border-line bg-[var(--ws-surface)] px-4 py-2 text-sm font-semibold text-ink shadow-[var(--ws-shadow-card)] transition-colors hover:border-primary/40 hover:text-primary sm:mb-1 sm:self-auto">
-              {t("seeAll")}
+              {sectionCopy.seeAll[locale]}
               <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-[var(--ws-accent-wash)] transition-transform group-hover:translate-x-0.5">→</span>
             </Link>
           </div>
         </Reveal>
-        {content}
+        {cards}
       </Container>
     </section>
   );

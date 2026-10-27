@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAuthorizedAdminId } from "@/lib/admin/auth";
 import { getWebContent, saveWebContent, validateWebContent, type WebContent } from "@/lib/admin/site-content";
+import { validateServices } from "@/lib/admin/home-content";
 
 export async function GET() {
   if (!(await getAuthorizedAdminId())) return NextResponse.json({ error: "Silakan masuk sebagai admin." }, { status: 401 });
@@ -23,6 +24,10 @@ export async function PUT(request: Request) {
   }
   const validationError = validateWebContent(content);
   if (validationError) return NextResponse.json({ error: validationError }, { status: 400 });
+  const servicesError = content && typeof content === "object" && "services" in content
+    ? validateServices(content.services)
+    : null;
+  if (servicesError) return NextResponse.json({ error: servicesError }, { status: 400 });
 
   try {
     await saveWebContent(content as WebContent);

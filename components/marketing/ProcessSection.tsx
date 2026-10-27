@@ -2,10 +2,14 @@ import { useTranslations } from "next-intl";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/motion/Reveal";
+import { useLocale } from "next-intl";
+import type { HomeContent } from "@/lib/admin/home-content";
 
-export default function ProcessSection() {
+export default function ProcessSection({ content }: { content?: HomeContent["process"] }) {
   const t = useTranslations("home.process");
-  const steps = t.raw("steps") as { title: string; text: string }[];
+  const locale = useLocale() as "id" | "en";
+  const steps = content?.steps.map((step) => ({ title: step.title[locale], text: step.text[locale] })) ?? t.raw("steps") as { title: string; text: string }[];
+  const title = content?.title[locale] ?? t("title");
 
   return (
     <section className="relative isolate overflow-hidden border-y border-line bg-[var(--ws-bg)] py-16 sm:py-20 lg:py-24">
@@ -13,7 +17,7 @@ export default function ProcessSection() {
       <div aria-hidden="true" className="pointer-events-none absolute -right-40 bottom-0 h-80 w-80 rounded-full bg-[#4f6bff]/[0.07] blur-3xl" />
       <Container className="relative">
         <Reveal>
-          <SectionHeading title={t("title")} />
+          <SectionHeading title={title} />
         </Reveal>
         <ol className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <span aria-hidden="true" className="absolute left-[12.5%] right-[12.5%] top-7 hidden h-px bg-gradient-to-r from-[#6328f5]/25 via-[#4f6bff]/50 to-[#6328f5]/25 lg:block" />

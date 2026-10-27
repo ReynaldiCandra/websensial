@@ -11,10 +11,11 @@ import { portfolioFilters, type PortfolioFilter, type PortfolioProject } from "@
 
 type FilterValue = "all" | PortfolioFilter;
 
-export function PortfolioTicker() {
+export function PortfolioTicker({ items }: { items: { id: string; en: string }[] }) {
   const t = useTranslations("portfolio");
+  const locale = useLocale() as "id" | "en";
   const [tickerPaused, setTickerPaused] = useState(false);
-  const tickerItems = t.raw("tickerItems") as string[];
+  const tickerItems = items.map((item) => item[locale]);
 
   return (
     <div className="portfolio-marquee relative left-1/2 flex w-screen -translate-x-1/2 items-center overflow-hidden bg-[var(--ws-ink)] py-5 text-[var(--ws-bg)] sm:py-6">
@@ -50,7 +51,7 @@ export function PortfolioTicker() {
   );
 }
 
-export default function PortfolioShowcase({ projects: allProjects, showHeader = true, limit }: { projects: PortfolioProject[]; showHeader?: boolean; limit?: number }) {
+export default function PortfolioShowcase({ projects: allProjects, showHeader = true, limit, homeContent }: { projects: PortfolioProject[]; showHeader?: boolean; limit?: number; homeContent?: { badge: { id: string; en: string }; title: { id: string; en: string }; description: { id: string; en: string } } }) {
   const t = useTranslations("portfolio");
   const locale = useLocale() as "id" | "en";
   const [filter, setFilter] = useState<FilterValue>("all");
@@ -66,9 +67,9 @@ export default function PortfolioShowcase({ projects: allProjects, showHeader = 
       <Container className="py-14 sm:py-16 lg:py-20">
         <div className="mb-8 flex flex-col gap-5 sm:mb-10 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-xl">
-            {showHeader ? <p className="eyebrow">{t("badge")}</p> : null}
-            <h2 className="mt-3 font-editorial text-4xl leading-[0.95] tracking-[-0.035em] text-ink sm:text-5xl">{t("title")}</h2>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">{showHeader ? t("conceptNote") : t("subtitle")}</p>
+            {showHeader ? <p className="eyebrow">{homeContent?.badge[locale] ?? t("badge")}</p> : null}
+            <h2 className="mt-3 font-editorial text-4xl leading-[0.95] tracking-[-0.035em] text-ink sm:text-5xl">{homeContent?.title[locale] ?? t("title")}</h2>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">{homeContent?.description[locale] ?? (showHeader ? t("conceptNote") : t("subtitle"))}</p>
           </div>
           {showHeader ? (
             <div role="group" aria-label={t("filterLabel")} className="flex flex-wrap gap-1.5">

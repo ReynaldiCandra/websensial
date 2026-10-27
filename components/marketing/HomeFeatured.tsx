@@ -5,10 +5,18 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/motion/Reveal";
 import ProductCard from "@/components/products/ProductCard";
 import type { Product } from "@/lib/data/products";
+import { useLocale } from "next-intl";
+import type { HomeContent } from "@/lib/admin/home-content";
 
-export default function HomeFeatured({ products }: { products: Product[] }) {
+export default function HomeFeatured({ products, homeContent }: { products: Product[]; homeContent?: HomeContent["featured"] }) {
   const t = useTranslations("home.featured");
-  const featured = products.filter((product) => product.status === "published" && product.featured).slice(0, 3);
+  const locale = useLocale() as "id" | "en";
+  const featured = homeContent
+    ? homeContent.productIds.map((id) => products.find((product) => product.id === id)).filter((product): product is Product => Boolean(product && product.status === "published")).slice(0, 3)
+    : products.filter((product) => product.status === "published" && product.featured).slice(0, 3);
+  const title = homeContent?.title[locale] ?? t("title");
+  const subtitle = homeContent?.subtitle[locale] ?? t("subtitle");
+  const seeAll = homeContent?.seeAll[locale] ?? t("seeAll");
 
   if (featured.length === 0) return null;
 
@@ -17,12 +25,12 @@ export default function HomeFeatured({ products }: { products: Product[] }) {
       <Container className="py-14 sm:py-16 lg:py-20">
         <Reveal>
           <SectionHeading
-            title={t("title")}
-            subtitle={t("subtitle")}
+            title={title}
+            subtitle={subtitle}
             align="left"
             action={
               <Link href="/products" className="hidden text-xs font-semibold text-ink hover:text-muted sm:block">
-                {t("seeAll")} →
+                {seeAll} →
               </Link>
             }
           />

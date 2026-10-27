@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { PortfolioProject } from "@/lib/data/portfolio";
 import type { Product } from "@/lib/data/products";
+import type { HomeContent, HomeCopy, HomeSectionId } from "@/lib/admin/home-content";
+import type { Service } from "@/lib/data/services";
 
-type Content = { portfolio: PortfolioProject[]; products: Product[]; contact: { email: string; whatsapp: string | null } };
-type Section = "portfolio" | "products";
+type Content = { portfolio: PortfolioProject[]; products: Product[]; contact: { email: string; whatsapp: string | null }; home: HomeContent; services: Service[] };
+type Section = "home" | "portfolio" | "products";
 type Toast = { message: string; kind: "success" | "error" | "info" };
 type Asset = { name: string; url: string; width: number; height: number; bytes: number };
 type LocalizedField = "name" | "category" | "summary" | "description" | "license";
@@ -64,8 +66,8 @@ export default function AdminDashboard() {
   const router = useRouter();
   const [content, setContent] = useState<Content | null>(null);
   const [savedSnapshot, setSavedSnapshot] = useState("");
-  const [section, setSection] = useState<Section>("portfolio");
-  const sectionRef = useRef<Section>("portfolio");
+  const [section, setSection] = useState<Section>("home");
+  const sectionRef = useRef<Section>("home");
   const [selectedId, setSelectedId] = useState("");
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<Toast | null>(null);
@@ -81,7 +83,8 @@ export default function AdminDashboard() {
     try {
       const response = await fetch("/api/admin/content", { cache: "no-store" });
       const value = await response.json() as Content | { error?: string };
-      if (!response.ok || !("portfolio" in value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)) {
+      if (!response.ok || !("portfolio" in value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)
+        || !("home" in value) || !value.home || !("services" in value) || !Array.isArray(value.services)) {
         throw new Error("error" in value ? value.error || "Konten tidak dapat dimuat." : "Format konten dari CMS tidak valid.");
       }
       setContent(value);
@@ -132,7 +135,7 @@ export default function AdminDashboard() {
   }, [dirty]);
 
   const records = section === "portfolio" ? content?.portfolio ?? [] : content?.products ?? [];
-  const selected = records.find((item) => item.id === selectedId) ?? records[0] ?? null;
+  const selected = section === "home" ? null : records.find((item) => item.id === selectedId) ?? records[0] ?? null;
   const preset = { label: section === "portfolio" ? "Pratinjau portofolio" : "Pratinjau template", width: 1600, height: 1000 };
   const activeImage = selected ? (isProduct(selected) ? selected.previews[0] : selected.previewPath) : null;
   const imageRefs = useMemo(() => {
@@ -146,7 +149,137 @@ export default function AdminDashboard() {
   function changeSection(next: Section) {
     sectionRef.current = next;
     setSection(next);
-    setSelectedId(next === "portfolio" ? content?.portfolio[0]?.id ?? "" : content?.products[0]?.id ?? "");
+    setSelectedId(next === "portfolio" ? content?.portfolio[0]?.id ?? "" : next === "products" ? content?.products[0]?.id ?? "" : "");
+  }
+
+  function updateHomeCopy(path: string, locale: "id" | "en", value: string) {
+    setContent((current) => {
+      if (!current) return current;
+      const home = structuredClone(current.home) as unknown as Record<string, unknown>;
+      const keys = path.split(".");
+      let target: Record<string, unknown> = home;
+      for (const key of keys.slice(0, -1)) target = target[key] as Record<string, unknown>;
+      const field = keys[keys.length - 1];
+      const previous = target[field];
+      target[field] = field === "secondaryHref" && !value.trim()
+        ? null
+        : previous && typeof previous === "object" ? { ...previous, [locale]: value } : value;
+      return { ...current, home: home as unknown as HomeContent };
+    });
+  }
+
+  function toggleHomeSection(id: HomeSectionId) {
+    setContent((current) => current ? { ...current, home: { ...current.home, sections: current.home.sections.map((item) => item.id === id ? { ...item, enabled: !item.enabled } : item) } } : current);
+  }
+
+  function reorderHomeSection(index: number, direction: -1 | 1) {
+    setContent((current) => {
+      if (!current) return current;
+      const target = index + direction;
+      if (target < 0 || target >= current.home.sections.length) return current;
+      const sections = [...current.home.sections];
+      [sections[index], sections[target]] = [sections[target], sections[index]];
+      return { ...current, home: { ...current.home, sections } };
+    });
+  }
+
+  function setSelectedIds(group: "hero" | "portfolio" | "featured", id: string, checked: boolean) {
+    setContent((current) => {
+      if (!current) return current;
+      const home = structuredClone(current.home);
+      const ids = group === "hero" ? home.hero.projectIds : group === "portfolio" ? home.portfolio.projectIds : home.featured.productIds;
+      const next = checked ? [...ids, id] : ids.filter((value) => value !== id);
+      if (group === "hero") home.hero.projectIds = next.slice(0, 3);
+      else if (group === "portfolio") home.portfolio.projectIds = next;
+      else home.featured.productIds = next.slice(0, 3);
+      return { ...current, home };
+    });
+  }
+
+  function moveSelectedId(group: "hero" | "portfolio" | "featured", index: number, direction: -1 | 1) {
+    setContent((current) => {
+      if (!current) return current;
+      const home = structuredClone(current.home);
+      const ids = group === "hero" ? home.hero.projectIds : group === "portfolio" ? home.portfolio.projectIds : home.featured.productIds;
+      const target = index + direction;
+      if (target < 0 || target >= ids.length) return current;
+      [ids[index], ids[target]] = [ids[target], ids[index]];
+      return { ...current, home };
+    });
+  }
+
+  function updateService(index: number, field: "name" | "description", locale: "id" | "en", value: string) {
+    setContent((current) => current ? { ...current, services: current.services.map((service, itemIndex) => itemIndex === index ? { ...service, [field]: { ...service[field], [locale]: value } } : service) } : current);
+  }
+
+  function updateServiceItems(index: number, locale: "id" | "en", value: string) {
+    setContent((current) => current ? { ...current, services: current.services.map((service, itemIndex) => itemIndex === index ? { ...service, items: { ...service.items, [locale]: value.split("\\n").map((item) => item.trim()).filter(Boolean) } } : service) } : current);
+  }
+
+  function reorderService(index: number, direction: -1 | 1) {
+    setContent((current) => {
+      if (!current) return current;
+      const target = index + direction;
+      if (target < 0 || target >= current.services.length) return current;
+      const services = [...current.services];
+      [services[index], services[target]] = [services[target], services[index]];
+      return { ...current, services };
+    });
+  }
+
+  function addService() {
+    setContent((current) => current ? { ...current, services: [...current.services, { id: `service-${crypto.randomUUID()}`, name: { id: "Layanan baru", en: "New service" }, description: { id: "", en: "" }, items: { id: [], en: [] } }] } : current);
+  }
+
+  function removeService(id: string) {
+    if (!window.confirm("Hapus layanan ini dari beranda? Perubahan berlaku setelah disimpan.")) return;
+    setContent((current) => current ? { ...current, services: current.services.filter((service) => service.id !== id) } : current);
+  }
+
+  function updateTickerItem(index: number, locale: "id" | "en", value: string) {
+    setContent((current) => current ? { ...current, home: { ...current.home, tickerItems: current.home.tickerItems.map((item, itemIndex) => itemIndex === index ? { ...item, [locale]: value } : item) } } : current);
+  }
+
+  function moveTickerItem(index: number, direction: -1 | 1) {
+    setContent((current) => {
+      if (!current) return current;
+      const target = index + direction;
+      if (target < 0 || target >= current.home.tickerItems.length) return current;
+      const tickerItems = [...current.home.tickerItems];
+      [tickerItems[index], tickerItems[target]] = [tickerItems[target], tickerItems[index]];
+      return { ...current, home: { ...current.home, tickerItems } };
+    });
+  }
+
+  function addTickerItem() {
+    setContent((current) => current && current.home.tickerItems.length < 20 ? { ...current, home: { ...current.home, tickerItems: [...current.home.tickerItems, { id: "", en: "" }] } } : current);
+  }
+
+  function removeTickerItem(index: number) {
+    setContent((current) => current ? { ...current, home: { ...current.home, tickerItems: current.home.tickerItems.filter((_, itemIndex) => itemIndex !== index) } } : current);
+  }
+
+  function updateProcessStep(index: number, field: "title" | "text", locale: "id" | "en", value: string) {
+    setContent((current) => current ? { ...current, home: { ...current.home, process: { ...current.home.process, steps: current.home.process.steps.map((step, itemIndex) => itemIndex === index ? { ...step, [field]: { ...step[field], [locale]: value } } : step) } } } : current);
+  }
+
+  function moveProcessStep(index: number, direction: -1 | 1) {
+    setContent((current) => {
+      if (!current) return current;
+      const target = index + direction;
+      if (target < 0 || target >= current.home.process.steps.length) return current;
+      const steps = [...current.home.process.steps];
+      [steps[index], steps[target]] = [steps[target], steps[index]];
+      return { ...current, home: { ...current.home, process: { ...current.home.process, steps } } };
+    });
+  }
+
+  function addProcessStep() {
+    setContent((current) => current && current.home.process.steps.length < 12 ? { ...current, home: { ...current.home, process: { ...current.home.process, steps: [...current.home.process.steps, { title: { id: "Langkah baru", en: "New step" }, text: { id: "", en: "" } }] } } } : current);
+  }
+
+  function removeProcessStep(index: number) {
+    setContent((current) => current ? { ...current, home: { ...current.home, process: { ...current.home.process, steps: current.home.process.steps.filter((_, itemIndex) => itemIndex !== index) } } } : current);
   }
 
   function updateSelected(mutator: (record: PortfolioProject | Product) => PortfolioProject | Product) {
@@ -292,6 +425,8 @@ export default function AdminDashboard() {
     if (portfolioSlugError) return portfolioSlugError;
     const productSlugError = validateSlugs(content.products, "template");
     if (productSlugError) return productSlugError;
+    if (content.home.hero.projectIds.length > 3 || content.home.featured.productIds.length > 3) return "Pilih maksimal tiga proyek Hero dan tiga template unggulan.";
+    if (content.home.sections.length !== 7 || new Set(content.home.sections.map((item) => item.id)).size !== 7) return "Susunan bagian beranda tidak valid.";
     for (const product of content.products) {
       if (product.status === "published" && product.previews.length === 0) return `Template “${product.name.id}” belum memiliki gambar pratinjau. Tambahkan gambar atau ubah status ke Draft.`;
       if (product.status === "published" && (!product.summary.id.trim() || !product.summary.en.trim())) return `Ringkasan Indonesia dan Inggris wajib diisi sebelum template “${product.name.id}” diterbitkan.`;
@@ -344,6 +479,7 @@ export default function AdminDashboard() {
         <Link href="/id" className="admin-logo"><strong className="ws-cms-logo">W<span>·</span></strong></Link>
         <span className="admin-kicker">WEBSENSIAL · CMS</span>
         <nav aria-label="Navigasi admin">
+          <button className={section === "home" ? "selected" : ""} onClick={() => changeSection("home")}>Beranda</button>
           <button className={section === "portfolio" ? "selected" : ""} onClick={() => changeSection("portfolio")}>Portofolio</button>
           <button className={section === "products" ? "selected" : ""} onClick={() => changeSection("products")}>Template</button>
         </nav>
@@ -353,11 +489,12 @@ export default function AdminDashboard() {
         <header className="admin-topbar"><span>Panel pengelolaan konten</span><span>{dirty ? "Ada perubahan belum disimpan" : "Semua perubahan tersimpan"}</span></header>
         <section className="admin-content">
           <div className="admin-page-heading">
-            <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "portfolio" ? "Portofolio" : "Template"}</h1></div>
-            <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button><button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : "template"}</button><button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button></div>
+            <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "home" ? "Beranda" : section === "portfolio" ? "Portofolio" : "Template"}</h1></div>
+            <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button>{section === "home" ? <button className="admin-primary" type="button" onClick={addService} disabled={busy}>+ Tambah layanan</button> : <button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : "template"}</button>}<button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button></div>
           </div>
-          <p className="admin-demo-note">Editor Websensial. Perubahan item disimpan saat tombol Simpan ditekan; penghapusan file cloud hanya tersedia untuk gambar yang tidak direferensikan.</p>
+          <p className="admin-demo-note">Konten bisa diisi dalam bahasa Indonesia dan Inggris. Terjemahan otomatis belum diaktifkan. Susunan dan visibilitas bagian beranda dapat diatur di editor Beranda.</p>
           <form id="admin-content-form" onSubmit={save}>
+            {section === "home" ? <HomeEditor content={content} updateHomeCopy={updateHomeCopy} toggleHomeSection={toggleHomeSection} reorderHomeSection={reorderHomeSection} setSelectedIds={setSelectedIds} moveSelectedId={moveSelectedId} updateService={updateService} updateServiceItems={updateServiceItems} reorderService={reorderService} removeService={removeService} updateTickerItem={updateTickerItem} moveTickerItem={moveTickerItem} addTickerItem={addTickerItem} removeTickerItem={removeTickerItem} updateProcessStep={updateProcessStep} moveProcessStep={moveProcessStep} addProcessStep={addProcessStep} removeProcessStep={removeProcessStep} /> : null}
             <section className="admin-form-card admin-settings-group">
               <h3>Kontak global situs</h3>
               <p className="ws-cms-hint">Kontak ini tampil di halaman Kontak, footer, dan tombol chat calon klien.</p>
@@ -366,7 +503,7 @@ export default function AdminDashboard() {
                 <label>WhatsApp (format internasional)<input type="tel" placeholder="+6281234567890" value={content.contact.whatsapp ?? ""} onChange={(event) => setContent((current) => current ? { ...current, contact: { ...current.contact, whatsapp: event.target.value.trim() || null } } : current)} /></label>
               </div>
             </section>
-            <div className="ws-cms-layout">
+            {section !== "home" ? <div className="ws-cms-layout">
               <aside className="ws-cms-list admin-form-card">
                 <label className="ws-cms-search">Daftar konten<select value={selected?.id ?? ""} onChange={(event) => setSelectedId(event.target.value)} size={Math.min(Math.max(records.length, 4), 10)}>
                   {records.map((item) => <option key={item.id} value={item.id}>{item.name.id || item.slug}</option>)}
@@ -433,20 +570,44 @@ export default function AdminDashboard() {
                 </div>
                 <div className="admin-modal-foot"><span className="ws-cms-hint">Status: {dirty ? "ada perubahan belum disimpan" : "tersimpan"}</span></div>
               </div> : null}
-            </div>
+            </div> : null}
           </form>
 
-          <section className="ws-cms-media-library admin-form-card">
+          {section !== "home" ? <section className="ws-cms-media-library admin-form-card">
             <div className="admin-settings-group"><h3>Perpustakaan media</h3><p className="ws-cms-hint">File terpakai tidak bisa dihapus. Lepas referensi, simpan konten, lalu hapus file jika memang tidak lagi diperlukan.</p></div>
             {assetList.length ? <div className="ws-cms-media-grid">{assetList.map((asset) => {
               const owner = imageRefs.find((ref) => ref.url === asset.url)?.owner;
               return <article key={asset.url}><img src={asset.url} alt={asset.name} /><p>{asset.name}</p><small>{asset.width}×{asset.height} · {(asset.bytes / 1024 / 1024).toFixed(2)} MB</small><div>{owner ?? "Belum terpasang"}</div><button className="admin-danger" type="button" disabled={Boolean(owner) || busy} title={owner ? "Lepas referensi dan simpan dahulu" : undefined} onClick={() => void deleteUnusedAsset(asset.url)}>Hapus file</button></article>;
             })}</div> : <p className="admin-empty">Belum ada file di perpustakaan media.</p>}
-          </section>
+          </section> : null}
         </section>
       </main>
     </div>
   );
+}
+
+function HomeEditor({ content, updateHomeCopy, toggleHomeSection, reorderHomeSection, setSelectedIds, moveSelectedId, updateService, updateServiceItems, reorderService, removeService, updateTickerItem, moveTickerItem, addTickerItem, removeTickerItem, updateProcessStep, moveProcessStep, addProcessStep, removeProcessStep }: {
+  content: Content; updateHomeCopy: (path: string, locale: "id" | "en", value: string) => void; toggleHomeSection: (id: HomeSectionId) => void; reorderHomeSection: (index: number, direction: -1 | 1) => void; setSelectedIds: (group: "hero" | "portfolio" | "featured", id: string, checked: boolean) => void; moveSelectedId: (group: "hero" | "portfolio" | "featured", index: number, direction: -1 | 1) => void;
+  updateService: (index: number, field: "name" | "description", locale: "id" | "en", value: string) => void; updateServiceItems: (index: number, locale: "id" | "en", value: string) => void; reorderService: (index: number, direction: -1 | 1) => void; removeService: (id: string) => void; updateTickerItem: (index: number, locale: "id" | "en", value: string) => void; moveTickerItem: (index: number, direction: -1 | 1) => void; addTickerItem: () => void; removeTickerItem: (index: number) => void; updateProcessStep: (index: number, field: "title" | "text", locale: "id" | "en", value: string) => void; moveProcessStep: (index: number, direction: -1 | 1) => void; addProcessStep: () => void; removeProcessStep: (index: number) => void;
+}) {
+  const sectionLabels: Record<HomeSectionId, string> = { hero: "Hero", ticker: "Teks berjalan", portfolio: "Sorotan portofolio", featured: "Template unggulan", services: "Layanan", process: "Cara kerja", cta: "Ajakan (CTA)" };
+  const heroFields: Array<[keyof HomeContent["hero"], string]> = [["badge", "Label kecil"], ["titleLine1", "Judul · baris 1"], ["titleHighlight", "Judul · aksen"], ["titleLine2", "Judul · baris 2"], ["subtitle", "Deskripsi"], ["primaryCta", "Tombol utama"], ["secondaryCta", "Tombol kedua"], ["sceneBadge", "Catatan visual"], ["heroFoot", "Catatan bawah"], ["secondaryNote", "Keterangan tambahan"]];
+  const localizedGroup = (group: "portfolio" | "featured" | "services" | "cta", fields: string[], titles: Record<string, string>) => fields.map((field) => <div key={`${group}-${field}`} className="span-two grid gap-3 sm:grid-cols-2">{(["id", "en"] as const).map((locale) => <LocalizedTextArea key={locale} label={`${titles[field]} · ${locale === "id" ? "Indonesia" : "English"}`} value={(content.home[group] as unknown as Record<string, HomeCopy>)[field][locale]} onChange={(value) => updateHomeCopy(`${group}.${field}`, locale, value)} />)}</div>);
+  const picker = (group: "hero" | "portfolio" | "featured", ids: string[], items: Array<{ id: string; name: { id: string }; status?: string }>, maximum?: number) => {
+    const available = items.filter((item) => item.status !== "draft");
+    return <div className="span-two admin-settings-group"><h3>{group === "hero" ? "Pilihan proyek Hero · maks. 3" : group === "portfolio" ? "Urutan proyek portofolio" : "Pilihan template · maks. 3"}</h3><div className="ws-home-record-picker">{available.map((item) => <label key={item.id} className="admin-check"><input type="checkbox" checked={ids.includes(item.id)} disabled={!ids.includes(item.id) && maximum !== undefined && ids.length >= maximum} onChange={(event) => setSelectedIds(group, item.id, event.target.checked)} />{item.name.id}</label>)}</div><ol className="ws-home-order-list">{ids.map((id, index) => { const item = available.find((candidate) => candidate.id === id); return item ? <li key={id}><span>{item.name.id}</span><button type="button" className="admin-quiet" disabled={index === 0} onClick={() => moveSelectedId(group, index, -1)}>↑</button><button type="button" className="admin-quiet" disabled={index === ids.length - 1} onClick={() => moveSelectedId(group, index, 1)}>↓</button></li> : null; })}</ol></div>;
+  };
+
+  return <div className="ws-home-editor">
+    <section className="admin-form-card admin-settings-group"><h3>Susunan beranda</h3><p className="ws-cms-hint">Atur urutan dan tampil/sembunyikan bagian. Desain visual tetap ditentukan oleh sistem situs.</p><ol className="ws-home-sections">{content.home.sections.map((item, index) => <li key={item.id}><strong className="ws-home-section-name">{sectionLabels[item.id]}</strong><label className="admin-check"><input type="checkbox" checked={item.enabled} onChange={() => toggleHomeSection(item.id)} />Tampilkan</label><button type="button" className="admin-quiet" disabled={index === 0} onClick={() => reorderHomeSection(index, -1)} aria-label={`Naikkan ${sectionLabels[item.id]}`}>↑</button><button type="button" className="admin-quiet" disabled={index === content.home.sections.length - 1} onClick={() => reorderHomeSection(index, 1)} aria-label={`Turunkan ${sectionLabels[item.id]}`}>↓</button></li>)}</ol></section>
+    <section className="admin-form-card admin-settings-group"><h3>Hero · bagian utama</h3><div className="admin-form-grid">{heroFields.map(([field, label]) => <div key={field} className="span-two grid gap-3 sm:grid-cols-2">{(["id", "en"] as const).map((locale) => <LocalizedTextArea key={locale} label={`${label} · ${locale === "id" ? "Indonesia" : "English"}`} value={(content.home.hero[field] as HomeCopy)[locale]} onChange={(value) => updateHomeCopy(`hero.${field}`, locale, value)} />)}</div>)}<label>Tautan tombol utama<input value={content.home.hero.primaryHref} onChange={(event) => updateHomeCopy("hero.primaryHref", "id", event.target.value)} /></label><label>Tautan tombol kedua<input value={content.home.hero.secondaryHref} onChange={(event) => updateHomeCopy("hero.secondaryHref", "id", event.target.value)} /></label><div className="span-two grid gap-3 sm:grid-cols-2">{(["id", "en"] as const).map((locale) => <LocalizedTextArea key={locale} label={`Pola aksesibilitas proyek · ${locale}`} value={content.home.hero.exploreFeatured[locale]} onChange={(value) => updateHomeCopy("hero.exploreFeatured", locale, value)} />)}{(["id", "en"] as const).map((locale) => <LocalizedTextArea key={`category-${locale}`} label={`Pola label kategori · ${locale}`} value={content.home.hero.featureLabel[locale]} onChange={(value) => updateHomeCopy("hero.featureLabel", locale, value)} />)}</div></div>{picker("hero", content.home.hero.projectIds, content.portfolio, 3)}</section>
+    <section className="admin-form-card admin-settings-group"><h3>Teks berjalan</h3>{content.home.tickerItems.map((item, index) => <div className="ws-home-repeat-row" key={`ticker-${index}`}><div className="grid flex-1 gap-3 sm:grid-cols-2">{(["id", "en"] as const).map((locale) => <label key={locale}>Teks {index + 1} · {locale === "id" ? "Indonesia" : "English"}<input value={item[locale]} onChange={(event) => updateTickerItem(index, locale, event.target.value)} /></label>)}</div><button type="button" className="admin-quiet" disabled={index === 0} onClick={() => moveTickerItem(index, -1)}>↑</button><button type="button" className="admin-quiet" disabled={index === content.home.tickerItems.length - 1} onClick={() => moveTickerItem(index, 1)}>↓</button><button type="button" className="admin-danger" onClick={() => removeTickerItem(index)}>Hapus</button></div>)}<button type="button" className="admin-quiet" onClick={addTickerItem} disabled={content.home.tickerItems.length >= 20}>+ Tambah teks</button></section>
+    <section className="admin-form-card admin-settings-group"><h3>Sorotan portofolio</h3><div className="admin-form-grid">{localizedGroup("portfolio", ["badge", "title", "description"], { badge: "Label", title: "Judul", description: "Deskripsi" })}</div>{picker("portfolio", content.home.portfolio.projectIds, content.portfolio)}</section>
+    <section className="admin-form-card admin-settings-group"><h3>Template unggulan</h3><div className="admin-form-grid">{localizedGroup("featured", ["title", "subtitle", "seeAll"], { title: "Judul", subtitle: "Deskripsi", seeAll: "Teks tautan katalog" })}</div>{picker("featured", content.home.featured.productIds, content.products, 3)}</section>
+    <section className="admin-form-card admin-settings-group"><div className="ws-home-service-head"><h3>Bagian layanan</h3></div><div className="admin-form-grid">{localizedGroup("services", ["badge", "title", "subtitle", "seeAll"], { badge: "Label", title: "Judul", subtitle: "Deskripsi", seeAll: "Teks tautan layanan" })}</div>{content.services.map((service, index) => <article className="ws-home-service" key={service.id}><div className="ws-home-service-head"><h4>Layanan {index + 1}</h4><button type="button" className="admin-quiet" disabled={index === 0} onClick={() => reorderService(index, -1)}>↑</button><button type="button" className="admin-quiet" disabled={index === content.services.length - 1} onClick={() => reorderService(index, 1)}>↓</button><button type="button" className="admin-danger" onClick={() => removeService(service.id)}>Hapus</button></div><div className="grid gap-3 sm:grid-cols-2">{(["id", "en"] as const).map((locale) => <div key={locale} className="grid gap-2"><label>Nama · {locale === "id" ? "Indonesia" : "English"}<input value={service.name[locale]} onChange={(event) => updateService(index, "name", locale, event.target.value)} /></label><label>Deskripsi · {locale === "id" ? "Indonesia" : "English"}<textarea value={service.description[locale]} onChange={(event) => updateService(index, "description", locale, event.target.value)} /></label><label>Butir layanan · satu per baris<textarea value={service.items[locale].join("\n")} onChange={(event) => updateServiceItems(index, locale, event.target.value)} /></label></div>)}</div></article>)}</section>
+    <section className="admin-form-card admin-settings-group"><div className="ws-home-service-head"><h3>Cara kerja · langkah</h3><button type="button" className="admin-quiet" onClick={addProcessStep} disabled={content.home.process.steps.length >= 12}>+ Tambah langkah</button></div><div className="admin-form-grid"><div className="span-two grid gap-3 sm:grid-cols-2">{(["id", "en"] as const).map((locale) => <LocalizedTextArea key={locale} label={`Judul · ${locale === "id" ? "Indonesia" : "English"}`} value={content.home.process.title[locale]} onChange={(value) => updateHomeCopy("process.title", locale, value)} />)}</div>{content.home.process.steps.map((step, index) => <article className="ws-home-service span-two" key={`step-${index}`}><div className="ws-home-service-head"><h4>Langkah {index + 1}</h4><button type="button" className="admin-quiet" disabled={index === 0} onClick={() => moveProcessStep(index, -1)}>↑</button><button type="button" className="admin-quiet" disabled={index === content.home.process.steps.length - 1} onClick={() => moveProcessStep(index, 1)}>↓</button><button type="button" className="admin-danger" onClick={() => removeProcessStep(index)}>Hapus</button></div><div className="grid gap-3 sm:grid-cols-2">{(["id", "en"] as const).map((locale) => <div key={locale} className="grid gap-2"><label>Judul · {locale}<input value={step.title[locale]} onChange={(event) => updateProcessStep(index, "title", locale, event.target.value)} /></label><label>Deskripsi · {locale}<textarea value={step.text[locale]} onChange={(event) => updateProcessStep(index, "text", locale, event.target.value)} /></label></div>)}</div></article>)}</div></section>
+    <section className="admin-form-card admin-settings-group"><h3>Ajakan (CTA)</h3><div className="admin-form-grid">{localizedGroup("cta", ["badge", "title", "text", "primary", "secondary"], { badge: "Label kecil", title: "Judul", text: "Deskripsi", primary: "Tombol utama", secondary: "Tombol kedua" })}<label>Tautan tombol utama<input value={content.home.cta.primaryHref} onChange={(event) => updateHomeCopy("cta.primaryHref", "id", event.target.value)} /></label><label>Tautan tombol kedua<input value={content.home.cta.secondaryHref ?? ""} onChange={(event) => updateHomeCopy("cta.secondaryHref", "id", event.target.value)} /><small className="ws-cms-hint">Kosongkan untuk memakai WhatsApp dari kontak global.</small></label></div></section>
+  </div>;
 }
 
 function LocalizedInput({ label, value, onChange, required = false }: { label: string; value: string; onChange: (value: string) => void; required?: boolean }) {
