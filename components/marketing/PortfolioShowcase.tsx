@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
+import PortfolioPreviewGallery from "@/components/marketing/PortfolioPreviewGallery";
 import { useLocale, useTranslations } from "next-intl";
 import Reveal from "@/components/motion/Reveal";
 import Container from "@/components/ui/Container";
@@ -100,22 +100,11 @@ export default function PortfolioShowcase({ projects: allProjects, showHeader = 
             <Reveal key={project.id} delay={Math.min(index * 0.06, 0.3)}>
               <article id={project.slug} className="portfolio-card group flex h-full flex-col overflow-hidden rounded-[0.3rem] border-0 bg-transparent">
                 {project.previewPath ? (
-                  <div className="portfolio-collection-preview relative aspect-[16/10] overflow-hidden rounded-[0.3rem] bg-[#e4e3df] p-3 sm:p-5">
-                    <div className="portfolio-preview-motion absolute inset-3 overflow-hidden bg-white shadow-[0_8px_24px_-16px_rgba(20,24,24,0.35)] sm:inset-5">
-                      <Image
-                        src={project.previewPath}
-                        alt={`${project.name[locale]} — ${project.category[locale]}`}
-                        fill
-                        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 44vw"
-                        className="object-cover object-top"
-                        loading={index < 2 ? "eager" : "lazy"}
-                      />
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                    />
-                  </div>
+                  <PortfolioPreviewGallery
+                    slides={[project.previewPath, ...(project.previewPaths ?? [])]}
+                    projectName={project.name[locale]}
+                    category={project.category[locale]}
+                  />
                 ) : null}
 
                 <div className="flex flex-1 flex-col pt-3">
@@ -137,11 +126,11 @@ export default function PortfolioShowcase({ projects: allProjects, showHeader = 
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 font-medium text-ink sm:text-xs"
                       >
-                        {t("demo")} <InlineArrow className="h-3 w-3" />
+                        {t("livePreview")} <InlineArrow className="h-3 w-3" />
                       </a>
                     ) : (
                       <span className="font-medium text-muted" title={t("demoUnavailable")}>
-                        {t("demo")} · {t("demoSoon")}
+                        {t("livePreview")} · {t("demoSoon")}
                       </span>
                     )}
                     <Link href={`/portfolio/${project.slug}`} className="inline-flex items-center gap-1 text-muted hover:text-ink">{t("visitProject")} <InlineArrow className="h-3 w-3" /></Link>

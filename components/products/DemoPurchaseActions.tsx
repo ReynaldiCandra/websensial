@@ -19,11 +19,11 @@ export default function DemoPurchaseActions({
       <div className="flex flex-col gap-3 sm:flex-row">
         {demoUrl ? (
           <ButtonLink href={demoUrl} external variant="secondary" size="lg" className="flex-1">
-            {tc("liveDemo")} ↗
+            {tc("livePreview")} ↗
           </ButtonLink>
         ) : (
           <ButtonLink href="#!" disabled variant="secondary" size="lg" className="flex-1" ariaLabel={tc("notConfiguredTitle.demo")}>
-            {tc("liveDemo")}
+            {tc("livePreview")}
           </ButtonLink>
         )}
         {purchaseUrl ? (
@@ -45,7 +45,7 @@ export default function DemoPurchaseActions({
         <p className="mt-3 text-xs leading-relaxed text-muted">
           <RichText
             text={tc("notConfiguredBody", {
-              kind: [tc("liveDemo"), tc("buy")].filter((_, index) => (index === 0 ? !demoUrl : !purchaseUrl && !whatsappUrl)).join(" / "),
+              kind: [tc("livePreview"), tc("buy")].filter((_, index) => (index === 0 ? !demoUrl : !purchaseUrl && !whatsappUrl)).join(" / "),
             })}
             strongClassName="font-semibold text-ink"
           />

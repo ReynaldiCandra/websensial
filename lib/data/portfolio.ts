@@ -16,7 +16,9 @@ export type PortfolioProject = {
   tech: string[];
   /** Path relative to /public, or null when no preview exists yet. */
   previewPath: string | null;
-  /** null = not configured; the card shows an honest unavailable demo state. */
+  /** Optional additional gallery slides; previewPath remains the card/cover image. */
+  previewPaths?: string[];
+  /** null = not configured; the UI shows an honest unavailable live-preview state. */
   projectUrl: string | null;
   /** Showcase concepts must never be presented as client deliveries. */
   kind: "concept" | "client";

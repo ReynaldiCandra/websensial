@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import PortfolioPreviewGallery from "@/components/marketing/PortfolioPreviewGallery";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/Container";
@@ -53,8 +53,8 @@ export default async function PortfolioProjectPage({ params }: Props) {
       </nav>
       <article>
         {project.previewPath ? (
-          <div className="relative mb-8 aspect-[16/10] overflow-hidden rounded-2xl bg-soft">
-            <Image src={project.previewPath} alt={`${project.name[locale]} — ${project.category[locale]}`} fill priority sizes="(max-width: 1024px) 100vw, 1200px" className="object-cover object-top" />
+          <div className="mb-8">
+            <PortfolioPreviewGallery slides={[project.previewPath, ...(project.previewPaths ?? [])]} projectName={project.name[locale]} category={project.category[locale]} />
           </div>
         ) : null}
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">

@@ -164,6 +164,7 @@ export function validateWebContent(value: unknown): string | null {
     if (!isRecord(item) || !isLocalizedText(item.name, true) || !isLocalizedText(item.category, true) || !isLocalizedText(item.description)
       || !Array.isArray(item.tech) || !item.tech.every((tag) => isText(tag, true))
       || !(item.previewPath === null || isSafeImagePath(item.previewPath))
+      || (item.previewPaths !== undefined && (!Array.isArray(item.previewPaths) || item.previewPaths.length > 20 || !item.previewPaths.every(isSafeImagePath)))
       || !isSafeOptionalUrl(item.projectUrl)
       || !["website", "dashboard", "landing"].includes(String(item.filter))
       || !["concept", "client"].includes(String(item.kind))) {

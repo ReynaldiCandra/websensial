@@ -85,7 +85,7 @@ export async function DELETE(request: Request) {
   const currentContent = await getStoredWebContent();
   if (!currentContent) return NextResponse.json({ error: "Konten CMS tidak dapat diverifikasi; file tidak dihapus." }, { status: 503 });
   const isReferenced = [
-    ...currentContent.portfolio.map((item) => item.previewPath),
+    ...currentContent.portfolio.flatMap((item) => [item.previewPath, ...(item.previewPaths ?? [])]),
     ...currentContent.products.flatMap((item) => item.previews),
   ].includes(body.url as string);
   if (isReferenced) return NextResponse.json({ error: "Gambar masih digunakan. Lepas referensinya dan simpan perubahan terlebih dahulu." }, { status: 409 });
