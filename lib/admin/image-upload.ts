@@ -84,7 +84,20 @@ export async function prepareImageForUpload(file: File): Promise<PreparedImage> 
   }
 }
 
-export type UploadResult = { ok: boolean; status: number };
+export type UploadResult = { ok: boolean; status: number; detail: string };
+
+/** Turns a storage error response into one short line the admin can act on. */
+function describeFailure(raw: string) {
+  const text = (raw ?? "").trim();
+  if (!text) return "";
+  try {
+    const parsed = JSON.parse(text) as { message?: unknown; error?: unknown };
+    const message = typeof parsed.message === "string" ? parsed.message : typeof parsed.error === "string" ? parsed.error : "";
+    return message.trim().slice(0, 180);
+  } catch {
+    return text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 180);
+  }
+}
 
 /** PUTs the file straight to Supabase Storage and reports real upload progress. */
 export function putWithProgress(url: string, file: File, onProgress: (percent: number) => void): Promise<UploadResult> {
@@ -95,7 +108,10 @@ export function putWithProgress(url: string, file: File, onProgress: (percent: n
     request.upload.onprogress = (event) => {
       if (event.lengthComputable && event.total > 0) onProgress(Math.round((event.loaded / event.total) * 100));
     };
-    request.onload = () => resolve({ ok: request.status >= 200 && request.status < 300, status: request.status });
+    request.onload = () => {
+      const ok = request.status >= 200 && request.status < 300;
+      resolve({ ok, status: request.status, detail: ok ? "" : describeFailure(request.responseText) });
+    };
     request.onerror = () => reject(new TypeError("Network request failed"));
     request.onabort = () => reject(new TypeError("Upload aborted"));
     request.send(file);

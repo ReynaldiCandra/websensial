@@ -40,13 +40,17 @@ export async function POST(request: Request) {
 
   const path = `${section}/${crypto.randomUUID()}.${extension}`;
   const { data, error } = await client.storage.from(bucket).createSignedUploadUrl(path);
-  if (error || !data?.signedUrl) {
+  if (error || !data?.token) {
     console.error("Failed to sign a CMS media upload.", error);
     return NextResponse.json({ error: "Gambar gagal disiapkan untuk diunggah." }, { status: 500 });
   }
 
+  // Build the documented signed-upload endpoint instead of trusting
+  // `data.signedUrl`: storage-js has shipped that value both relative
+  // ("/object/upload/sign/…") and absolute, and prefixing it with SUPABASE_URL
+  // by hand produced a URL that Supabase rejected with 401.
   return NextResponse.json({
-    uploadUrl: `${base}${data.signedUrl.startsWith("/") ? "" : "/"}${data.signedUrl}`,
+    uploadUrl: `${base}/storage/v1/object/upload/sign/${bucket}/${data.path}?token=${encodeURIComponent(data.token)}`,
     publicUrl: client.storage.from(bucket).getPublicUrl(path).data.publicUrl,
   });
 }

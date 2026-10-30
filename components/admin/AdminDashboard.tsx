@@ -426,7 +426,7 @@ export default function AdminDashboard() {
           setUploadPercent(percent);
           setUploadProgress(`Mengunggah ${original.name} (${position}) · ${percent}%`);
         });
-        if (!result.ok) throw new Error(`Upload ${original.name} gagal (status ${result.status}).`);
+        if (!result.ok) throw new Error(`Upload ${original.name} gagal (status ${result.status})${result.detail ? `: ${result.detail}` : ""}.`);
         uploaded.push(ticket.publicUrl);
       }
       if (section === "portfolio") setContent((current) => {
