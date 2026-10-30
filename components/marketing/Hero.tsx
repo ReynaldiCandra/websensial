@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import PreviewImage from "@/components/ui/PreviewImage";
 import { Link } from "@/i18n/navigation";
 import { InlineArrow } from "@/components/ui/Button";
 import Reveal from "@/components/motion/Reveal";
@@ -8,6 +8,7 @@ import type { HomeContent } from "@/lib/admin/home-content";
 
 export default function Hero({ portfolioProjects, content }: { portfolioProjects: PortfolioProject[]; content: HomeContent["hero"] }) {
   const locale = useLocale() as "id" | "en";
+  const t = useTranslations("portfolio");
   const heroProjects = content.projectIds
     .map((id) => portfolioProjects.find((project) => project.id === id))
     .filter((project) => project?.previewPath) as (typeof portfolioProjects)[number][];
@@ -62,7 +63,7 @@ export default function Hero({ portfolioProjects, content }: { portfolioProjects
                 className={`hero-feature-card absolute w-[94%] overflow-hidden rounded-xl border border-line bg-[var(--ws-surface)] shadow-[0_18px_35px_-12px_rgba(25,28,24,0.18)] ${index === 0 ? "left-[4%] top-[12%] z-10 rotate-[7deg] scale-[0.95]" : "left-[1%] top-[5%] z-0 -rotate-[9deg] scale-[0.9]"}`}
               >
                 <div className="relative aspect-[16/9] overflow-hidden bg-soft">
-                  <Image src={project.previewPath!} alt="" fill sizes="(max-width: 1024px) 92vw, 42vw" className="object-cover" />
+                  <PreviewImage src={project.previewPath!} alt={`${project.name[locale]} — ${project.category[locale]}`} fallbackLabel={t("imageUnavailable")} hideFallbackText fill sizes="(max-width: 1024px) 92vw, 42vw" className="object-cover" />
                 </div>
                 <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3 sm:px-5 sm:py-4">
                   <span className="text-xs font-semibold text-ink sm:text-sm">{project.name[locale]}</span>
@@ -76,9 +77,10 @@ export default function Hero({ portfolioProjects, content }: { portfolioProjects
               className="hero-feature-card absolute left-[3%] top-[19%] z-20 block w-[94%] overflow-hidden rounded-xl border border-line bg-[var(--ws-surface)] shadow-[0_24px_42px_-14px_rgba(25,28,24,0.22)] transition-transform duration-700 hover:-translate-y-2"
             >
               <div className="relative aspect-[16/9] overflow-hidden bg-soft">
-                <Image
+                <PreviewImage
                   src={featured.previewPath}
                   alt={`${featured.name[locale]} — ${featured.category[locale]}`}
+                  fallbackLabel={t("imageUnavailable")}
                   fill
                   priority
                   sizes="(max-width: 1024px) 92vw, 42vw"

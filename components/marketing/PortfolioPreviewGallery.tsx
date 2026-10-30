@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
+import PreviewImage from "@/components/ui/PreviewImage";
 
 export default function PortfolioPreviewGallery({ slides, projectName, category }: { slides: string[]; projectName: string; category: string }) {
   const t = useTranslations("portfolio");
@@ -14,9 +14,10 @@ export default function PortfolioPreviewGallery({ slides, projectName, category 
     <div className="relative aspect-[16/10] overflow-hidden rounded-[0.3rem] bg-[#e4e3df] p-3 sm:p-5">
       <div className="portfolio-preview-motion absolute inset-3 overflow-hidden bg-white shadow-[0_8px_24px_-16px_rgba(20,24,24,0.35)] sm:inset-5">
         {slides.map((src, index) => (
-          <Image
+          <PreviewImage
             key={src}
             src={src}
+            fallbackLabel={t("imageUnavailable")}
             alt={`${projectName} — ${category} · ${t("previewSlide", { current: index + 1, total: slides.length })}`}
             fill
             sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 44vw"

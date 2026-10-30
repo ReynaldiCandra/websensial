@@ -10,6 +10,9 @@ import { getWhatsAppUrl } from "@/lib/data/site";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
+// Portfolio copy and media come from the CMS; never serve a prerendered copy.
+export const dynamic = "force-dynamic";
+
 async function resolveProject(params: Props["params"]) {
   const [{ locale, slug }, content] = await Promise.all([params, getWebContent()]);
   return { locale: locale === "en" ? ("en" as const) : ("id" as const), project: content.portfolio.find((item) => item.slug === slug), content };

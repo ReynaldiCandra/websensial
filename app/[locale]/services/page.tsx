@@ -5,8 +5,12 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import ServiceCards from "@/components/marketing/ServiceCards";
+import { getWebContent } from "@/lib/admin/site-content";
 
 type Props = { params: Promise<{ locale: string }> };
+
+// Services are edited in the CMS; render on demand so edits appear at once.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -22,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("services");
+  const [t, content] = await Promise.all([getTranslations("services"), getWebContent()]);
 
   return (
     <section className="bg-[var(--ws-bg)]">
@@ -31,7 +35,7 @@ export default async function ServicesPage({ params }: Props) {
           <p className="eyebrow mb-3">{t("badge")}</p>
           <SectionHeading title={t("title")} subtitle={t("subtitle")} />
         </Reveal>
-        <ServiceCards showHeading={false} />
+        <ServiceCards showHeading={false} services={content.services} />
 
         <Reveal className="mt-16">
           <div className="border-y border-line px-8 py-10 text-center">

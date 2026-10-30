@@ -149,7 +149,8 @@
     "emptyTitle": "Tidak ada yang cocok",
     "emptyText": "Coba kata kunci lain atau hapus filter aktif.",
     "demoNotice": "Produk berikut adalah katalog contoh untuk melihat pratinjau marketplace.",
-    "cardFrom": "mulai"
+    "cardFrom": "mulai",
+    "imageUnavailable": "Pratinjau gambar belum tersedia"
   },
   "product": {
     "categoryLabel": "Kategori",
@@ -169,6 +170,7 @@
     "backToCatalog": "Kembali ke katalog",
     "relatedLabel": "Produk terkait",
     "draftBadge": "Draft",
+    "imageUnavailable": "Pratinjau gambar belum tersedia",
     "conceptNotice": "**Konsep showcase.** Produk ini adalah contoh demonstrasi — bukan produk berjalan yang tersedia pembayarannya di dunia nyata saat ini."
   },
   "services": {
@@ -193,6 +195,7 @@
     "previousPreview": "Lihat pratinjau sebelumnya",
     "nextPreview": "Lihat pratinjau berikutnya",
     "demoUnavailable": "Tautan demo belum dikonfigurasi",
+    "imageUnavailable": "Pratinjau gambar belum tersedia",
     "empty": "Belum ada karya di kategori ini.",
     "conceptBadge": "Konsep",
     "clientBadge": "Klien",

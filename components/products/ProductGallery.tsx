@@ -1,21 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
+import PreviewImage from "@/components/ui/PreviewImage";
 
 export default function ProductGallery({ previews, productName }: { previews: string[]; productName: string }) {
   const t = useTranslations("product");
   const [activeIndex, setActiveIndex] = useState(0);
   const current = previews[activeIndex] ?? previews[0];
+  if (!current) return null;
   const showSlide = (index: number) => setActiveIndex((index + previews.length) % previews.length);
 
   return (
     <div>
       <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-line bg-soft">
-        <Image
+        <PreviewImage
+          key={current}
           src={current}
           alt={t("previewLabel")}
+          fallbackLabel={t("imageUnavailable")}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 60vw"
@@ -43,7 +46,7 @@ export default function ProductGallery({ previews, productName }: { previews: st
               index === activeIndex ? "border-primary" : "border-line hover:border-primary/40"
             }`}
           >
-            <Image src={preview} alt={`${t("previewLabel")} ${index + 1}`} fill sizes="96px" className="object-cover object-top" />
+            <PreviewImage src={preview} alt={`${t("previewLabel")} ${index + 1}`} fallbackLabel={t("imageUnavailable")} hideFallbackText fill sizes="96px" className="object-cover object-top" />
           </button>
         ))}
       </div>

@@ -9,6 +9,9 @@ import { getWebContent } from "@/lib/admin/site-content";
 
 type Props = { params: Promise<{ locale: string }> };
 
+// Contact details come from the CMS, so the page must not be prerendered.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const tc = await getTranslations({ locale, namespace: "meta" });

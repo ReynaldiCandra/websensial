@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
+import PreviewImage from "@/components/ui/PreviewImage";
 import { Link } from "@/i18n/navigation";
 import type { Product } from "@/lib/data/products";
 import { getCategory } from "@/lib/data/categories";
@@ -18,9 +18,10 @@ export default function ProductCard({ product, priority = false }: { product: Pr
       className="portfolio-card group flex h-full flex-col overflow-hidden rounded-[0.3rem] border-0 bg-transparent transition-colors"
     >
       <div className="portfolio-collection-preview relative aspect-[16/10] overflow-hidden rounded-[0.3rem] bg-[#e4e3df]">
-        <Image
+        <PreviewImage
           src={product.previews[0]}
           alt={`${product.name[locale]} — ${t("previewAlt")}`}
+          fallbackLabel={t("imageUnavailable")}
           fill
           priority={priority}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

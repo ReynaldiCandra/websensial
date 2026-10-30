@@ -152,7 +152,8 @@
     "emptyTitle": "Nothing matches",
     "emptyText": "Try different keywords or clear the active filters.",
     "demoNotice": "The products below are a sample catalog for previewing the marketplace experience.",
-    "cardFrom": "from"
+    "cardFrom": "from",
+    "imageUnavailable": "Preview image unavailable"
   },
   "product": {
     "categoryLabel": "Category",
@@ -172,6 +173,7 @@
     "backToCatalog": "Back to catalog",
     "relatedLabel": "Related products",
     "draftBadge": "Draft",
+    "imageUnavailable": "Preview image unavailable",
     "conceptNotice": "**Showcase concept.** This product is a demonstration sample — it is not a live, purchasable product right now."
   },
   "services": {
@@ -196,6 +198,7 @@
     "previousPreview": "View previous preview",
     "nextPreview": "View next preview",
     "demoUnavailable": "Demo link not configured yet",
+    "imageUnavailable": "Preview image unavailable",
     "empty": "No work in this category yet.",
     "conceptBadge": "Concept",
     "clientBadge": "Client",
