@@ -8,6 +8,7 @@ import type { PortfolioProject } from "@/lib/data/portfolio";
 import type { Product } from "@/lib/data/products";
 import type { HomeContent, HomeCopy, HomeSectionId } from "@/lib/admin/home-content";
 import type { Service } from "@/lib/data/services";
+import { maxUploadBytes, prepareImageForUpload, putWithProgress } from "@/lib/admin/image-upload";
 
 type Content = { portfolio: PortfolioProject[]; products: Product[]; contact: { email: string; whatsapp: string | null }; home: HomeContent; services: Service[] };
 type Section = "home" | "portfolio" | "products";
@@ -74,6 +75,7 @@ export default function AdminDashboard() {
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<Toast | null>(null);
   const [uploadProgress, setUploadProgress] = useState("");
+  const [uploadPercent, setUploadPercent] = useState<number | null>(null);
   const [assetList, setAssetList] = useState<Asset[]>([]);
   const dirty = Boolean(content && JSON.stringify(content) !== savedSnapshot);
 
@@ -297,27 +299,28 @@ export default function AdminDashboard() {
     updateSelected((record) => ({ ...record, [field]: value }) as PortfolioProject | Product);
   }
 
-  function updateLocalized(field: LocalizedField, locale: "id" | "en", value: string) {
-    updateSelected((record) => {
-      const current = isProduct(record) ? record[field as keyof Product] : record[field as keyof PortfolioProject];
-      return { ...record, [field]: { ...(current as { id: string; en: string }), [locale]: value } } as PortfolioProject | Product;
-    });
+  // The editor keeps one text per field: Indonesian is the source copy and is
+  // written to both locales so the English pages never show a blank field.
+  // Separate per-language translation is no longer maintained from this panel.
+  function updateLocalizedBoth(field: LocalizedField, value: string) {
+    updateSelected((record) => ({ ...record, [field]: { id: value, en: value } }) as PortfolioProject | Product);
   }
 
-  function updateCaseStudy(field: "challenge" | "approach" | "solution" | "outcome", locale: "id" | "en", value: string) {
+  function updateCaseStudyBoth(field: "challenge" | "approach" | "solution" | "outcome", value: string) {
     if (!selected || isProduct(selected)) return;
     updateSelected((record) => {
       if (isProduct(record)) return record;
       const caseStudy = record.caseStudy ?? emptyCaseStudy();
-      return { ...record, caseStudy: { ...caseStudy, [field]: { ...caseStudy[field], [locale]: value } } };
+      return { ...record, caseStudy: { ...caseStudy, [field]: { id: value, en: value } } };
     });
   }
 
-  function updateProductList(field: ProductListField, locale: "id" | "en", value: string) {
+  function updateProductListBoth(field: ProductListField, value: string) {
     if (!selected || !isProduct(selected)) return;
+    const items = value.split("\n").map((item) => item.trim()).filter(Boolean);
     updateSelected((record) => {
       if (!isProduct(record)) return record;
-      return { ...record, [field]: { ...record[field], [locale]: value.split("\n").map((item) => item.trim()).filter(Boolean) } };
+      return { ...record, [field]: { id: items, en: items } };
     });
   }
 
@@ -397,15 +400,34 @@ export default function AdminDashboard() {
     setBusy(true);
     try {
       const uploaded: string[] = [];
-      for (const file of files) {
-        setUploadProgress(`Mengunggah ${file.name}…`);
-        const formData = new FormData();
-        formData.set("file", file);
-        formData.set("section", section);
-        const response = await fetch("/api/admin/media", { method: "POST", body: formData });
-        const result = await response.json() as { url?: string; error?: string };
-        if (!response.ok || !result.url) throw new Error(result.error || `Upload ${file.name} gagal.`);
-        uploaded.push(result.url);
+      let savedBytes = 0;
+      for (const [index, original] of files.entries()) {
+        const position = `${index + 1}/${files.length}`;
+        setUploadProgress(`Menyiapkan ${original.name}… (${position})`);
+        const prepared = await prepareImageForUpload(original);
+        if (prepared.file.size > maxUploadBytes) {
+          throw new Error(`${original.name} masih lebih dari 10 MB setelah dikompres. Perkecil gambar lalu unggah ulang.`);
+        }
+        savedBytes += prepared.originalBytes - prepared.file.size;
+
+        const ticketResponse = await fetch("/api/admin/media/sign", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ section, contentType: prepared.file.type }),
+        });
+        const ticket = await ticketResponse.json() as { uploadUrl?: string; publicUrl?: string; error?: string };
+        if (!ticketResponse.ok || !ticket.uploadUrl || !ticket.publicUrl) {
+          throw new Error(ticket.error || `Upload ${original.name} gagal.`);
+        }
+
+        setUploadPercent(0);
+        setUploadProgress(`Mengunggah ${original.name} (${position}) · 0%`);
+        const result = await putWithProgress(ticket.uploadUrl, prepared.file, (percent) => {
+          setUploadPercent(percent);
+          setUploadProgress(`Mengunggah ${original.name} (${position}) · ${percent}%`);
+        });
+        if (!result.ok) throw new Error(`Upload ${original.name} gagal (status ${result.status}).`);
+        uploaded.push(ticket.publicUrl);
       }
       if (section === "portfolio") setContent((current) => {
         if (!current) return current;
@@ -417,12 +439,16 @@ export default function AdminDashboard() {
       });
       else updateSelected((record) => isProduct(record) ? { ...record, previews: [...record.previews, ...uploaded] } : record);
       await fetchAssets();
-      showToast(`${uploaded.length} gambar berhasil diunggah. Simpan konten untuk menerapkan referensinya.`, "success");
+      const savings = savedBytes > 0 ? ` Ukuran file turun ${(savedBytes / 1024 / 1024).toFixed(1)} MB setelah kompresi.` : "";
+      showToast(`${uploaded.length} gambar berhasil diunggah.${savings} Simpan konten untuk menerapkan referensinya.`, "success");
     } catch (reason) {
-      showToast(reason instanceof Error ? reason.message : "Upload gambar gagal.", "error");
+      showToast(reason instanceof TypeError
+        ? "Koneksi ke server terputus saat mengunggah. Periksa koneksi lalu coba lagi."
+        : reason instanceof Error ? reason.message : "Upload gambar gagal.", "error");
     } finally {
       setBusy(false);
       setUploadProgress("");
+      setUploadPercent(null);
     }
   }
 
@@ -532,7 +558,7 @@ export default function AdminDashboard() {
             <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "home" ? "Beranda" : section === "portfolio" ? "Portofolio" : "Template"}</h1></div>
             <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button>{section === "home" ? <button className="admin-primary" type="button" onClick={addService} disabled={busy}>+ Tambah layanan</button> : <button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : "template"}</button>}<button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button></div>
           </div>
-          {section === "home" ? <div className="ws-admin-intro"><div><p className="admin-kicker">KONTEN SITUS</p><h2>Kelola beranda</h2><p>Atur konten, urutan bagian, dan materi yang ditampilkan kepada pengunjung.</p></div><span className="ws-admin-locale-note">Bahasa Indonesia &amp; English <span>·</span> diisi terpisah</span></div> : <p className="admin-demo-note">Konten bisa diisi dalam bahasa Indonesia dan Inggris. Terjemahan otomatis belum diaktifkan.</p>}
+          {section === "home" ? <div className="ws-admin-intro"><div><p className="admin-kicker">KONTEN SITUS</p><h2>Kelola beranda</h2><p>Atur konten, urutan bagian, dan materi yang ditampilkan kepada pengunjung.</p></div><span className="ws-admin-locale-note">Bahasa Indonesia &amp; English <span>·</span> diisi terpisah</span></div> : <p className="admin-demo-note">Isi konten satu kali dalam bahasa Indonesia. Teks yang sama dipakai di halaman English sampai ada terjemahan khusus.</p>}
           <form id="admin-content-form" onSubmit={save}>
             {section === "home" ? <HomeEditor content={content} addService={addService} updateHomeCopy={updateHomeCopy} toggleHomeSection={toggleHomeSection} reorderHomeSection={reorderHomeSection} setSelectedIds={setSelectedIds} moveSelectedId={moveSelectedId} updateService={updateService} updateServiceItems={updateServiceItems} reorderService={reorderService} removeService={removeService} updateTickerItem={updateTickerItem} moveTickerItem={moveTickerItem} addTickerItem={addTickerItem} removeTickerItem={removeTickerItem} updateProcessStep={updateProcessStep} moveProcessStep={moveProcessStep} addProcessStep={addProcessStep} removeProcessStep={removeProcessStep} busy={busy} /> : null}
             <section className="admin-form-card ws-home-card ws-contact-card">
@@ -556,40 +582,30 @@ export default function AdminDashboard() {
                   <div className="admin-form-grid">
                     <label>Slug<input value={selected.slug} pattern={slugPattern} title="Gunakan huruf kecil, angka, dan tanda hubung." onChange={(event) => updateField("slug", event.target.value)} required /></label>
                     {isProduct(selected) ? <label>Status katalog<select value={selected.status} onChange={(event) => updateField("status", event.target.value as Product["status"])}><option value="draft">Draft (disembunyikan)</option><option value="published">Terbit (ditampilkan)</option></select></label> : <label>Jenis proyek<select value={selected.kind} onChange={(event) => updateField("kind", event.target.value as PortfolioProject["kind"])}><option value="concept">Konsep</option><option value="client">Klien</option></select></label>}
-                    <LocalizedInput label="Nama · Indonesia" value={selected.name.id} onChange={(value) => updateLocalized("name", "id", value)} required />
-                    <LocalizedInput label="Name · English" value={selected.name.en} onChange={(value) => updateLocalized("name", "en", value)} required />
+                    <LocalizedInput label="Nama" value={selected.name.id} onChange={(value) => updateLocalizedBoth("name", value)} required />
                     {isProduct(selected) ? <>
                       <label>Kategori template<select value={selected.category} onChange={(event) => updateField("category", event.target.value as Product["category"])}><option value="landing-pages">Landing pages</option><option value="business-websites">Business websites</option><option value="portfolio">Portfolio</option><option value="ecommerce">E-commerce</option></select></label>
                       <label>Format<select value={selected.format} onChange={(event) => updateField("format", event.target.value as Product["format"])}><option value="nextjs">Next.js</option><option value="html">HTML</option><option value="figma">Figma</option></select></label>
                       <label>Harga<input type="number" min="0" step="1" value={selected.price} onChange={(event) => updateField("price", Number(event.target.value))} required /></label>
                       <label>Mata uang<select value={selected.currency} onChange={(event) => updateField("currency", event.target.value as Product["currency"])}><option value="IDR">IDR</option><option value="USD">USD</option></select></label>
                       <label className="admin-check"><input type="checkbox" checked={selected.featured} onChange={(event) => updateField("featured", event.target.checked)} /> Tampilkan sebagai unggulan</label>
-                      <LocalizedTextArea label="Ringkasan · Indonesia" value={selected.summary.id} onChange={(value) => updateLocalized("summary", "id", value)} />
-                      <LocalizedTextArea label="Summary · English" value={selected.summary.en} onChange={(value) => updateLocalized("summary", "en", value)} />
+                      <LocalizedTextArea label="Ringkasan" value={selected.summary.id} onChange={(value) => updateLocalizedBoth("summary", value)} />
                     </> : <>
-                      <LocalizedInput label="Kategori · Indonesia" value={selected.category.id} onChange={(value) => updateLocalized("category", "id", value)} required />
-                      <LocalizedInput label="Category · English" value={selected.category.en} onChange={(value) => updateLocalized("category", "en", value)} required />
+                      <LocalizedInput label="Kategori" value={selected.category.id} onChange={(value) => updateLocalizedBoth("category", value)} required />
                       <label>Jenis portofolio<select value={selected.filter} onChange={(event) => updateField("filter", event.target.value as PortfolioProject["filter"])}><option value="website">Website</option><option value="landing">Landing page</option><option value="dashboard">Dashboard</option></select></label>
                     </>}
-                    <LocalizedTextArea label="Deskripsi · Indonesia" value={selected.description.id} onChange={(value) => updateLocalized("description", "id", value)} />
-                    <LocalizedTextArea label="Description · English" value={selected.description.en} onChange={(value) => updateLocalized("description", "en", value)} />
+                    <LocalizedTextArea label="Deskripsi" value={selected.description.id} onChange={(value) => updateLocalizedBoth("description", value)} />
                     {!isProduct(selected) ? <>
                       <h3 className="span-two">Studi kasus (opsional)</h3>
-                      {(["challenge", "approach", "solution", "outcome"] as const).map((field) => <div key={field} className="span-two grid gap-3 sm:grid-cols-2"><LocalizedTextArea label={`${{ challenge: "Tantangan", approach: "Pendekatan", solution: "Solusi", outcome: "Hasil" }[field]} · Indonesia`} value={selected.caseStudy?.[field].id ?? ""} onChange={(value) => updateCaseStudy(field, "id", value)} /><LocalizedTextArea label={`${{ challenge: "Challenge", approach: "Approach", solution: "Solution", outcome: "Outcome" }[field]} · English`} value={selected.caseStudy?.[field].en ?? ""} onChange={(value) => updateCaseStudy(field, "en", value)} /></div>)}
+                      {(["challenge", "approach", "solution", "outcome"] as const).map((field) => <LocalizedTextArea key={field} label={{ challenge: "Tantangan", approach: "Pendekatan", solution: "Solusi", outcome: "Hasil" }[field]} value={selected.caseStudy?.[field].id ?? ""} onChange={(value) => updateCaseStudyBoth(field, value)} />)}
                     </> : null}
                     {isProduct(selected) ? <>
-                      <LocalizedListArea label="Teknologi · Indonesia (satu per baris)" value={selected.tech.id} onChange={(value) => updateProductList("tech", "id", value)} />
-                      <LocalizedListArea label="Technology · English (one per line)" value={selected.tech.en} onChange={(value) => updateProductList("tech", "en", value)} />
-                      <LocalizedListArea label="Kompatibilitas · Indonesia" value={selected.compatibility.id} onChange={(value) => updateProductList("compatibility", "id", value)} />
-                      <LocalizedListArea label="Compatibility · English" value={selected.compatibility.en} onChange={(value) => updateProductList("compatibility", "en", value)} />
-                      <LocalizedListArea label="Berkas termasuk · Indonesia" value={selected.includedFiles.id} onChange={(value) => updateProductList("includedFiles", "id", value)} />
-                      <LocalizedListArea label="Included files · English" value={selected.includedFiles.en} onChange={(value) => updateProductList("includedFiles", "en", value)} />
-                      <LocalizedListArea label="Fitur · Indonesia" value={selected.features.id} onChange={(value) => updateProductList("features", "id", value)} />
-                      <LocalizedListArea label="Features · English" value={selected.features.en} onChange={(value) => updateProductList("features", "en", value)} />
-                      <LocalizedListArea label="Persyaratan instalasi · Indonesia" value={selected.installRequirements.id} onChange={(value) => updateProductList("installRequirements", "id", value)} />
-                      <LocalizedListArea label="Install requirements · English" value={selected.installRequirements.en} onChange={(value) => updateProductList("installRequirements", "en", value)} />
-                      <LocalizedTextArea label="Lisensi · Indonesia" value={selected.license.id} onChange={(value) => updateLocalized("license", "id", value)} />
-                      <LocalizedTextArea label="License · English" value={selected.license.en} onChange={(value) => updateLocalized("license", "en", value)} />
+                      <LocalizedListArea label="Teknologi (satu per baris)" value={selected.tech.id} onChange={(value) => updateProductListBoth("tech", value)} />
+                      <LocalizedListArea label="Kompatibilitas (satu per baris)" value={selected.compatibility.id} onChange={(value) => updateProductListBoth("compatibility", value)} />
+                      <LocalizedListArea label="Berkas termasuk (satu per baris)" value={selected.includedFiles.id} onChange={(value) => updateProductListBoth("includedFiles", value)} />
+                      <LocalizedListArea label="Fitur (satu per baris)" value={selected.features.id} onChange={(value) => updateProductListBoth("features", value)} />
+                      <LocalizedListArea label="Persyaratan instalasi (satu per baris)" value={selected.installRequirements.id} onChange={(value) => updateProductListBoth("installRequirements", value)} />
+                      <LocalizedTextArea label="Lisensi" value={selected.license.id} onChange={(value) => updateLocalizedBoth("license", value)} />
                     </> : <label>Teknologi / tags (pisahkan dengan koma)<input value={selected.tech.join(", ")} onChange={(event) => updateField("tech", event.target.value.split(",").map((tag) => tag.trim()).filter(Boolean))} /></label>}
                     {isProduct(selected) ? <>
                       <UrlField label="Live Preview URL" value={selected.liveDemoUrl} onChange={(value) => updateField("liveDemoUrl", value)} actionLabel="Uji Live Preview" />
@@ -600,11 +616,11 @@ export default function AdminDashboard() {
 
                 <div className="admin-settings-group">
                   <h3>Media & pratinjau</h3>
-                  <p className="ws-cms-hint">{preset.label}: disarankan <strong>{preset.width} × {preset.height} px</strong> (rasio 16:10). JPG, PNG, WebP, AVIF; maksimal 10 MB per file. Template Terbit wajib memiliki gambar utama.</p>
+                  <p className="ws-cms-hint">{preset.label}: <strong>{preset.width} × {preset.height} px</strong> (16:10) ideal untuk kartu. Landing page panjang boleh diunggah utuh (mis. 1600 × 6000 px); kartu memakai bagian atasnya dan slide lain tetap tersimpan. JPG, PNG, WebP, AVIF; maksimal 10 MB per file, otomatis dikompres sebelum diunggah. Template Terbit wajib memiliki gambar utama.</p>
                   {activeImage ? <div className="ws-cms-preview"><img src={activeImage} alt="Pratinjau gambar utama" /><div><small>{isProduct(selected) ? "Gambar pertama digunakan sebagai pratinjau utama." : "Slide pertama menjadi sampul kartu portofolio."}</small><button type="button" className="admin-quiet" onClick={() => detachImage(activeImage)} disabled={busy}>Lepas dari item</button></div></div> : <p className="ws-cms-hint">Belum ada gambar utama. Unggah gambar untuk mengisi pratinjau.</p>}
                   {selectedPreviews.length > 1 ? <div className="ws-cms-thumbs">{selectedPreviews.map((url, index) => <span key={url}><img src={url} alt={`Pratinjau ${index + 1}`} /><button type="button" disabled={index === 0} onClick={() => movePreview(index, -1)} aria-label={`Geser slide ${index + 1} ke kiri`}>←</button><button type="button" disabled={index === selectedPreviews.length - 1} onClick={() => movePreview(index, 1)} aria-label={`Geser slide ${index + 1} ke kanan`}>→</button><button type="button" onClick={() => { if (index === 0) detachImage(url); else if (isProduct(selected)) setProductCover(url); else setPortfolioCover(url); }}>{index === 0 ? "Lepas sampul" : "Jadikan sampul"}</button>{index > 0 ? <button type="button" className="ws-cms-thumb-remove" onClick={() => detachImage(url)}>Hapus slide</button> : null}</span>)}</div> : null}
                   <label className="ws-cms-upload">{section === "portfolio" ? "Tambah slide pratinjau proyek" : "Tambah slide pratinjau template"}<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple onChange={(event) => void uploadFiles(event)} disabled={busy} /></label>
-                  {uploadProgress ? <p role="status">{uploadProgress}</p> : null}
+                  {uploadProgress ? <div className="ws-cms-progress-block"><p role="status">{uploadProgress}</p>{uploadPercent !== null ? <div className="ws-cms-progress" role="progressbar" aria-valuenow={uploadPercent} aria-valuemin={0} aria-valuemax={100} aria-label="Progres unggahan gambar"><span style={{ width: `${uploadPercent}%` }} /></div> : null}</div> : null}
                   <p className="ws-cms-hint">Melepas gambar hanya mengubah referensi yang akan disimpan; tidak menghapus file. File cloud hanya dapat dihapus dari perpustakaan setelah tidak lagi digunakan dan perubahan sudah tersimpan.</p>
                 </div>
                 <div className="admin-modal-foot"><span className="ws-cms-hint">Status: {dirty ? "ada perubahan belum disimpan" : "tersimpan"}</span></div>

@@ -13,3 +13,9 @@
 
 /* Admin previews mirror the public cards: 16:10 cover crop anchored to the top. */
 .ws-cms-preview>img,.ws-cms-thumbs img,.ws-cms-media-grid article>img{object-position:top}
+
+/* Upload progress: compression runs first, then the byte-level upload. */
+.ws-cms-progress-block{max-width:420px;margin:10px 0 4px}
+.ws-cms-progress-block p{margin:0 0 6px;color:#5c5246;font-size:11px;line-height:1.5}
+.ws-cms-progress{position:relative;height:6px;overflow:hidden;border-radius:999px;background:#e8e1d6}
+.ws-cms-progress>span{display:block;height:100%;border-radius:999px;background:#766149;transition:width .18s ease}

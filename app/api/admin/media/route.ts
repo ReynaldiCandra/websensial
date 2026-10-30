@@ -4,8 +4,6 @@ import { getAuthorizedAdminId } from "@/lib/admin/auth";
 import { getCmsAdminClient, getStoredWebContent } from "@/lib/admin/site-content";
 
 const bucket = "websensial-media";
-const maxBytes = 10 * 1024 * 1024;
-const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);
 const storageUrl = () => process.env.SUPABASE_URL?.trim();
 const adminKey = () => process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
 
@@ -48,28 +46,8 @@ export async function GET() {
   return NextResponse.json(nested.flat(), { headers: { "Cache-Control": "no-store" } });
 }
 
-export async function POST(request: Request) {
-  if (!(await getAuthorizedAdminId())) {
-    return NextResponse.json({ error: "Silakan masuk sebagai admin." }, { status: 401 });
-  }
-  const client = getCmsAdminClient();
-  if (!client) return NextResponse.json({ error: "CMS belum dikonfigurasi." }, { status: 503 });
-  const form = await request.formData();
-  const file = form.get("file");
-  const section = form.get("section");
-  if (!(file instanceof File) || !(section === "portfolio" || section === "products")) {
-    return NextResponse.json({ error: "File atau bagian konten tidak valid." }, { status: 400 });
-  }
-  if (!allowedTypes.has(file.type) || file.size > maxBytes || file.size === 0) {
-    return NextResponse.json({ error: "Gambar harus JPG, PNG, WebP, atau AVIF dan maksimal 10 MB." }, { status: 400 });
-  }
-  const ext = file.type === "image/jpeg" ? "jpg" : file.type.split("/")[1];
-  const path = `${section}/${crypto.randomUUID()}.${ext}`;
-  const { error } = await client.storage.from(bucket).upload(path, file, { contentType: file.type, cacheControl: "31536000", upsert: false });
-  if (error) return NextResponse.json({ error: "Upload gambar gagal. Periksa konfigurasi bucket." }, { status: 500 });
-  return NextResponse.json({ url: client.storage.from(bucket).getPublicUrl(path).data.publicUrl });
-}
-
+// Image bytes are uploaded from the browser to Supabase Storage through the
+// signed URL issued by /api/admin/media/sign; see that route for why.
 export async function DELETE(request: Request) {
   if (!(await getAuthorizedAdminId())) return NextResponse.json({ error: "Silakan masuk sebagai admin." }, { status: 401 });
   const client = getCmsAdminClient();
