@@ -3,7 +3,7 @@ import PreviewImage from "@/components/ui/PreviewImage";
 import { Link } from "@/i18n/navigation";
 import type { Product } from "@/lib/data/products";
 import { getCategory } from "@/lib/data/categories";
-import { formatPrice } from "@/components/ui/format";
+import { displayPrice } from "@/components/ui/format";
 import { InlineArrow } from "@/components/ui/Button";
 
 export default function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
@@ -49,7 +49,7 @@ export default function ProductCard({ product, priority = false }: { product: Pr
         </div>
         <details className="group/details">
           <summary className="flex cursor-pointer list-none items-center justify-between py-2 text-[10px] text-muted [&::-webkit-details-marker]:hidden">
-            {t("cardFrom")} · {formatPrice(product.price, product.currency, locale)}
+            {t("cardFrom")} · {displayPrice(product.price, product.currency, locale)}
             <span className="text-sm leading-none transition-transform group-open/details:rotate-45">+</span>
           </summary>
           <p className="border-t border-line py-2 text-[10px] text-muted">{product.summary[locale]}</p>

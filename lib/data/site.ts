@@ -12,6 +12,14 @@ export const siteConfig = {
     email: "agencywebsensial@gmail.com",
     whatsapp: "+6281319963253",
   },
+  /**
+   * Prices are stored in each product's own currency (the demo catalog uses
+   * IDR). English pages quote USD, converted with this indicative rate and
+   * marked as approximate — review it once real pricing is settled.
+   */
+  currency: {
+    idrPerUsd: 16000,
+  },
   /** Optional social links (null = intentionally not configured, not hidden). */
   socials: {
     instagram: null as string | null,

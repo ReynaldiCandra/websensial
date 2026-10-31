@@ -176,6 +176,7 @@
     "imageUnavailable": "Preview image unavailable",
     "previewScrollHint": "Long landing page — scroll inside the frame to see the whole page, or open the image in full size.",
     "openFullPreview": "Open full image",
+    "priceConversionNote": "USD amounts are an indicative conversion of the IDR price, not a separately quoted price.",
     "conceptNotice": "**Showcase concept.** This product is a demonstration sample — it is not a live, purchasable product right now."
   },
   "services": {

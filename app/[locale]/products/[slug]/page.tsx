@@ -6,7 +6,7 @@ import Container from "@/components/ui/Container";
 import ProductGallery from "@/components/products/ProductGallery";
 import DemoPurchaseActions from "@/components/products/DemoPurchaseActions";
 import ProductCard from "@/components/products/ProductCard";
-import { formatPrice, formatValue } from "@/components/ui/format";
+import { displayPrice, formatValue, isPriceConverted } from "@/components/ui/format";
 import { getCategory } from "@/lib/data/categories";
 import { getWebContent } from "@/lib/admin/site-content";
 import { getWhatsAppUrl } from "@/lib/data/site";
@@ -93,11 +93,16 @@ export default async function ProductDetailPage({ params }: Props) {
           <h1 className="mt-3 font-editorial text-4xl tracking-tight text-ink sm:text-5xl">{product.name[locale]}</h1>
           <p className="mt-2 text-[15px] leading-relaxed text-muted">{product.summary[locale]}</p>
 
-          <div className="mt-5 flex items-baseline gap-2">
-            <span className="text-xl font-extrabold text-ink">
-              {formatPrice(product.price, product.currency, locale)}
-            </span>
-            <span className="text-xs text-muted">· {tp("oneTime")}</span>
+          <div className="mt-5">
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-extrabold text-ink">
+                {displayPrice(product.price, product.currency, locale)}
+              </span>
+              <span className="text-xs text-muted">· {tp("oneTime")}</span>
+            </div>
+            {isPriceConverted(product.currency, locale) ? (
+              <p className="mt-1 text-[11px] leading-relaxed text-muted">{t("priceConversionNote")}</p>
+            ) : null}
           </div>
 
           <div className="mt-6">
