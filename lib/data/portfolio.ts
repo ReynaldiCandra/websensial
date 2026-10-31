@@ -1,4 +1,4 @@
-import type { LocalizedText } from "./i18n-types";
+import type { LocalizedText, LocalizedTextList } from "./i18n-types";
 
 /** Filter buckets shown on the portfolio page. Only real offerings belong here. */
 export type PortfolioFilter = "website" | "dashboard" | "landing";
@@ -22,6 +22,8 @@ export type PortfolioProject = {
   projectUrl: string | null;
   /** Showcase concepts must never be presented as client deliveries. */
   kind: "concept" | "client";
+  /** Design highlights of the concept; omitted when not authored. */
+  features?: LocalizedTextList;
   /** Optional case-study copy; only render sections with authored content. */
   caseStudy?: {
     challenge: LocalizedText;
@@ -52,6 +54,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/veillee-boardgame.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Arah seni gelap dan atmosferik", "Tipografi editorial kontras tinggi", "Suasana malam permainan tabletop"],
+      en: ["Dark, atmospheric art direction", "High-contrast editorial typography", "Tabletop game-night atmosphere"],
+    },
   },
   {
     id: "pf-tempo",
@@ -67,6 +73,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/tempo-chess.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Palet warna hangat", "Tipografi berani sebagai fokus", "Estetika kontemporer untuk klub catur"],
+      en: ["Warm color palette", "Bold typography as the focal point", "Contemporary chess-club aesthetic"],
+    },
   },
   {
     id: "pf-tessera",
@@ -82,6 +92,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/tessera-interiors.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Grid arsitektural yang terkurasi", "Presentasi produk yang tenang", "Etalase objek rumah"],
+      en: ["Curated architectural grid", "Calm product presentation", "Home-object storefront"],
+    },
   },
   {
     id: "pf-oddpress",
@@ -97,6 +111,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/oddpress-printclub.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Kampanye editorial yang ceria", "Sorotan produk edisi terbatas", "Nada komunitas cetak independen"],
+      en: ["Playful editorial campaign", "Limited-release product highlights", "Independent print-community tone"],
+    },
   },
   {
     id: "pf-ficelle",
@@ -112,6 +130,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/ficelle-gift.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Nuansa handmade", "Detail pita sebagai aksen visual", "Identitas layanan pengiriman hadiah"],
+      en: ["Handmade feel", "Ribbon details as visual accents", "Gift-delivery service identity"],
+    },
   },
   {
     id: "pf-passeline",
@@ -127,6 +149,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/passeline-gift.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Ilustrasi perjalanan pengantaran", "Cerita lokal dalam kota", "Arah warna yang lembut"],
+      en: ["Illustrated delivery journeys", "Local in-city storytelling", "Soft color direction"],
+    },
   },
   {
     id: "pf-ecrin",
@@ -142,6 +168,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/ecrin-gift.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Presentasi sinematik", "Kotak hadiah sebagai pusat cerita", "Komposisi visual dramatis"],
+      en: ["Cinematic presentation", "The gift box as the centerpiece", "Dramatic visual composition"],
+    },
   },
   {
     id: "pf-fallow",
@@ -157,6 +187,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/fallow-botanical.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Cerita empat bab dari benih ke bunga", "Ritme gulir bertahap", "Ilustrasi botanikal"],
+      en: ["Four-chapter seed-to-bloom story", "Paced scroll rhythm", "Botanical illustration"],
+    },
   },
   {
     id: "pf-offcut",
@@ -172,6 +206,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/offcut-furniture.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Material jujur sebagai fokus", "Alur proses dan keahlian", "Katalog furnitur bergaya abadi"],
+      en: ["Honest materials in focus", "Craft and process storytelling", "Timeless furniture catalog"],
+    },
   },
   {
     id: "pf-aero",
@@ -187,6 +225,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/aero-travel.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Lanskap lebar dan lapang", "Panduan destinasi", "Rencana perjalanan terkurasi"],
+      en: ["Expansive landscape imagery", "Destination guides", "Curated itineraries"],
+    },
   },
   {
     id: "pf-crux",
@@ -202,6 +244,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/crux-climbing.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Energi berani dan hangat", "Nada komunitas yang inklusif", "Sorotan kegiatan komunitas panjat"],
+      en: ["Bold, welcoming energy", "Inclusive community tone", "Climbing community highlights"],
+    },
   },
   {
     id: "pf-maree",
@@ -217,6 +263,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/maree-coastal.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Ritme pasang sebagai arah visual", "Suasana tenang tepi laut", "Cerita ritual berendam"],
+      en: ["Tide rhythm as the visual device", "Quiet coastal atmosphere", "Bathing-ritual storytelling"],
+    },
   },
   {
     id: "pf-umbra",
@@ -232,6 +282,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/umbra-gift.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Palet malam editorial", "Kemasan hangat dan taktil", "Pengalaman memberi yang intim"],
+      en: ["Nocturnal editorial palette", "Warm tactile packaging", "Intimate gifting experience"],
+    },
   },
   {
     id: "pf-aparte",
@@ -247,6 +301,10 @@ export const portfolioProjects: PortfolioProject[] = [
     previewPath: "/previews/portfolio/aparte-gift.svg",
     projectUrl: null,
     kind: "concept",
+    features: {
+      id: ["Tipografi editorial", "Ilustrasi lembut", "Cerita personal pelanggan"],
+      en: ["Editorial typography", "Gentle illustration", "Personal customer stories"],
+    },
   },
 ];
 

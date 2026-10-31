@@ -49,6 +49,12 @@ export function getBundledWebContent(): WebContent {
   };
 }
 
+/** Stored CMS copies can predate a data field; fall back to the bundled default. */
+function withPortfolioDefaults(project: PortfolioProject): PortfolioProject {
+  const bundled = portfolioProjects.find((candidate) => candidate.id === project.id);
+  return bundled ? { ...project, features: project.features ?? bundled.features } : project;
+}
+
 export async function getStoredWebContent(): Promise<WebContent | null> {
   const client = getCmsClient();
   if (!client) return null;
@@ -65,7 +71,7 @@ export async function getStoredWebContent(): Promise<WebContent | null> {
     const content = data.content as Partial<WebContent>;
     if (!Array.isArray(content.portfolio) || !Array.isArray(content.products)) return null;
     return {
-      portfolio: content.portfolio,
+      portfolio: content.portfolio.map(withPortfolioDefaults),
       products: content.products,
       contact: content.contact ?? fallbackContent.contact,
       home: normalizeHomeContent(content.home),
@@ -162,6 +168,7 @@ export function validateWebContent(value: unknown): string | null {
 
   for (const [index, item] of value.portfolio.entries()) {
     if (!isRecord(item) || !isLocalizedText(item.name, true) || !isLocalizedText(item.category, true) || !isLocalizedText(item.description)
+      || (item.features !== undefined && !isLocalizedList(item.features))
       || !Array.isArray(item.tech) || !item.tech.every((tag) => isText(tag, true))
       || !(item.previewPath === null || isSafeImagePath(item.previewPath))
       || (item.previewPaths !== undefined && (!Array.isArray(item.previewPaths) || item.previewPaths.length > 20 || !item.previewPaths.every(isSafeImagePath)))
