@@ -49,7 +49,15 @@ export default async function PortfolioProjectPage({ params }: Props) {
       : `Halo Websensial, saya ingin berdiskusi tentang proyek seperti ${project.name.id}.`,
   );
 
-  const features = project.features?.[locale] ?? [];
+  const features = (project.features?.[locale] ?? []).filter((feature) => feature.trim().length > 0);
+  const tech = project.tech.filter((tag) => tag.trim().length > 0);
+  const description = project.description[locale].trim();
+  // An empty case-study object (new CMS drafts) must not render a bare heading.
+  const caseStudy = project.caseStudy
+    ? (["challenge", "approach", "solution", "outcome"] as const)
+      .map((field) => ({ field, copy: project.caseStudy?.[field][locale]?.trim() ?? "" }))
+      .filter((entry) => entry.copy.length > 0)
+    : [];
 
   return (
     <Container className="pt-10 pb-20">
@@ -57,16 +65,16 @@ export default async function PortfolioProjectPage({ params }: Props) {
         <Link href={{ pathname: "/portfolio" }} className="font-semibold text-muted hover:text-primary">← {t("backToPortfolio")}</Link>
       </nav>
       <article>
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-          <div>
-            {project.previewPath ? (
+        <div className={project.previewPath ? "grid gap-10 lg:grid-cols-[1.15fr_0.85fr]" : "max-w-3xl"}>
+          {project.previewPath ? (
+            <div>
               <PortfolioPreviewGallery
                 slides={[project.previewPath, ...(project.previewPaths ?? [])]}
                 projectName={project.name[locale]}
                 category={project.category[locale]}
               />
-            ) : null}
-          </div>
+            </div>
+          ) : null}
 
           <div>
             <div className="flex flex-wrap items-center gap-2">
@@ -77,7 +85,7 @@ export default async function PortfolioProjectPage({ params }: Props) {
             </div>
 
             <h1 className="mt-3 font-editorial text-4xl tracking-tight text-ink sm:text-5xl">{project.name[locale]}</h1>
-            <p className="mt-2 text-[15px] leading-relaxed text-muted">{project.description[locale]}</p>
+            {description.length > 0 ? <p className="mt-2 text-[15px] leading-relaxed text-muted">{description}</p> : null}
 
             <div className="mt-6">
               <PortfolioActions demoUrl={project.projectUrl} whatsappUrl={whatsappUrl} />
@@ -87,14 +95,16 @@ export default async function PortfolioProjectPage({ params }: Props) {
               {content.contact.email}
             </a>
 
-            <div className="mt-6 rounded-xl border border-line bg-white px-4 py-3 text-sm">
-              <h2 className="text-xs font-bold tracking-wider text-muted uppercase">{t("techStackLabel")}</h2>
-              <ul className="mt-2 flex flex-wrap gap-2">
-                {project.tech.map((tag) => (
-                  <li key={tag} className="rounded-full border border-line px-3 py-1.5 text-xs text-muted">{tag}</li>
-                ))}
-              </ul>
-            </div>
+            {tech.length > 0 ? (
+              <div className="mt-6 rounded-xl border border-line bg-white px-4 py-3 text-sm">
+                <h2 className="text-xs font-bold tracking-wider text-muted uppercase">{t("techStackLabel")}</h2>
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  {tech.map((tag) => (
+                    <li key={tag} className="rounded-full border border-line px-3 py-1.5 text-xs text-muted">{tag}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
             {features.length > 0 ? (
               <section aria-labelledby="project-features" className="mt-6 border-t border-line pt-5">
@@ -115,20 +125,16 @@ export default async function PortfolioProjectPage({ params }: Props) {
           </div>
         </div>
 
-        {project.caseStudy ? (
+        {caseStudy.length > 0 ? (
           <section aria-labelledby="case-study" className="mt-14 max-w-3xl">
             <h2 id="case-study" className="font-editorial text-3xl text-ink sm:text-4xl">{t("caseStudy")}</h2>
             <div className="mt-5 space-y-7">
-              {(["challenge", "approach", "solution", "outcome"] as const).map((field) => {
-                const copy = project.caseStudy?.[field][locale];
-                if (!copy?.trim()) return null;
-                return (
-                  <section key={field} className="border-t border-line pt-5">
-                    <h3 className="text-sm font-extrabold text-ink">{t(field)}</h3>
-                    <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-muted">{copy}</p>
-                  </section>
-                );
-              })}
+              {caseStudy.map(({ field, copy }) => (
+                <section key={field} className="border-t border-line pt-5">
+                  <h3 className="text-sm font-extrabold text-ink">{t(field)}</h3>
+                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-muted">{copy}</p>
+                </section>
+              ))}
             </div>
           </section>
         ) : null}

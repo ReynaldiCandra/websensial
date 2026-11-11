@@ -56,8 +56,10 @@ const emptyPortfolio = (): PortfolioProject => ({
   description: { id: "", en: "" },
   tech: [],
   previewPath: null,
+  previewPaths: [],
   projectUrl: null,
   kind: "concept",
+  features: { id: [], en: [] },
   caseStudy: emptyCaseStudy(),
 });
 
@@ -313,6 +315,12 @@ export default function AdminDashboard() {
       const caseStudy = record.caseStudy ?? emptyCaseStudy();
       return { ...record, caseStudy: { ...caseStudy, [field]: { id: value, en: value } } };
     });
+  }
+
+  function updatePortfolioFeatures(value: string) {
+    if (!selected || isProduct(selected)) return;
+    const items = value.split("\n").map((item) => item.trim()).filter(Boolean);
+    updateSelected((record) => isProduct(record) ? record : { ...record, features: { id: items, en: items } });
   }
 
   function updateProductListBoth(field: ProductListField, value: string) {
@@ -588,7 +596,7 @@ export default function AdminDashboard() {
                       <label>Format<select value={selected.format} onChange={(event) => updateField("format", event.target.value as Product["format"])}><option value="nextjs">Next.js</option><option value="html">HTML</option><option value="figma">Figma</option></select></label>
                       <label>Harga<input type="number" min="0" step="1" value={selected.price} onChange={(event) => updateField("price", Number(event.target.value))} required /></label>
                       <label>Mata uang<select value={selected.currency} onChange={(event) => updateField("currency", event.target.value as Product["currency"])}><option value="IDR">IDR</option><option value="USD">USD</option></select></label>
-                      <label className="admin-check"><input type="checkbox" checked={selected.featured} onChange={(event) => updateField("featured", event.target.checked)} /> Tampilkan sebagai unggulan</label>
+                      <label className="admin-check"><input type="checkbox" checked={selected.featured} onChange={(event) => updateField("featured", event.target.checked)} /> Tandai unggulan (badge ★ di kartu)</label>
                       <LocalizedTextArea label="Ringkasan" value={selected.summary.id} onChange={(value) => updateLocalizedBoth("summary", value)} />
                     </> : <>
                       <LocalizedInput label="Kategori" value={selected.category.id} onChange={(value) => updateLocalizedBoth("category", value)} required />
@@ -606,7 +614,10 @@ export default function AdminDashboard() {
                       <LocalizedListArea label="Fitur (satu per baris)" value={selected.features.id} onChange={(value) => updateProductListBoth("features", value)} />
                       <LocalizedListArea label="Persyaratan instalasi (satu per baris)" value={selected.installRequirements.id} onChange={(value) => updateProductListBoth("installRequirements", value)} />
                       <LocalizedTextArea label="Lisensi" value={selected.license.id} onChange={(value) => updateLocalizedBoth("license", value)} />
-                    </> : <label>Teknologi / tags (pisahkan dengan koma)<input value={selected.tech.join(", ")} onChange={(event) => updateField("tech", event.target.value.split(",").map((tag) => tag.trim()).filter(Boolean))} /></label>}
+                    </> : <>
+                      <label>Teknologi / tags (pisahkan dengan koma)<input value={selected.tech.join(", ")} onChange={(event) => updateField("tech", event.target.value.split(",").map((tag) => tag.trim()).filter(Boolean))} /></label>
+                      <LocalizedListArea label="Fitur & highlight (satu per baris)" value={selected.features?.id ?? []} onChange={updatePortfolioFeatures} />
+                    </>}
                     {isProduct(selected) ? <>
                       <UrlField label="Live Preview URL" value={selected.liveDemoUrl} onChange={(value) => updateField("liveDemoUrl", value)} actionLabel="Uji Live Preview" />
                       <UrlField label="Link pembelian (opsional)" value={selected.purchaseUrl} onChange={(value) => updateField("purchaseUrl", value)} />

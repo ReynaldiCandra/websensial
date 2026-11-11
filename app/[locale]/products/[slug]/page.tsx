@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: product.name[locale],
       description: product.summary[locale],
-      images: [{ url: product.previews[0] }],
+      images: product.previews.length > 0 ? [{ url: product.previews[0] }] : [],
       type: "website",
     },
   };
@@ -65,6 +65,21 @@ export default async function ProductDetailPage({ params }: Props) {
   const related = getRelatedProducts(publishedProducts, product);
   const whatsappUrl = getWhatsAppUrl(content.contact.whatsapp, locale === "en" ? `Hello Websensial, I would like to purchase the ${product.name.en} template.` : `Halo Websensial, saya ingin membeli template ${product.name.id}.`);
 
+  // The CMS allows empty optional fields; hide any block that has no content
+  // instead of leaving a heading, empty list or blank column behind.
+  const tech = product.tech[locale].filter((item) => item.trim().length > 0);
+  const compatibility = product.compatibility[locale].filter((item) => item.trim().length > 0);
+  const features = product.features[locale].filter((item) => item.trim().length > 0);
+  const includedFiles = product.includedFiles[locale].filter((item) => item.trim().length > 0);
+  const installRequirements = product.installRequirements[locale].filter((item) => item.trim().length > 0);
+  const description = product.description[locale].trim();
+  const summary = product.summary[locale].trim();
+  const license = product.license[locale].trim();
+  const hasGallery = product.previews.length > 0;
+  const hasSpecs = tech.length > 0 || compatibility.length > 0;
+  const hasAside = features.length > 0 || includedFiles.length > 0 || installRequirements.length > 0;
+  const hasDetails = description.length > 0 || hasAside;
+
   return (
     <Container className="pt-10 pb-20">
       <nav aria-label={t("backToCatalog")} className="mb-6 text-sm">
@@ -73,10 +88,12 @@ export default async function ProductDetailPage({ params }: Props) {
         </Link>
       </nav>
 
-      <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-        <div>
-          <ProductGallery previews={product.previews} productName={product.name[locale]} />
-        </div>
+      <div className={hasGallery ? "grid gap-10 lg:grid-cols-[1.15fr_0.85fr]" : "max-w-3xl"}>
+        {hasGallery ? (
+          <div>
+            <ProductGallery previews={product.previews} productName={product.name[locale]} />
+          </div>
+        ) : null}
 
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -91,7 +108,7 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
 
           <h1 className="mt-3 font-editorial text-4xl tracking-tight text-ink sm:text-5xl">{product.name[locale]}</h1>
-          <p className="mt-2 text-[15px] leading-relaxed text-muted">{product.summary[locale]}</p>
+          {summary.length > 0 ? <p className="mt-2 text-[15px] leading-relaxed text-muted">{summary}</p> : null}
 
           <div className="mt-5">
             <div className="flex items-baseline gap-2">
@@ -109,79 +126,95 @@ export default async function ProductDetailPage({ params }: Props) {
             <DemoPurchaseActions demoUrl={product.liveDemoUrl} purchaseUrl={product.purchaseUrl} whatsappUrl={whatsappUrl} />
           </div>
 
-          <dl className="mt-6 grid grid-cols-1 gap-3 text-sm">
-            <DetailRow label={t("techLabel")} values={product.tech[locale]} />
-            <DetailRow label={t("compatibilityLabel")} values={product.compatibility[locale]} />
-          </dl>
+          {hasSpecs ? (
+            <dl className="mt-6 grid grid-cols-1 gap-3 text-sm">
+              {tech.length > 0 ? <DetailRow label={t("techLabel")} values={tech} /> : null}
+              {compatibility.length > 0 ? <DetailRow label={t("compatibilityLabel")} values={compatibility} /> : null}
+            </dl>
+          ) : null}
 
-          <div className="mt-6 border-y border-line py-5">
-            <h2 className="text-sm font-extrabold text-ink">{t("licenseLabel")}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">{product.license[locale]}</p>
-          </div>
+          {license.length > 0 ? (
+            <div className="mt-6 border-y border-line py-5">
+              <h2 className="text-sm font-extrabold text-ink">{t("licenseLabel")}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{license}</p>
+            </div>
+          ) : null}
         </div>
       </div>
 
-      <div className="mt-14 grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-        <section aria-labelledby="full-desc">
-          <h2 id="full-desc" className="font-editorial text-3xl text-ink sm:text-4xl">
-            {t("descriptionLabel")}
-          </h2>
-          <p className="mt-3 leading-relaxed text-ink/80">{product.description[locale]}</p>
-        </section>
+      {hasDetails ? (
+        <div className={description.length > 0 && hasAside ? "mt-14 grid gap-10 lg:grid-cols-[1.15fr_0.85fr]" : "mt-14"}>
+          {description.length > 0 ? (
+            <section aria-labelledby="full-desc" className={hasAside ? undefined : "max-w-3xl"}>
+              <h2 id="full-desc" className="font-editorial text-3xl text-ink sm:text-4xl">
+                {t("descriptionLabel")}
+              </h2>
+              <p className="mt-3 leading-relaxed text-ink/80">{description}</p>
+            </section>
+          ) : null}
 
-        <aside className="space-y-6">
-          <section aria-labelledby="features" className="border-t border-line py-5">
-            <h2 id="features" className="text-sm font-extrabold text-ink">
-              {t("featuresLabel")}
-            </h2>
-            <ul className="mt-3 space-y-2 text-sm text-ink/80">
-              {product.features[locale].map((feature) => (
-                <li key={feature} className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </section>
+          {hasAside ? (
+            <aside className="space-y-6">
+              {features.length > 0 ? (
+                <section aria-labelledby="features" className="border-t border-line py-5">
+                  <h2 id="features" className="text-sm font-extrabold text-ink">
+                    {t("featuresLabel")}
+                  </h2>
+                  <ul className="mt-3 space-y-2 text-sm text-ink/80">
+                    {features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2">
+                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
 
-          <section aria-labelledby="files" className="border-t border-line py-5">
-            <h2 id="files" className="text-sm font-extrabold text-ink">
-              {t("includedFilesLabel")}
-            </h2>
-            <ul className="mt-3 space-y-2 text-sm text-ink/80">
-              {product.includedFiles[locale].map((file) => (
-                <li key={file} className="flex items-start gap-2">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="mt-0.5 h-4 w-4 shrink-0 text-primary"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <path d="M14 2v6h6" />
-                  </svg>
-                  {file}
-                </li>
-              ))}
-            </ul>
-          </section>
+              {includedFiles.length > 0 ? (
+                <section aria-labelledby="files" className="border-t border-line py-5">
+                  <h2 id="files" className="text-sm font-extrabold text-ink">
+                    {t("includedFilesLabel")}
+                  </h2>
+                  <ul className="mt-3 space-y-2 text-sm text-ink/80">
+                    {includedFiles.map((file) => (
+                      <li key={file} className="flex items-start gap-2">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <path d="M14 2v6h6" />
+                        </svg>
+                        {file}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
 
-          <section aria-labelledby="install" className="border-t border-line py-5">
-            <h2 id="install" className="text-sm font-extrabold text-ink">
-              {t("installLabel")}
-            </h2>
-            <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-ink/80">
-              {product.installRequirements[locale].map((requirement) => (
-                <li key={requirement}>{requirement}</li>
-              ))}
-            </ol>
-          </section>
-        </aside>
-      </div>
+              {installRequirements.length > 0 ? (
+                <section aria-labelledby="install" className="border-t border-line py-5">
+                  <h2 id="install" className="text-sm font-extrabold text-ink">
+                    {t("installLabel")}
+                  </h2>
+                  <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-ink/80">
+                    {installRequirements.map((requirement) => (
+                      <li key={requirement}>{requirement}</li>
+                    ))}
+                  </ol>
+                </section>
+              ) : null}
+            </aside>
+          ) : null}
+        </div>
+      ) : null}
 
       {related.length > 0 ? (
         <section aria-labelledby="related" className="mt-16">
