@@ -20,7 +20,7 @@ async function storageObject(client: ReturnType<typeof getCmsAdminClient>, publi
   const prefix = `${url}/storage/v1/object/public/${bucket}/`;
   if (!publicUrl.startsWith(prefix)) return null;
   const path = decodeURIComponent(publicUrl.slice(prefix.length));
-  if (!path || path.includes("..") || !/^(portfolio|products)\/[a-zA-Z0-9._-]+$/.test(path)) return null;
+  if (!path || path.includes("..") || !/^(portfolio|products|articles)\/[a-zA-Z0-9._-]+$/.test(path)) return null;
   return path;
 }
 
@@ -29,7 +29,7 @@ export async function GET() {
   if (!client) return NextResponse.json({ error: "Silakan masuk sebagai admin." }, { status: 401 });
   const { data, error } = await client.storage.from(bucket).list("", { limit: 1000, sortBy: { column: "created_at", order: "desc" } });
   if (error) return NextResponse.json({ error: "Media gagal dimuat." }, { status: 500 });
-  const folders = (data ?? []).filter((item) => item.id === null && ["portfolio", "products"].includes(item.name));
+  const folders = (data ?? []).filter((item) => item.id === null && ["portfolio", "products", "articles"].includes(item.name));
   const nested = await Promise.all(folders.map(async ({ name: folder }) => {
     const { data: files } = await client.storage.from(bucket).list(folder, { limit: 1000, sortBy: { column: "created_at", order: "desc" } });
     return (files ?? []).filter((item) => item.id !== null).map((item) => {
@@ -65,6 +65,7 @@ export async function DELETE(request: Request) {
   const isReferenced = [
     ...currentContent.portfolio.flatMap((item) => [item.previewPath, ...(item.previewPaths ?? [])]),
     ...currentContent.products.flatMap((item) => item.previews),
+    ...currentContent.articles.flatMap((item) => item.coverPath ? [item.coverPath] : []),
   ].includes(body.url as string);
   if (isReferenced) return NextResponse.json({ error: "Gambar masih digunakan. Lepas referensinya dan simpan perubahan terlebih dahulu." }, { status: 409 });
   const { error } = await client.storage.from(bucket).remove([path]);

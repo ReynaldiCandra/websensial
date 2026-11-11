@@ -4,6 +4,16 @@ import { createClient } from "@supabase/supabase-js";
 
 const cookieName = "ws-admin-session";
 const sessionLifetimeSeconds = 60 * 60 * 24 * 7;
+const loginWindowMs = 15 * 60 * 1000;
+const maxAccountFailures = 5;
+const maxIpFailures = 20;
+const attemptsTable = "websensial_login_attempts";
+
+// Fallback for environments where the attempts table has not been migrated yet
+// (and for transient database errors). Vercel runs several instances, so the
+// Supabase table remains the authoritative limit once the SQL is applied.
+const memoryAttempts = new Map<string, number[]>();
+let rateLimitWarningShown = false;
 
 function signingSecret() {
   return process.env.ADMIN_SESSION_SECRET?.trim() || process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || "";
@@ -11,6 +21,40 @@ function signingSecret() {
 
 function sign(value: string, secret: string) {
   return createHmac("sha256", secret).update(value).digest("base64url");
+}
+
+function attemptKey(value: string, secret: string) {
+  return createHmac("sha256", secret).update(value).digest("hex");
+}
+
+function requestIp(request: Request) {
+  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  return forwarded || request.headers.get("x-real-ip")?.trim() || "unknown";
+}
+
+function recentMemoryFailures(key: string, now: number) {
+  const recent = (memoryAttempts.get(key) ?? []).filter((time) => now - time < loginWindowMs);
+  if (recent.length > 0) memoryAttempts.set(key, recent);
+  else memoryAttempts.delete(key);
+  return recent.length;
+}
+
+function rememberMemoryFailure(keys: string[], now: number) {
+  for (const key of keys) {
+    const recent = (memoryAttempts.get(key) ?? []).filter((time) => now - time < loginWindowMs);
+    recent.push(now);
+    memoryAttempts.set(key, recent);
+  }
+}
+
+function clearMemoryFailures(keys: string[]) {
+  for (const key of keys) memoryAttempts.delete(key);
+}
+
+function warnRateLimitStore(error: unknown) {
+  if (rateLimitWarningShown) return;
+  rateLimitWarningShown = true;
+  console.warn("Login attempt table unavailable; using in-memory rate limits. Run the latest supabase/websensial-cms.sql.", error);
 }
 
 export async function POST(request: Request) {
@@ -34,13 +78,70 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Email atau password tidak valid." }, { status: 400 });
   }
 
+  const adminClient = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
+  const now = Date.now();
+  const ip = requestIp(request);
+  const keys = [
+    attemptKey(`${ip}:${email.toLowerCase()}`, secret),
+    attemptKey(`ip:${ip}`, secret),
+  ];
+
+  let storeAvailable = false;
+  let blocked = recentMemoryFailures(keys[0], now) >= maxAccountFailures
+    || recentMemoryFailures(keys[1], now) >= maxIpFailures;
+  try {
+    const since = new Date(now - loginWindowMs).toISOString();
+    const [account, ipCount] = await Promise.all([
+      adminClient.from(attemptsTable).select("id", { count: "exact", head: true }).eq("attempt_key", keys[0]).gte("created_at", since),
+      adminClient.from(attemptsTable).select("id", { count: "exact", head: true }).eq("attempt_key", keys[1]).gte("created_at", since),
+    ]);
+    if (account.error || ipCount.error) throw account.error ?? ipCount.error;
+    storeAvailable = true;
+    blocked = blocked || (account.count ?? 0) >= maxAccountFailures || (ipCount.count ?? 0) >= maxIpFailures;
+  } catch (error) {
+    warnRateLimitStore(error);
+  }
+  if (blocked) {
+    return NextResponse.json(
+      { error: "Terlalu banyak percobaan masuk. Coba lagi dalam 15 menit." },
+      { status: 429, headers: { "Retry-After": "900" } },
+    );
+  }
+
+  async function recordFailure() {
+    rememberMemoryFailure(keys, now);
+    if (!storeAvailable) return;
+    try {
+      const { error } = await adminClient.from(attemptsTable).insert(keys.map((attempt_key) => ({ attempt_key })));
+      if (error) throw error;
+      const { error: pruneError } = await adminClient
+        .from(attemptsTable)
+        .delete()
+        .lt("created_at", new Date(now - 24 * 60 * 60 * 1000).toISOString());
+      if (pruneError) throw pruneError;
+    } catch (error) {
+      warnRateLimitStore(error);
+    }
+  }
+
+  async function clearFailures() {
+    clearMemoryFailures(keys);
+    if (!storeAvailable) return;
+    try {
+      const { error } = await adminClient.from(attemptsTable).delete().in("attempt_key", keys);
+      if (error) throw error;
+    } catch (error) {
+      warnRateLimitStore(error);
+    }
+  }
+
   const authClient = createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data, error } = await authClient.auth.signInWithPassword({ email, password });
   if (error || !data.user || !data.session) {
+    await recordFailure();
     return NextResponse.json({ error: "Email atau password salah." }, { status: 401 });
   }
 
-  const adminClient = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data: admin, error: adminError } = await adminClient
     .from("websensial_admins")
     .select("user_id")
@@ -50,6 +151,8 @@ export async function POST(request: Request) {
     await authClient.auth.signOut();
     return NextResponse.json({ error: "Akun ini belum diberi akses admin Websensial." }, { status: 403 });
   }
+
+  await clearFailures();
 
   const expiresAt = Math.floor(Date.now() / 1000) + sessionLifetimeSeconds;
   const payload = Buffer.from(JSON.stringify({ sub: data.user.id, exp: expiresAt })).toString("base64url");

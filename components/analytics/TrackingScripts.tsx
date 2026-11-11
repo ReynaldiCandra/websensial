@@ -2,6 +2,11 @@ import Script from "next/script";
 import AnalyticsRouteTracker from "./AnalyticsRouteTracker";
 import type { TrackingSettings } from "@/lib/data/tracking";
 
+/** Inline-script stdout: quoted and with `<` escaped so a tampered CMS value cannot close the tag. */
+function inlineValue(value: string) {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
 /**
  * Loads only the tags the admin actually configured. Values are validated
  * before they reach the CMS, and JSON.stringify keeps them safely quoted in
@@ -27,8 +32,8 @@ export default function TrackingScripts({ tracking }: { tracking: TrackingSettin
                 "window.dataLayer=window.dataLayer||[];",
                 "function gtag(){window.dataLayer.push(arguments);}",
                 "gtag('js',new Date());",
-                ...(gaMeasurementId ? [`gtag('config',${JSON.stringify(gaMeasurementId)});`] : []),
-                ...(googleAdsId ? [`gtag('config',${JSON.stringify(googleAdsId)});`] : []),
+                ...(gaMeasurementId ? [`gtag('config',${inlineValue(gaMeasurementId)});`] : []),
+                ...(googleAdsId ? [`gtag('config',${inlineValue(googleAdsId)});`] : []),
               ].join(""),
             }}
           />
@@ -47,7 +52,7 @@ export default function TrackingScripts({ tracking }: { tracking: TrackingSettin
                 "if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];",
                 "t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)",
                 "}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');",
-                `fbq('init',${JSON.stringify(metaPixelId)});`,
+                `fbq('init',${inlineValue(metaPixelId)});`,
                 "fbq('track','PageView');",
               ].join(""),
             }}
