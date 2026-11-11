@@ -8,6 +8,7 @@
       "productDetail": "Detail Produk",
       "services": "Layanan",
       "portfolio": "Portofolio",
+      "articles": "Artikel",
       "contact": "Kontak",
       "notFound": "Halaman tidak ditemukan"
     }
@@ -17,6 +18,7 @@
     "products": "Template",
     "services": "Layanan",
     "portfolio": "Karya kami",
+    "articles": "Artikel",
     "contact": "Tentang Kami",
     "openMenu": "Buka menu navigasi",
     "closeMenu": "Tutup menu navigasi",
@@ -175,6 +177,19 @@
     "openFullPreview": "Buka gambar penuh",
     "priceConversionNote": "Nominal USD adalah konversi indikatif dari harga IDR, bukan harga terpisah.",
     "conceptNotice": "**Konsep showcase.** Produk ini adalah contoh demonstrasi — bukan produk berjalan yang tersedia pembayarannya di dunia nyata saat ini."
+  },
+  "articles": {
+    "badge": "Artikel",
+    "title": "Catatan studio",
+    "subtitle": "Panduan praktis soal desain web, template, dan SEO — ditulis oleh tim Websensial.",
+    "readMore": "Baca artikel",
+    "empty": "Belum ada artikel yang terbit.",
+    "backToArticles": "Kembali ke artikel",
+    "by": "oleh",
+    "related": "Artikel lain",
+    "tagsLabel": "Topik artikel",
+    "coverUnavailable": "Gambar sampul belum tersedia",
+    "discuss": "Diskusikan kebutuhan Anda"
   },
   "services": {
     "title": "Layanan",

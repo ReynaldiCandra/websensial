@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Abstract illustration of layered website template cards">
+  <defs>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6328F5" />
+      <stop offset="1" stop-color="#4F6BFF" />
+    </linearGradient>
+    <linearGradient id="soft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F1ECFA" />
+    </linearGradient>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#6328F5" stroke-opacity="0.07" />
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="#F6F3FB" />
+  <rect width="1600" height="900" fill="url(#grid)" />
+  <circle cx="1280" cy="180" r="380" fill="url(#violet)" opacity="0.92" />
+  <circle cx="1280" cy="180" r="250" fill="none" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="2" />
+  <circle cx="1280" cy="180" r="140" fill="none" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2" />
+  <g transform="rotate(-6 600 470)">
+    <rect x="150" y="170" width="640" height="430" rx="28" fill="#E7E0F4" />
+    <rect x="190" y="120" width="640" height="470" rx="28" fill="#FFFFFF" stroke="#E1D8F2" />
+    <rect x="190" y="120" width="640" height="56" rx="28" fill="url(#soft)" />
+    <circle cx="228" cy="148" r="7" fill="#C9BDE4" />
+    <circle cx="252" cy="148" r="7" fill="#C9BDE4" />
+    <circle cx="276" cy="148" r="7" fill="#C9BDE4" />
+    <rect x="235" y="220" width="250" height="22" rx="11" fill="#2C2338" />
+    <rect x="235" y="260" width="340" height="12" rx="6" fill="#C9C0D9" />
+    <rect x="235" y="284" width="300" height="12" rx="6" fill="#DAD3E6" />
+    <rect x="235" y="338" width="170" height="44" rx="22" fill="url(#violet)" />
+    <rect x="520" y="220" width="250" height="162" rx="16" fill="#EFEAF9" />
+    <circle cx="645" cy="290" r="38" fill="url(#violet)" opacity="0.65" />
+    <rect x="235" y="430" width="160" height="96" rx="14" fill="#F4F0FB" />
+    <rect x="415" y="430" width="160" height="96" rx="14" fill="#F4F0FB" />
+    <rect x="595" y="430" width="175" height="96" rx="14" fill="#F4F0FB" />
+  </g>
+  <text x="120" y="790" fill="#4B4358" font-family="Georgia, 'Times New Roman', serif" font-size="52" letter-spacing="-1">WEBSENSIAL JOURNAL</text>
+  <text x="120" y="830" fill="#8A8098" font-family="Helvetica, Arial, sans-serif" font-size="20" letter-spacing="6">TEMPLATE · STUDIO NOTES</text>
+</svg>

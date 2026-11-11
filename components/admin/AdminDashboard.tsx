@@ -6,12 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import type { PortfolioProject } from "@/lib/data/portfolio";
 import type { Product } from "@/lib/data/products";
+import type { Article } from "@/lib/data/articles";
+import { validateTracking, type TrackingSettings } from "@/lib/data/tracking";
+import { analyzeArticleSeo, seoLevelLabel } from "@/lib/admin/article-seo";
 import type { HomeContent, HomeCopy, HomeSectionId } from "@/lib/admin/home-content";
 import type { Service } from "@/lib/data/services";
 import { maxUploadBytes, prepareImageForUpload, putWithProgress } from "@/lib/admin/image-upload";
 
-type Content = { portfolio: PortfolioProject[]; products: Product[]; contact: { email: string; whatsapp: string | null }; home: HomeContent; services: Service[] };
-type Section = "home" | "portfolio" | "products";
+type Content = { portfolio: PortfolioProject[]; products: Product[]; articles: Article[]; tracking: TrackingSettings; contact: { email: string; whatsapp: string | null }; home: HomeContent; services: Service[] };
+type Section = "home" | "portfolio" | "products" | "articles" | "tracking";
 type Toast = { message: string; kind: "success" | "error" | "info" };
 type Asset = { name: string; url: string; width: number; height: number; bytes: number };
 type LocalizedField = "name" | "category" | "summary" | "description" | "license";
@@ -63,7 +66,22 @@ const emptyPortfolio = (): PortfolioProject => ({
   caseStudy: emptyCaseStudy(),
 });
 
-const isProduct = (record: PortfolioProject | Product): record is Product => "previews" in record;
+const isProduct = (record: PortfolioProject | Product | Article): record is Product => "previews" in record;
+const isArticle = (record: PortfolioProject | Product | Article): record is Article => "seo" in record;
+
+const emptyArticle = (): Article => ({
+  id: `art-${crypto.randomUUID()}`,
+  slug: "artikel-baru",
+  title: { id: "Artikel baru", en: "New article" },
+  excerpt: { id: "", en: "" },
+  content: { id: "", en: "" },
+  coverPath: null,
+  tags: [],
+  author: "Websensial",
+  status: "draft",
+  publishedAt: new Date().toISOString(),
+  seo: { title: { id: "", en: "" }, description: { id: "", en: "" }, keyword: "" },
+});
 const slugPattern = "[a-z0-9]+(?:-[a-z0-9]+)*";
 
 export default function AdminDashboard() {
@@ -90,13 +108,14 @@ export default function AdminDashboard() {
       const response = await fetch("/api/admin/content", { cache: "no-store" });
       const value = await response.json() as Content | { error?: string };
       if (!response.ok || !("portfolio" in value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)
+        || !Array.isArray(value.articles) || !("tracking" in value) || !value.tracking
         || !("home" in value) || !value.home || !("services" in value) || !Array.isArray(value.services)) {
         throw new Error("error" in value ? value.error || "Konten tidak dapat dimuat." : "Format konten dari CMS tidak valid.");
       }
       setContent(value);
       setSavedSnapshot(JSON.stringify(value));
       setSelectedId((current) => {
-        const currentItems = sectionRef.current === "portfolio" ? value.portfolio : value.products;
+        const currentItems = sectionRef.current === "portfolio" ? value.portfolio : sectionRef.current === "articles" ? value.articles : sectionRef.current === "products" ? value.products : [];
         return currentItems.some((item) => item.id === current) ? current : currentItems[0]?.id ?? "";
       });
       if (!preserveMessage) showToast("Konten berhasil dimuat ulang.", "success");
@@ -140,23 +159,32 @@ export default function AdminDashboard() {
     return () => window.removeEventListener("beforeunload", warnBeforeUnload);
   }, [dirty]);
 
-  const records = section === "portfolio" ? content?.portfolio ?? [] : content?.products ?? [];
-  const selected = section === "home" ? null : records.find((item) => item.id === selectedId) ?? records[0] ?? null;
-  const preset = { label: section === "portfolio" ? "Pratinjau portofolio" : "Pratinjau template", width: 1600, height: 1000 };
-  const selectedPreviews = selected ? (isProduct(selected) ? selected.previews : [selected.previewPath, ...(selected.previewPaths ?? [])].filter((url): url is string => Boolean(url))) : [];
+  const records = section === "portfolio" ? content?.portfolio ?? [] : section === "articles" ? content?.articles ?? [] : content?.products ?? [];
+  const selected = section === "home" || section === "tracking" ? null : records.find((item) => item.id === selectedId) ?? records[0] ?? null;
+  const preset = section === "articles"
+    ? { label: "Sampul artikel", width: 1600, height: 900 }
+    : { label: section === "portfolio" ? "Pratinjau portofolio" : "Pratinjau template", width: 1600, height: 1000 };
+  const selectedPreviews = selected
+    ? isProduct(selected)
+      ? selected.previews
+      : isArticle(selected)
+        ? (selected.coverPath ? [selected.coverPath] : [])
+        : [selected.previewPath, ...(selected.previewPaths ?? [])].filter((url): url is string => Boolean(url))
+    : [];
   const activeImage = selectedPreviews[0] ?? null;
   const imageRefs = useMemo(() => {
     if (!content) return [] as { owner: string; url: string }[];
     return [
       ...content.portfolio.flatMap((item) => [item.previewPath, ...(item.previewPaths ?? [])].filter((url): url is string => Boolean(url)).map((url) => ({ owner: item.name.id, url }))),
       ...content.products.flatMap((item) => item.previews.map((url) => ({ owner: item.name.id, url }))),
+      ...content.articles.flatMap((item) => item.coverPath ? [{ owner: item.title.id, url: item.coverPath }] : []),
     ];
   }, [content]);
 
   function changeSection(next: Section) {
     sectionRef.current = next;
     setSection(next);
-    setSelectedId(next === "portfolio" ? content?.portfolio[0]?.id ?? "" : next === "products" ? content?.products[0]?.id ?? "" : "");
+    setSelectedId(next === "portfolio" ? content?.portfolio[0]?.id ?? "" : next === "products" ? content?.products[0]?.id ?? "" : next === "articles" ? content?.articles[0]?.id ?? "" : "");
   }
 
   function updateHomeCopy(path: string, locale: "id" | "en", value: string) {
@@ -291,7 +319,7 @@ export default function AdminDashboard() {
 
   function updateSelected(mutator: (record: PortfolioProject | Product) => PortfolioProject | Product) {
     setContent((current) => {
-      if (!current || !selected) return current;
+      if (!current || !selected || isArticle(selected)) return current;
       if (section === "portfolio") return { ...current, portfolio: current.portfolio.map((item) => item.id === selected.id ? mutator(item) as PortfolioProject : item) };
       return { ...current, products: current.products.map((item) => item.id === selected.id ? mutator(item) as Product : item) };
     });
@@ -317,6 +345,34 @@ export default function AdminDashboard() {
     });
   }
 
+  function updateArticle(mutator: (article: Article) => Article) {
+    if (!selected || !isArticle(selected)) return;
+    const targetId = selected.id;
+    setContent((current) => current
+      ? { ...current, articles: current.articles.map((article) => article.id === targetId ? mutator(article) : article) }
+      : current);
+  }
+
+  function updateArticleField<K extends keyof Article>(field: K, value: Article[K]) {
+    updateArticle((article) => ({ ...article, [field]: value }));
+  }
+
+  function updateArticleCopy(field: "title" | "excerpt" | "content", value: string) {
+    updateArticle((article) => ({ ...article, [field]: { id: value, en: value } }));
+  }
+
+  function updateArticleSeo(field: "title" | "description", value: string) {
+    updateArticle((article) => ({ ...article, seo: { ...article.seo, [field]: { id: value, en: value } } }));
+  }
+
+  function updateArticleKeyword(value: string) {
+    updateArticle((article) => ({ ...article, seo: { ...article.seo, keyword: value } }));
+  }
+
+  function updateTrackingField<K extends keyof TrackingSettings>(field: K, value: TrackingSettings[K]) {
+    setContent((current) => current ? { ...current, tracking: { ...current.tracking, [field]: value } } : current);
+  }
+
   function updatePortfolioFeatures(value: string) {
     if (!selected || isProduct(selected)) return;
     const items = value.split("\n").map((item) => item.trim()).filter(Boolean);
@@ -338,6 +394,10 @@ export default function AdminDashboard() {
       const item = emptyPortfolio();
       setContent({ ...content, portfolio: [item, ...content.portfolio] });
       setSelectedId(item.id);
+    } else if (section === "articles") {
+      const item = emptyArticle();
+      setContent({ ...content, articles: [item, ...content.articles] });
+      setSelectedId(item.id);
     } else {
       const item = emptyProduct();
       setContent({ ...content, products: [item, ...content.products] });
@@ -347,17 +407,28 @@ export default function AdminDashboard() {
   }
 
   function deleteRecord() {
-    if (!content || !selected || !window.confirm(`Hapus “${selected.name.id}” dari daftar? Perubahan baru berlaku setelah disimpan.`)) return;
+    if (!content || !selected || !window.confirm(`Hapus “${isArticle(selected) ? selected.title.id : selected.name.id}” dari daftar? Perubahan baru berlaku setelah disimpan.`)) return;
     const next = section === "portfolio"
       ? content.portfolio.filter((item) => item.id !== selected.id)
-      : content.products.filter((item) => item.id !== selected.id);
-    setContent(section === "portfolio" ? { ...content, portfolio: next as PortfolioProject[] } : { ...content, products: next as Product[] });
+      : section === "articles"
+        ? content.articles.filter((item) => item.id !== selected.id)
+        : content.products.filter((item) => item.id !== selected.id);
+    setContent(section === "portfolio"
+      ? { ...content, portfolio: next as PortfolioProject[] }
+      : section === "articles"
+        ? { ...content, articles: next as Article[] }
+        : { ...content, products: next as Product[] });
     setSelectedId(next[0]?.id ?? "");
     showToast("Item dihapus dari perubahan sementara. Tekan Simpan perubahan untuk menerapkan.", "info");
   }
 
   function detachImage(url: string) {
     if (!selected) return;
+    if (isArticle(selected)) {
+      updateArticle((article) => ({ ...article, coverPath: null }));
+      showToast("Sampul artikel dilepas. Simpan perubahan; file cloud belum dihapus.", "info");
+      return;
+    }
     if (isProduct(selected)) {
       updateSelected((record) => isProduct(record) ? { ...record, previews: record.previews.filter((item) => item !== url) } : record);
     } else {
@@ -445,6 +516,9 @@ export default function AdminDashboard() {
           return { ...project, previewPath: slides[0] ?? null, previewPaths: slides.slice(1) };
         }) };
       });
+      else if (section === "articles") {
+        if (uploaded.length > 0) updateArticle((article) => ({ ...article, coverPath: uploaded[0] }));
+      }
       else updateSelected((record) => isProduct(record) ? { ...record, previews: [...record.previews, ...uploaded] } : record);
       await fetchAssets();
       const savings = savedBytes > 0 ? ` Ukuran file turun ${(savedBytes / 1024 / 1024).toFixed(1)} MB setelah kompresi.` : "";
@@ -503,6 +577,17 @@ export default function AdminDashboard() {
       if (product.status === "published" && (!product.summary.id.trim() || !product.summary.en.trim())) return `Ringkasan Indonesia dan Inggris wajib diisi sebelum template “${product.name.id}” diterbitkan.`;
       if (product.status === "published" && (!product.description.id.trim() || !product.description.en.trim())) return `Deskripsi Indonesia dan Inggris wajib diisi sebelum template “${product.name.id}” diterbitkan.`;
     }
+    const articleSlugs = content.articles.map((article) => article.slug.trim().toLowerCase());
+    if (articleSlugs.some((slug) => !new RegExp(`^${slugPattern}$`).test(slug))) return "Slug artikel harus huruf kecil, angka, dan tanda hubung.";
+    if (new Set(articleSlugs).size !== articleSlugs.length) return "Slug artikel tidak boleh duplikat.";
+    for (const article of content.articles) {
+      if (article.status === "published" && (!article.title.id.trim() || !article.title.en.trim())) return `Judul artikel “${article.slug}” wajib diisi sebelum diterbitkan.`;
+      if (article.status === "published" && (!article.excerpt.id.trim() || !article.excerpt.en.trim())) return `Ringkasan artikel “${article.slug}” wajib diisi sebelum diterbitkan.`;
+      if (article.status === "published" && (!article.content.id.trim() || !article.content.en.trim())) return `Isi artikel “${article.slug}” wajib diisi sebelum diterbitkan.`;
+      if (Number.isNaN(Date.parse(article.publishedAt))) return `Tanggal terbit artikel “${article.slug}” tidak valid.`;
+    }
+    const trackingError = validateTracking(content.tracking);
+    if (trackingError) return trackingError;
     return null;
   }
 
@@ -556,6 +641,8 @@ export default function AdminDashboard() {
           <button title="Beranda" className={section === "home" ? "selected" : ""} onClick={() => changeSection("home")}><span className="ws-sidebar-icon" aria-hidden="true">⌂</span><span>Beranda</span></button>
           <button title="Portofolio" className={section === "portfolio" ? "selected" : ""} onClick={() => changeSection("portfolio")}><span className="ws-sidebar-icon" aria-hidden="true">▧</span><span>Portofolio</span></button>
           <button title="Template" className={section === "products" ? "selected" : ""} onClick={() => changeSection("products")}><span className="ws-sidebar-icon" aria-hidden="true">▤</span><span>Template</span></button>
+          <button title="Artikel" className={section === "articles" ? "selected" : ""} onClick={() => changeSection("articles")}><span className="ws-sidebar-icon" aria-hidden="true">✎</span><span>Artikel</span></button>
+          <button title="Tracking & verifikasi" className={section === "tracking" ? "selected" : ""} onClick={() => changeSection("tracking")}><span className="ws-sidebar-icon" aria-hidden="true">◎</span><span>Tracking</span></button>
         </nav>
         <div className="admin-side-bottom"><Link href="/id" target="_blank" rel="noreferrer"><span className="ws-sidebar-icon" aria-hidden="true">↗</span><span>Lihat situs</span></Link><button className="ws-admin-logout" onClick={() => void logout()}><span className="ws-sidebar-icon" aria-hidden="true">⇥</span><span>Keluar</span></button></div>
       </aside>
@@ -563,28 +650,42 @@ export default function AdminDashboard() {
         <header className="admin-topbar"><button className="ws-topbar-toggle" type="button" onClick={() => setSidebarCollapsed((collapsed) => !collapsed)} aria-label={sidebarCollapsed ? "Perlebar sidebar" : "Ciutkan sidebar"} aria-expanded={!sidebarCollapsed}><span aria-hidden="true">{sidebarCollapsed ? "☰" : "‹"}</span></button><span className="ws-admin-topbar-title">Panel pengelolaan konten</span><span className={`ws-admin-save-state${dirty ? " is-dirty" : ""}`}><span aria-hidden="true">●</span>{dirty ? "Ada perubahan belum disimpan" : "Semua perubahan tersimpan"}</span></header>
         <section className="admin-content">
           <div className="admin-page-heading">
-            <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "home" ? "Beranda" : section === "portfolio" ? "Portofolio" : "Template"}</h1></div>
-            <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button>{section === "home" ? <button className="admin-primary" type="button" onClick={addService} disabled={busy}>+ Tambah layanan</button> : <button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : "template"}</button>}<button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button></div>
+            <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "home" ? "Beranda" : section === "portfolio" ? "Portofolio" : section === "articles" ? "Artikel" : section === "tracking" ? "Tracking" : "Template"}</h1></div>
+            <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button>{section === "home" ? <button className="admin-primary" type="button" onClick={addService} disabled={busy}>+ Tambah layanan</button> : section === "tracking" ? null : <button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : section === "articles" ? "artikel" : "template"}</button>}<button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button></div>
           </div>
-          {section === "home" ? <div className="ws-admin-intro"><div><p className="admin-kicker">KONTEN SITUS</p><h2>Kelola beranda</h2><p>Atur konten, urutan bagian, dan materi yang ditampilkan kepada pengunjung.</p></div><span className="ws-admin-locale-note">Satu teks untuk Indonesia &amp; English</span></div> : <p className="admin-demo-note">Isi konten satu kali dalam bahasa Indonesia. Teks yang sama dipakai di halaman English sampai ada terjemahan khusus.</p>}
+          {section === "home" ? <div className="ws-admin-intro"><div><p className="admin-kicker">KONTEN SITUS</p><h2>Kelola beranda</h2><p>Atur konten, urutan bagian, dan materi yang ditampilkan kepada pengunjung.</p></div><span className="ws-admin-locale-note">Satu teks untuk Indonesia &amp; English</span></div> : section === "tracking" ? <div className="ws-admin-intro"><div><p className="admin-kicker">INTEGRASI</p><h2>Tracking &amp; verifikasi</h2><p>Hubungkan Meta Pixel, Google Analytics, Google Ads, dan kode verifikasi domain. Kosongkan kolom yang belum dipakai.</p></div><span className="ws-admin-locale-note">Aktif di produksi</span></div> : <p className="admin-demo-note">Isi konten satu kali dalam bahasa Indonesia. Teks yang sama dipakai di halaman English sampai ada terjemahan khusus.</p>}
           <form id="admin-content-form" onSubmit={save}>
             {section === "home" ? <HomeEditor content={content} addService={addService} updateHomeCopy={updateHomeCopy} toggleHomeSection={toggleHomeSection} reorderHomeSection={reorderHomeSection} setSelectedIds={setSelectedIds} moveSelectedId={moveSelectedId} updateService={updateService} updateServiceItems={updateServiceItems} reorderService={reorderService} removeService={removeService} updateTickerItem={updateTickerItem} moveTickerItem={moveTickerItem} addTickerItem={addTickerItem} removeTickerItem={removeTickerItem} updateProcessStep={updateProcessStep} moveProcessStep={moveProcessStep} addProcessStep={addProcessStep} removeProcessStep={removeProcessStep} busy={busy} /> : null}
-            <section className="admin-form-card ws-home-card ws-contact-card">
+            {section === "tracking" ? <TrackingEditor tracking={content.tracking} onChange={updateTrackingField} /> : null}
+            {section !== "tracking" ? <section className="admin-form-card ws-home-card ws-contact-card">
               <div className="ws-home-card-heading"><div><span className="ws-home-index">09</span><div><h3>Kontak global situs</h3><p>Kontak ini digunakan di halaman Kontak, footer, dan tombol chat calon klien.</p></div></div></div>
               <div className="ws-home-url-grid">
                 <label>Email agency<input type="email" value={content.contact.email} onChange={(event) => setContent((current) => current ? { ...current, contact: { ...current.contact, email: event.target.value } } : current)} required /></label>
                 <label>WhatsApp (format internasional)<input type="tel" placeholder="+6281234567890" value={content.contact.whatsapp ?? ""} onChange={(event) => setContent((current) => current ? { ...current, contact: { ...current.contact, whatsapp: event.target.value.trim() || null } } : current)} /></label>
               </div>
-            </section>
-            {section !== "home" ? <div className="ws-cms-layout">
+            </section> : null}
+            {section !== "home" && section !== "tracking" ? <div className="ws-cms-layout">
               <aside className="ws-cms-list admin-form-card">
                 <label className="ws-cms-search">Daftar konten<select value={selected?.id ?? ""} onChange={(event) => setSelectedId(event.target.value)} size={Math.min(Math.max(records.length, 4), 10)}>
-                  {records.map((item) => <option key={item.id} value={item.id}>{item.name.id || item.slug}</option>)}
+                  {records.map((item) => <option key={item.id} value={item.id}>{isArticle(item) ? item.title.id || item.slug : item.name.id || item.slug}</option>)}
                 </select></label>
                 {!records.length ? <p>Belum ada konten di bagian ini. Tambahkan item baru untuk mulai.</p> : null}
                 {selected ? <button className="admin-danger" type="button" onClick={deleteRecord} disabled={busy}>Hapus konten terpilih</button> : null}
               </aside>
-              {selected ? <div className="ws-cms-editor admin-form-card">
+              {selected && isArticle(selected) ? <ArticleEditor
+                article={selected}
+                busy={busy}
+                dirty={dirty}
+                uploadProgress={uploadProgress}
+                uploadPercent={uploadPercent}
+                onField={updateArticleField}
+                onCopy={updateArticleCopy}
+                onSeo={updateArticleSeo}
+                onKeyword={updateArticleKeyword}
+                onCoverUpload={(event) => void uploadFiles(event)}
+                onDetachCover={() => selected.coverPath && detachImage(selected.coverPath)}
+              /> : null}
+              {selected && !isArticle(selected) ? <div className="ws-cms-editor admin-form-card">
                 <div className="admin-settings-group">
                   <h3>Identitas & publikasi</h3>
                   <div className="admin-form-grid">
@@ -639,7 +740,7 @@ export default function AdminDashboard() {
             </div> : null}
           </form>
 
-          {section !== "home" ? <section className="ws-cms-media-library admin-form-card">
+          {section !== "home" && section !== "tracking" ? <section className="ws-cms-media-library admin-form-card">
             <div className="admin-settings-group"><h3>Perpustakaan media</h3><p className="ws-cms-hint">File terpakai tidak bisa dihapus. Lepas referensi, simpan konten, lalu hapus file jika memang tidak lagi diperlukan.</p></div>
             {assetList.length ? <div className="ws-cms-media-grid">{assetList.map((asset) => {
               const owner = imageRefs.find((ref) => ref.url === asset.url)?.owner;
@@ -650,6 +751,125 @@ export default function AdminDashboard() {
       </main>
     </div>
   );
+}
+
+function TrackingEditor({ tracking, onChange }: { tracking: TrackingSettings; onChange: <K extends keyof TrackingSettings>(field: K, value: TrackingSettings[K]) => void }) {
+  const additionalText = tracking.additionalVerifications.map((entry) => `${entry.name}=${entry.content}`).join("\n");
+  const parseAdditional = (value: string) => value.split("\n").map((line) => {
+    const separator = line.indexOf("=");
+    if (separator < 1) return null;
+    const name = line.slice(0, separator).trim();
+    const content = line.slice(separator + 1).trim();
+    return name && content ? { name, content } : null;
+  }).filter((entry): entry is { name: string; content: string } => Boolean(entry)).slice(0, 10);
+  const state = (active: boolean) => <span className={`ws-track-state${active ? " is-active" : ""}`}>{active ? "Aktif" : "Belum diatur"}</span>;
+
+  return <div className="ws-home-editor">
+    <section className="admin-form-card ws-home-card">
+      <div className="ws-home-card-heading"><div><span className="ws-home-index">01</span><div><h3>Meta Pixel</h3><p>Mengirim PageView untuk Meta Ads, retargeting, dan pengukuran kampanye.</p></div></div>{state(Boolean(tracking.metaPixelId))}</div>
+      <div className="admin-form-grid">
+        <label className="span-two">Meta Pixel ID<input value={tracking.metaPixelId ?? ""} inputMode="numeric" placeholder="123456789012345" onChange={(event) => onChange("metaPixelId", event.target.value.trim() || null)} /></label>
+      </div>
+      <p className="ws-cms-hint">Salin dari Meta Events Manager → Data sources → Pixel. Hanya angka, biasanya 15–16 digit.</p>
+    </section>
+
+    <section className="admin-form-card ws-home-card">
+      <div className="ws-home-card-heading"><div><span className="ws-home-index">02</span><div><h3>Google Analytics &amp; Google Ads</h3><p>Kedua tag memakai loader gtag yang sama, jadi tidak dimuat dua kali.</p></div></div><div className="ws-track-badges"><span className={`ws-track-state${tracking.gaMeasurementId ? " is-active" : ""}`}>GA4 {tracking.gaMeasurementId ? "aktif" : "belum"}</span><span className={`ws-track-state${tracking.googleAdsId ? " is-active" : ""}`}>Ads {tracking.googleAdsId ? "aktif" : "belum"}</span></div></div>
+      <div className="admin-form-grid">
+        <label>Measurement ID Google Analytics 4<input value={tracking.gaMeasurementId ?? ""} placeholder="G-XXXXXXXXXX" onChange={(event) => onChange("gaMeasurementId", event.target.value.trim() || null)} /></label>
+        <label>Google Ads ID<input value={tracking.googleAdsId ?? ""} placeholder="AW-XXXXXXXXXX" onChange={(event) => onChange("googleAdsId", event.target.value.trim() || null)} /></label>
+      </div>
+      <p className="ws-cms-hint">GA4 dipakai untuk statistik kunjungan. Google Ads ID memasang tag situs untuk remarketing; konversi pembelian/lead tetap perlu event terpisah.</p>
+    </section>
+
+    <section className="admin-form-card ws-home-card">
+      <div className="ws-home-card-heading"><div><span className="ws-home-index">03</span><div><h3>Verifikasi domain</h3><p>Tag meta ini membuktikan kepemilikan domain saat mendaftar di Meta Business, Google, dan platform iklan lain.</p></div></div></div>
+      <div className="admin-form-grid">
+        <label>Google site verification<input value={tracking.googleSiteVerification ?? ""} placeholder="Kode dari Google Search Console" onChange={(event) => onChange("googleSiteVerification", event.target.value.trim() || null)} /></label>
+        <label>Meta domain verification<input value={tracking.metaDomainVerification ?? ""} placeholder="Kode dari Meta Business Suite" onChange={(event) => onChange("metaDomainVerification", event.target.value.trim() || null)} /></label>
+        <label>Bing site verification<input value={tracking.bingSiteVerification ?? ""} placeholder="Kode msvalidate.01" onChange={(event) => onChange("bingSiteVerification", event.target.value.trim() || null)} /></label>
+        <label className="span-two">Verifikasi tambahan <span className="ws-home-field-hint">satu per baris, format name=content</span><textarea value={additionalText} placeholder="p:domain_verify=xxxxxxxx" onChange={(event) => onChange("additionalVerifications", parseAdditional(event.target.value))} /></label>
+      </div>
+      <p className="ws-cms-hint">Nama meta yang didukung misalnya <code>p:domain_verify</code> (Pinterest), <code>msvalidate.01</code> (Bing), atau kode verifikasi platform lain. Hanya tag meta, bukan script.</p>
+    </section>
+
+    <section className="admin-form-card ws-home-card">
+      <div className="ws-home-card-heading"><div><span className="ws-home-index">04</span><div><h3>Catatan penting</h3><p>Perilaku script setelah setelan disimpan.</p></div></div></div>
+      <ul className="ws-track-notes">
+        <li>Script pelacakan hanya dimuat pada deployment produksi. Mode dev dan preview Vercel tidak mengirim data ke Meta/Google.</li>
+        <li>Verifikasi domain dipasang sebagai tag meta di halaman publik dan langsung berlaku setelah disimpan.</li>
+        <li>PageView iklan tetap tercatat saat pengunjung berpindah halaman tanpa reload (navigasi internal).</li>
+        <li>Anda tetap bertanggung jawab atas consent, kebijakan privasi, dan kepatuhan wilayah sebelum mengaktifkan pelacakan.</li>
+      </ul>
+    </section>
+  </div>;
+}
+
+function ArticleEditor({ article, busy, dirty, uploadProgress, uploadPercent, onField, onCopy, onSeo, onKeyword, onCoverUpload, onDetachCover }: {
+  article: Article;
+  busy: boolean;
+  dirty: boolean;
+  uploadProgress: string;
+  uploadPercent: number | null;
+  onField: <K extends keyof Article>(field: K, value: Article[K]) => void;
+  onCopy: (field: "title" | "excerpt" | "content", value: string) => void;
+  onSeo: (field: "title" | "description", value: string) => void;
+  onKeyword: (value: string) => void;
+  onCoverUpload: (event: ChangeEvent<HTMLInputElement>) => void;
+  onDetachCover: () => void;
+}) {
+  const seo = analyzeArticleSeo(article);
+  const publishedDate = article.publishedAt.slice(0, 10);
+
+  return <div className="ws-cms-editor admin-form-card">
+    <div className="admin-settings-group">
+      <h3>Konten artikel</h3>
+      <div className="admin-form-grid">
+        <label>Slug<input value={article.slug} pattern={slugPattern} title="Gunakan huruf kecil, angka, dan tanda hubung." onChange={(event) => onField("slug", event.target.value)} required /></label>
+        <label>Status publikasi<select value={article.status} onChange={(event) => onField("status", event.target.value as Article["status"])}><option value="draft">Draft (disembunyikan)</option><option value="published">Terbit (tampil & masuk sitemap)</option></select></label>
+        <label>Judul artikel<input value={article.title.id} onChange={(event) => onCopy("title", event.target.value)} required /></label>
+        <label>Tanggal terbit<input type="date" value={publishedDate} onChange={(event) => { if (event.target.value) onField("publishedAt", new Date(`${event.target.value}T09:00:00.000Z`).toISOString()); }} required /></label>
+        <label>Penulis<input value={article.author} onChange={(event) => onField("author", event.target.value)} required /></label>
+        <label>Tags (pisahkan dengan koma)<input value={article.tags.join(", ")} onChange={(event) => onField("tags", event.target.value.split(",").map((tag) => tag.trim()).filter(Boolean).slice(0, 30))} /></label>
+        <LocalizedTextArea label="Ringkasan" value={article.excerpt.id} onChange={(value) => onCopy("excerpt", value)} />
+        <LocalizedTextArea label="Isi artikel" value={article.content.id} onChange={(value) => onCopy("content", value)} />
+      </div>
+      <p className="ws-cms-hint">Satu teks dipakai untuk Indonesia &amp; English. Format isi: baris kosong untuk paragraf baru, “## ” untuk subjudul, dan “- ” untuk butir daftar.</p>
+    </div>
+
+    <div className="admin-settings-group ws-seo-panel">
+      <div className="ws-seo-head">
+        <h3>Rekomendasi SEO</h3>
+        <span className={`ws-seo-score is-${seo.overall}`}>{seo.score}/100 · {seoLevelLabel(seo.overall)}</span>
+      </div>
+      <p className="ws-cms-hint">Pemeriksaan on-page memakai teks Indonesia (teks English memakai isi yang sama). Skor ini panduan, bukan jaminan peringkat Google.</p>
+      <div className="admin-form-grid">
+        <label className="span-two">Meta title (opsional)<input value={article.seo.title.id} maxLength={80} placeholder={article.title.id} onChange={(event) => onSeo("title", event.target.value)} /></label>
+        <label className="span-two">Meta description (opsional)<textarea value={article.seo.description.id} maxLength={220} placeholder={article.excerpt.id} onChange={(event) => onSeo("description", event.target.value)} /></label>
+        <label>Kata kunci fokus<input value={article.seo.keyword} maxLength={80} placeholder="template website" onChange={(event) => onKeyword(event.target.value)} /></label>
+        <div className="ws-seo-preview span-two">
+          <span>Pratinjau hasil Google</span>
+          <em>{`websensial.com › id › articles › ${article.slug}`}</em>
+          <strong>{seo.metaTitle || "Judul artikel belum diisi"}</strong>
+          <p>{seo.metaDescription || "Deskripsi belum diisi."}</p>
+        </div>
+      </div>
+      <ul className="ws-seo-checks">
+        {seo.checks.map((check) => <li key={check.id} className={`is-${check.level}`}><span className="ws-seo-dot" aria-hidden="true" /><strong>{check.label}</strong><span>{check.detail}</span></li>)}
+      </ul>
+    </div>
+
+    <div className="admin-settings-group">
+      <h3>Sampul artikel</h3>
+      <p className="ws-cms-hint">Gunakan 1600 × 900 px (16:9). JPG, PNG, WebP, AVIF; maksimal 10 MB, otomatis dikompres. Sampul dipakai di kartu, halaman artikel, dan pratinjau saat dibagikan.</p>
+      {article.coverPath ? <div className="ws-cms-preview"><img src={article.coverPath} alt="Sampul artikel" /><div><small>Sampul aktif. Ganti dengan mengunggah gambar baru.</small><button type="button" className="admin-quiet" onClick={onDetachCover} disabled={busy}>Lepas sampul</button></div></div> : <p className="ws-cms-hint">Belum ada sampul. Artikel tetap bisa terbit, tetapi kartu tanpa gambar terasa lebih kosong.</p>}
+      <label className="ws-cms-upload">Unggah sampul artikel<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={onCoverUpload} disabled={busy} /></label>
+      {uploadProgress ? <div className="ws-cms-progress-block"><p role="status">{uploadProgress}</p>{uploadPercent !== null ? <div className="ws-cms-progress" role="progressbar" aria-valuenow={uploadPercent} aria-valuemin={0} aria-valuemax={100} aria-label="Progres unggahan gambar"><span style={{ width: `${uploadPercent}%` }} /></div> : null}</div> : null}
+      <p className="ws-cms-hint">Melepas sampul hanya mengubah referensi; file tidak dihapus. Simpan perubahan sebelum menghapus file dari perpustakaan media.</p>
+    </div>
+
+    <div className="admin-modal-foot"><span className="ws-cms-hint">Status: {dirty ? "ada perubahan belum disimpan" : "tersimpan"}</span></div>
+  </div>;
 }
 
 function HomeEditor({ content, addService, updateHomeCopy, toggleHomeSection, reorderHomeSection, setSelectedIds, moveSelectedId, updateService, updateServiceItems, reorderService, removeService, updateTickerItem, moveTickerItem, addTickerItem, removeTickerItem, updateProcessStep, moveProcessStep, addProcessStep, removeProcessStep, busy }: {

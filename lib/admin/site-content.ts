@@ -2,6 +2,8 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { portfolioProjects, type PortfolioProject } from "@/lib/data/portfolio";
 import { products, type Product } from "@/lib/data/products";
+import { articles, type Article } from "@/lib/data/articles";
+import { defaultTracking, normalizeTracking, validateTracking, type TrackingSettings } from "@/lib/data/tracking";
 import { defaultHomeContent, defaultServices, normalizeHomeContent, validateHomeContent, validateServices, type HomeContent } from "@/lib/admin/home-content";
 
 export type SiteContact = {
@@ -12,6 +14,8 @@ export type SiteContact = {
 export type WebContent = {
   portfolio: PortfolioProject[];
   products: Product[];
+  articles: Article[];
+  tracking: TrackingSettings;
   contact: SiteContact;
   home: HomeContent;
   services: typeof defaultServices;
@@ -20,6 +24,8 @@ export type WebContent = {
 const fallbackContent: WebContent = {
   portfolio: portfolioProjects,
   products,
+  articles,
+  tracking: defaultTracking,
   contact: { email: "agencywebsensial@gmail.com", whatsapp: "+6281319963253" },
   home: defaultHomeContent,
   services: defaultServices,
@@ -43,6 +49,8 @@ export function getBundledWebContent(): WebContent {
   return {
     portfolio: structuredClone(fallbackContent.portfolio),
     products: structuredClone(fallbackContent.products),
+    articles: structuredClone(fallbackContent.articles),
+    tracking: structuredClone(fallbackContent.tracking),
     contact: structuredClone(fallbackContent.contact),
     home: structuredClone(fallbackContent.home),
     services: structuredClone(fallbackContent.services),
@@ -73,6 +81,8 @@ export async function getStoredWebContent(): Promise<WebContent | null> {
     return {
       portfolio: content.portfolio.map(withPortfolioDefaults),
       products: content.products,
+      articles: Array.isArray(content.articles) ? content.articles : structuredClone(fallbackContent.articles),
+      tracking: normalizeTracking(content.tracking),
       contact: content.contact ?? fallbackContent.contact,
       home: normalizeHomeContent(content.home),
       services: Array.isArray(content.services) ? content.services as WebContent["services"] : structuredClone(fallbackContent.services),
@@ -129,9 +139,11 @@ function isSafeImagePath(value: unknown): value is string {
 
 export function validateWebContent(value: unknown): string | null {
   if (!isRecord(value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)
-    || !isRecord(value.contact)) {
-    return "Data portofolio, template, dan kontak harus valid.";
+    || !Array.isArray(value.articles) || !isRecord(value.contact)) {
+    return "Data portofolio, template, artikel, dan kontak harus valid.";
   }
+  const trackingError = validateTracking(value.tracking);
+  if (trackingError) return trackingError;
   if (!isText(value.contact.email, true) || value.contact.email.length > 254
     || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.contact.email)) {
     return "Alamat email kontak tidak valid.";
@@ -141,7 +153,7 @@ export function validateWebContent(value: unknown): string | null {
       || !/^\+?[1-9]\d{7,14}$/.test(value.contact.whatsapp))) {
     return "Nomor WhatsApp harus menggunakan format internasional, contoh +6281234567890.";
   }
-  if (value.portfolio.length > 500 || value.products.length > 500) return "Jumlah konten melebihi batas.";
+  if (value.portfolio.length > 500 || value.products.length > 500 || value.articles.length > 200) return "Jumlah konten melebihi batas.";
 
   const validateIdsAndSlugs = (items: unknown[], label: string) => {
     const ids = new Set<string>();
@@ -160,6 +172,8 @@ export function validateWebContent(value: unknown): string | null {
   if (portfolioIdentityError) return portfolioIdentityError;
   const productIdentityError = validateIdsAndSlugs(value.products, "template");
   if (productIdentityError) return productIdentityError;
+  const articleIdentityError = validateIdsAndSlugs(value.articles, "artikel");
+  if (articleIdentityError) return articleIdentityError;
 
   const homeError = validateHomeContent(value.home, value.portfolio, value.products);
   if (homeError) return homeError;
@@ -201,6 +215,21 @@ export function validateWebContent(value: unknown): string | null {
     if (!coreValid) return `Data template nomor ${index + 1} tidak valid.`;
     const previews = item.previews as string[];
     if (item.status === "published" && previews.length === 0) return `Template “${String((item.name as { id: string }).id)}” yang terbit wajib memiliki gambar pratinjau.`;
+  }
+
+  for (const [index, item] of value.articles.entries()) {
+    if (!isRecord(item) || !isLocalizedText(item.title, true) || !isLocalizedText(item.excerpt)
+      || !isLocalizedText(item.content) || !(item.coverPath === null || isSafeImagePath(item.coverPath))
+      || !Array.isArray(item.tags) || item.tags.length > 30 || !item.tags.every((tag) => isText(tag, true))
+      || !isText(item.author, true) || !["draft", "published"].includes(String(item.status))
+      || typeof item.publishedAt !== "string" || Number.isNaN(Date.parse(item.publishedAt))
+      || !isRecord(item.seo) || !isLocalizedText(item.seo.title) || !isLocalizedText(item.seo.description)
+      || !isText(item.seo.keyword)) {
+      return `Data artikel nomor ${index + 1} tidak valid.`;
+    }
+    if (item.status === "published" && (!isLocalizedText(item.excerpt, true) || !isLocalizedText(item.content, true))) {
+      return `Artikel “${String((item.title as { id: string }).id)}” yang terbit wajib memiliki ringkasan dan isi.`;
+    }
   }
 
   return null;

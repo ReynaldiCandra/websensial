@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/", key: "home" },
   { href: "/services", key: "services" },
   { href: "/portfolio", key: "portfolio" },
+  { href: "/articles", key: "articles" },
   { href: "/products", key: "products" },
   { href: "/contact", key: "about" },
 ] as const;
@@ -52,7 +53,7 @@ export default function Header() {
           <Logo className="h-auto w-[158px] sm:w-[224px]" />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           {NAV_ITEMS.map((item) => {
             const active =
               item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
@@ -96,7 +97,7 @@ export default function Header() {
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-controls="mobile-nav"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line bg-[var(--ws-surface)] text-ink md:hidden"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line bg-[var(--ws-surface)] text-ink lg:hidden"
           >
             <span className="sr-only">{open ? t("closeMenu") : t("openMenu")}</span>
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -111,7 +112,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <div id="mobile-nav" className="glass mt-2 w-full rounded-3xl p-2 md:hidden">
+        <div id="mobile-nav" className="glass mt-2 w-full rounded-3xl p-2 lg:hidden">
           {NAV_ITEMS.map((item) => {
             const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
             return (

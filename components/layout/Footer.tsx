@@ -20,6 +20,7 @@ export default async function Footer() {
   const companyLinks = [
     { href: "/services" as const, label: tn("services") },
     { href: "/portfolio" as const, label: tn("portfolio") },
+    { href: "/articles" as const, label: tn("articles") },
     { href: "/contact" as const, label: tn("contact") },
   ];
 

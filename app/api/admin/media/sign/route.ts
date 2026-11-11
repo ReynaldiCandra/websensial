@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     ? body.contentType.split(";")[0].trim().toLowerCase()
     : "";
   const extension = extensions[contentType];
-  if (!(section === "portfolio" || section === "products") || !extension) {
+  if (!(section === "portfolio" || section === "products" || section === "articles") || !extension) {
     return NextResponse.json({ error: "Gambar harus JPG, PNG, WebP, atau AVIF." }, { status: 400 });
   }
 

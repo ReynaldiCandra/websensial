@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { siteConfig } from "@/lib/data/site";
 
 const jakarta = localFont({
   variable: "--font-jakarta",
@@ -14,6 +15,8 @@ const jakarta = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
   title: "Websensial",
   description: "Websensial digital studio and template marketplace.",
 };

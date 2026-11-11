@@ -22,3 +22,34 @@
 
 /* Labels are kept for assistive tech where a heading already names the field. */
 .ws-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Article SEO panel: colour-coded on-page suggestions. */
+.ws-seo-panel{border-top:1px solid #e7e1d8;margin-top:4px;padding-top:20px}
+.ws-seo-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.ws-seo-head h3{margin:0}
+.ws-seo-score{display:inline-flex;align-items:center;padding:5px 11px;border:1px solid transparent;border-radius:999px;font:700 10px/1 Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.ws-seo-score.is-good{border-color:#bfe0ca;background:#e7f4eb;color:#256b41}
+.ws-seo-score.is-warning{border-color:#ecd5a7;background:#fbf1dd;color:#8a5a12}
+.ws-seo-score.is-bad{border-color:#efc3bd;background:#fbe9e7;color:#9b3a31}
+.ws-seo-preview{display:flex;flex-direction:column;gap:3px;margin:4px 0 14px;padding:12px 14px;border:1px solid #e7e1d8;border-radius:10px;background:#fff}
+.ws-seo-preview>span{color:#8a8074;font:600 9px/1.4 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.ws-seo-preview em{color:#5f6368;font:400 11px/1.5 Arial,sans-serif;font-style:normal;word-break:break-all}
+.ws-seo-preview strong{color:#1a0dab;font:500 15px/1.4 Arial,sans-serif}
+.ws-seo-preview p{margin:0;color:#4d5156;font:400 12px/1.55 Arial,sans-serif}
+.ws-seo-checks{display:grid;gap:7px;margin:8px 0 0;padding:12px 0 0;border-top:1px solid #eee8df;list-style:none}
+.ws-seo-checks li{display:grid;grid-template-columns:10px minmax(0,220px) minmax(0,1fr);gap:9px;align-items:start;color:#6b6155;font-size:11px;line-height:1.5}
+.ws-seo-dot{width:8px;height:8px;margin-top:4px;border-radius:50%}
+.ws-seo-checks li.is-good .ws-seo-dot{background:#2f8a54}
+.ws-seo-checks li.is-warning .ws-seo-dot{background:#d09a2d}
+.ws-seo-checks li.is-bad .ws-seo-dot{background:#c45548}
+.ws-seo-checks li strong{color:#3b332a;font-weight:600}
+.ws-seo-checks li span:last-child{color:#7a7065}
+@media(max-width:680px){.ws-seo-checks li{grid-template-columns:10px minmax(0,1fr)}.ws-seo-checks li span:last-child{grid-column:2}}
+
+/* Tracking & verification settings. */
+.ws-track-state{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid #e0d8cc;border-radius:999px;background:#f7f2e9;color:#8a7b66;font:700 9px/1 Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.ws-track-state.is-active{border-color:#bfe0ca;background:#e7f4eb;color:#256b41}
+.ws-track-badges{display:flex;flex-wrap:wrap;gap:6px}
+.ws-track-notes{display:grid;gap:9px;margin:0;padding:0 0 0 18px;color:#6a6054;font-size:11px;line-height:1.6}
+.ws-track-notes li::marker{color:#8a7862}
+.ws-home-field-hint{display:block;margin-top:2px;color:#9a8d7b;font-size:9px;font-weight:400;letter-spacing:.02em;text-transform:none}

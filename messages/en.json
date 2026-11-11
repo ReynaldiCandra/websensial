@@ -8,6 +8,7 @@
       "productDetail": "Product Details",
       "services": "Services",
       "portfolio": "Portfolio",
+      "articles": "Articles",
       "contact": "Contact",
       "notFound": "Page not found"
     }
@@ -17,6 +18,7 @@
     "products": "Templates",
     "services": "Services",
     "portfolio": "Our Work",
+    "articles": "Articles",
     "contact": "About",
     "openMenu": "Open navigation menu",
     "closeMenu": "Close navigation menu",
@@ -178,6 +180,19 @@
     "openFullPreview": "Open full image",
     "priceConversionNote": "USD amounts are an indicative conversion of the IDR price, not a separately quoted price.",
     "conceptNotice": "**Showcase concept.** This product is a demonstration sample — it is not a live, purchasable product right now."
+  },
+  "articles": {
+    "badge": "Articles",
+    "title": "Studio notes",
+    "subtitle": "Practical guides on web design, templates, and SEO — written by the Websensial team.",
+    "readMore": "Read article",
+    "empty": "No published articles yet.",
+    "backToArticles": "Back to articles",
+    "by": "by",
+    "related": "More articles",
+    "tagsLabel": "Article topics",
+    "coverUnavailable": "Cover image unavailable",
+    "discuss": "Discuss your project"
   },
   "services": {
     "title": "Services",
