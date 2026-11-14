@@ -59,24 +59,41 @@ export default async function PortfolioProjectPage({ params }: Props) {
       .filter((entry) => entry.copy.length > 0)
     : [];
 
+  const renderCaseStudy = (className: string) => caseStudy.length > 0 ? (
+    <section aria-labelledby="case-study" className={className}>
+      <h2 id="case-study" className="font-editorial text-3xl text-ink sm:text-4xl">{t("caseStudy")}</h2>
+      <div className="mt-5 space-y-7">
+        {caseStudy.map(({ field, copy }) => (
+          <section key={field} className="border-t border-line pt-5">
+            <h3 className="text-sm font-extrabold text-ink">{t(field)}</h3>
+            <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-muted">{copy}</p>
+          </section>
+        ))}
+      </div>
+    </section>
+  ) : null;
+
   return (
     <Container className="pt-10 pb-20">
       <nav aria-label={t("badge")} className="mb-6 text-sm">
         <Link href={{ pathname: "/portfolio" }} className="font-semibold text-muted hover:text-primary">← {t("backToPortfolio")}</Link>
       </nav>
       <article>
-        <div className={project.previewPath ? "grid gap-10 lg:grid-cols-[1.15fr_0.85fr]" : "max-w-3xl"}>
+        <div className={project.previewPath ? "flex flex-col gap-10 lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-start" : "max-w-3xl"}>
           {project.previewPath ? (
-            <div>
-              <PortfolioPreviewGallery
-                slides={[project.previewPath, ...(project.previewPaths ?? [])]}
-                projectName={project.name[locale]}
-                category={project.category[locale]}
-              />
+            <div className="contents lg:col-start-1 lg:block">
+              <div className="order-1">
+                <PortfolioPreviewGallery
+                  slides={[project.previewPath, ...(project.previewPaths ?? [])]}
+                  projectName={project.name[locale]}
+                  category={project.category[locale]}
+                />
+              </div>
+              {renderCaseStudy("order-3 max-w-3xl lg:mt-10")}
             </div>
           ) : null}
 
-          <div>
+          <div className={project.previewPath ? "order-2 lg:order-none lg:col-start-2" : ""}>
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
                 {project.kind === "concept" ? t("conceptBadge") : t("clientBadge")}
@@ -125,19 +142,7 @@ export default async function PortfolioProjectPage({ params }: Props) {
           </div>
         </div>
 
-        {caseStudy.length > 0 ? (
-          <section aria-labelledby="case-study" className="mt-14 max-w-3xl">
-            <h2 id="case-study" className="font-editorial text-3xl text-ink sm:text-4xl">{t("caseStudy")}</h2>
-            <div className="mt-5 space-y-7">
-              {caseStudy.map(({ field, copy }) => (
-                <section key={field} className="border-t border-line pt-5">
-                  <h3 className="text-sm font-extrabold text-ink">{t(field)}</h3>
-                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-muted">{copy}</p>
-                </section>
-              ))}
-            </div>
-          </section>
-        ) : null}
+        {project.previewPath ? null : renderCaseStudy("mt-14 max-w-3xl")}
       </article>
     </Container>
   );
