@@ -12,9 +12,10 @@ import { analyzeArticleSeo, seoLevelLabel } from "@/lib/admin/article-seo";
 import type { HomeContent, HomeCopy, HomeSectionId } from "@/lib/admin/home-content";
 import type { Service } from "@/lib/data/services";
 import { maxUploadBytes, prepareImageForUpload, putWithProgress } from "@/lib/admin/image-upload";
+import AdminGuide from "./AdminGuide";
 
 type Content = { portfolio: PortfolioProject[]; products: Product[]; articles: Article[]; tracking: TrackingSettings; contact: { email: string; whatsapp: string | null }; home: HomeContent; services: Service[] };
-type Section = "home" | "portfolio" | "products" | "articles" | "tracking";
+type Section = "home" | "portfolio" | "products" | "articles" | "tracking" | "guide";
 type Toast = { message: string; kind: "success" | "error" | "info" };
 type Asset = { name: string; url: string; width: number; height: number; bytes: number };
 type LocalizedField = "name" | "category" | "summary" | "description" | "license";
@@ -160,7 +161,7 @@ export default function AdminDashboard() {
   }, [dirty]);
 
   const records = section === "portfolio" ? content?.portfolio ?? [] : section === "articles" ? content?.articles ?? [] : content?.products ?? [];
-  const selected = section === "home" || section === "tracking" ? null : records.find((item) => item.id === selectedId) ?? records[0] ?? null;
+  const selected = section === "home" || section === "tracking" || section === "guide" ? null : records.find((item) => item.id === selectedId) ?? records[0] ?? null;
   const preset = section === "articles"
     ? { label: "Sampul artikel", width: 1600, height: 900 }
     : { label: section === "portfolio" ? "Pratinjau portofolio" : "Pratinjau template", width: 1600, height: 1000 };
@@ -643,6 +644,7 @@ export default function AdminDashboard() {
           <button title="Template" className={section === "products" ? "selected" : ""} onClick={() => changeSection("products")}><span className="ws-sidebar-icon" aria-hidden="true">▤</span><span>Template</span></button>
           <button title="Artikel" className={section === "articles" ? "selected" : ""} onClick={() => changeSection("articles")}><span className="ws-sidebar-icon" aria-hidden="true">✎</span><span>Artikel</span></button>
           <button title="Tracking & verifikasi" className={section === "tracking" ? "selected" : ""} onClick={() => changeSection("tracking")}><span className="ws-sidebar-icon" aria-hidden="true">◎</span><span>Tracking</span></button>
+          <button title="Panduan" className={section === "guide" ? "selected" : ""} onClick={() => changeSection("guide")}><span className="ws-sidebar-icon" aria-hidden="true">?</span><span>Panduan</span></button>
         </nav>
         <div className="admin-side-bottom"><Link href="/id" target="_blank" rel="noreferrer"><span className="ws-sidebar-icon" aria-hidden="true">↗</span><span>Lihat situs</span></Link><button className="ws-admin-logout" onClick={() => void logout()}><span className="ws-sidebar-icon" aria-hidden="true">⇥</span><span>Keluar</span></button></div>
       </aside>
@@ -650,10 +652,11 @@ export default function AdminDashboard() {
         <header className="admin-topbar"><button className="ws-topbar-toggle" type="button" onClick={() => setSidebarCollapsed((collapsed) => !collapsed)} aria-label={sidebarCollapsed ? "Perlebar sidebar" : "Ciutkan sidebar"} aria-expanded={!sidebarCollapsed}><span aria-hidden="true">{sidebarCollapsed ? "☰" : "‹"}</span></button><span className="ws-admin-topbar-title">Panel pengelolaan konten</span><span className={`ws-admin-save-state${dirty ? " is-dirty" : ""}`}><span aria-hidden="true">●</span>{dirty ? "Ada perubahan belum disimpan" : "Semua perubahan tersimpan"}</span></header>
         <section className="admin-content">
           <div className="admin-page-heading">
-            <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "home" ? "Beranda" : section === "portfolio" ? "Portofolio" : section === "articles" ? "Artikel" : section === "tracking" ? "Tracking" : "Template"}</h1></div>
-            <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button>{section === "home" ? <button className="admin-primary" type="button" onClick={addService} disabled={busy}>+ Tambah layanan</button> : section === "tracking" ? null : <button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : section === "articles" ? "artikel" : "template"}</button>}<button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button></div>
+            <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "home" ? "Beranda" : section === "portfolio" ? "Portofolio" : section === "articles" ? "Artikel" : section === "tracking" ? "Tracking" : section === "guide" ? "Panduan" : "Template"}</h1></div>
+            <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button>{section === "home" ? <button className="admin-primary" type="button" onClick={addService} disabled={busy}>+ Tambah layanan</button> : section === "tracking" || section === "guide" ? null : <button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : section === "articles" ? "artikel" : "template"}</button>}{section !== "guide" ? <button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button> : null}</div>
           </div>
-          {section === "home" ? <div className="ws-admin-intro"><div><p className="admin-kicker">KONTEN SITUS</p><h2>Kelola beranda</h2><p>Atur konten, urutan bagian, dan materi yang ditampilkan kepada pengunjung.</p></div><span className="ws-admin-locale-note">Satu teks untuk Indonesia &amp; English</span></div> : section === "tracking" ? <div className="ws-admin-intro"><div><p className="admin-kicker">INTEGRASI</p><h2>Tracking &amp; verifikasi</h2><p>Hubungkan Meta Pixel, Google Analytics, Google Ads, dan kode verifikasi domain. Kosongkan kolom yang belum dipakai.</p></div><span className="ws-admin-locale-note">Aktif di produksi</span></div> : <p className="admin-demo-note">Isi konten satu kali dalam bahasa Indonesia. Teks yang sama dipakai di halaman English sampai ada terjemahan khusus.</p>}
+          {section === "home" ? <div className="ws-admin-intro"><div><p className="admin-kicker">KONTEN SITUS</p><h2>Kelola beranda</h2><p>Atur konten, urutan bagian, dan materi yang ditampilkan kepada pengunjung.</p></div><span className="ws-admin-locale-note">Satu teks untuk Indonesia &amp; English</span></div> : section === "tracking" ? <div className="ws-admin-intro"><div><p className="admin-kicker">INTEGRASI</p><h2>Tracking &amp; verifikasi</h2><p>Hubungkan Meta Pixel, Google Analytics, Google Ads, dan kode verifikasi domain. Kosongkan kolom yang belum dipakai.</p></div><span className="ws-admin-locale-note">Aktif di produksi</span></div> : section === "guide" ? null : <p className="admin-demo-note">Isi konten satu kali dalam bahasa Indonesia. Teks yang sama dipakai di halaman English sampai ada terjemahan khusus.</p>}
+          {section === "guide" ? <AdminGuide onNavigate={changeSection} /> : (
           <form id="admin-content-form" onSubmit={save}>
             {section === "home" ? <HomeEditor content={content} addService={addService} updateHomeCopy={updateHomeCopy} toggleHomeSection={toggleHomeSection} reorderHomeSection={reorderHomeSection} setSelectedIds={setSelectedIds} moveSelectedId={moveSelectedId} updateService={updateService} updateServiceItems={updateServiceItems} reorderService={reorderService} removeService={removeService} updateTickerItem={updateTickerItem} moveTickerItem={moveTickerItem} addTickerItem={addTickerItem} removeTickerItem={removeTickerItem} updateProcessStep={updateProcessStep} moveProcessStep={moveProcessStep} addProcessStep={addProcessStep} removeProcessStep={removeProcessStep} busy={busy} /> : null}
             {section === "tracking" ? <TrackingEditor tracking={content.tracking} onChange={updateTrackingField} /> : null}
@@ -739,8 +742,9 @@ export default function AdminDashboard() {
               </div> : null}
             </div> : null}
           </form>
+          )}
 
-          {section !== "home" && section !== "tracking" ? <section className="ws-cms-media-library admin-form-card">
+          {section !== "home" && section !== "tracking" && section !== "guide" ? <section className="ws-cms-media-library admin-form-card">
             <div className="admin-settings-group"><h3>Perpustakaan media</h3><p className="ws-cms-hint">File terpakai tidak bisa dihapus. Lepas referensi, simpan konten, lalu hapus file jika memang tidak lagi diperlukan.</p></div>
             {assetList.length ? <div className="ws-cms-media-grid">{assetList.map((asset) => {
               const owner = imageRefs.find((ref) => ref.url === asset.url)?.owner;
