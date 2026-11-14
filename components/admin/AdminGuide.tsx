@@ -13,8 +13,8 @@ export default function AdminGuide({ onNavigate }: { onNavigate: (section: Guide
       <section className="ws-guide-hero">
         <div>
           <p className="admin-kicker">REFERENSI ADMIN</p>
-          <h2>Panduan artikel &amp; tracking</h2>
-          <p>Acuan cepat untuk menulis artikel yang siap diindeks dan memasang pelacakan dengan benar. Semua setelan dikelola dari panel ini dan berlaku setelah disimpan.</p>
+          <h2>Panduan konten &amp; tracking</h2>
+          <p>Acuan cepat untuk artikel, portofolio, layanan, dokumen publik, dan pelacakan. Semua setelan dikelola dari panel ini dan berlaku setelah disimpan.</p>
         </div>
         <div className="ws-guide-actions">
           <button className="admin-primary" type="button" onClick={() => onNavigate("articles")}>Buka editor artikel</button>
@@ -32,6 +32,7 @@ export default function AdminGuide({ onNavigate }: { onNavigate: (section: Guide
           <a href="#guide-uji">5. Uji &amp; pantau</a>
           <a href="#guide-batasan">6. Batasan</a>
           <a href="#guide-prioritas">7. Prioritas</a>
+          <a href="#guide-penawaran">8. Portofolio &amp; dokumen</a>
         </nav>
 
         <div className="ws-guide-content">
@@ -282,6 +283,46 @@ typeof window.fbq`}</pre>
               <li><strong>Tambahkan pagination dan preview draft</strong> ketika jumlah artikel mulai bertambah.</li>
             </ol>
             <p>Panduan ini mengikuti fitur yang tersedia di panel saat ini. Jika salah satu fitur di atas ditambahkan, perbarui bagian ini agar tetap menjadi acuan yang akurat.</p>
+          </section>
+
+          <section id="guide-penawaran" className="ws-guide-card">
+            <p className="admin-kicker">08 · PENAWARAN &amp; DOKUMEN</p>
+            <h3>Portofolio, layanan, dan syarat &amp; ketentuan</h3>
+            <p>Harga portofolio, fase layanan, dan dokumen PDF dikelola dari panel ini. Semua yang kosong tidak dipaksakan tampil di situs, sehingga tidak ada angka atau tautan yang dikarang.</p>
+
+            <h4>Harga referensi portofolio</h4>
+            <ul>
+              <li>Buka <strong>Portofolio</strong> → pilih proyek → isi <strong>Harga referensi</strong> dan <strong>Mata uang harga</strong>.</li>
+              <li>Harga bersifat opsional. Kosongkan kolom untuk menyembunyikan harga dari kartu dan halaman detail.</li>
+              <li>Halaman Indonesia menampilkan IDR; halaman English menampilkan USD. Konversi memakai kurs indikatif tetap dan diberi tanda <code>≈</code>.</li>
+              <li>Label publik menyebutnya “Referensi investasi”, bukan penawaran resmi. Harga final tetap mengikuti lingkup proyek.</li>
+            </ul>
+
+            <h4>Layanan sebelum &amp; sesudah launch</h4>
+            <ul>
+              <li>Buka <strong>Beranda</strong> → bagian <strong>Layanan</strong>. Setiap layanan punya pilihan fase <strong>Sebelum launch</strong> atau <strong>Setelah launch</strong>.</li>
+              <li><strong>Termasuk / yang didapat</strong> dan <strong>Tidak termasuk</strong> diisi satu butir per baris. Daftar “Tidak termasuk” bisa dibuka terpisah di kartu layanan agar tidak memenuhi halaman.</li>
+              <li>Halaman Layanan mengelompokkan paket berdasarkan fase. Beranda tetap menampilkan semuanya berurutan.</li>
+              <li>Lingkup sebelum/sesudah launch untuk proyek portofolio diisi dari editor portofolio dan muncul sebagai bagian accordion di halaman detail.</li>
+            </ul>
+
+            <h4>Dokumen syarat &amp; ketentuan</h4>
+            <ol>
+              <li>Buka menu <strong>Dokumen</strong> → unggah file PDF (maksimal 10 MB).</li>
+              <li>Tekan <strong>Simpan perubahan</strong>. Tautan baru muncul di footer dan kartu dokumen pada halaman Layanan setelah tersimpan.</li>
+              <li>Gunakan <strong>Buka PDF</strong> untuk memeriksa file. Tombol <strong>Lepas</strong> hanya melepas referensi; file lama tidak otomatis terhapus dari storage.</li>
+              <li>Satu PDF dipakai untuk bahasa Indonesia dan English. Situs tidak membuat versi terpisah atau riwayat versi dokumen.</li>
+            </ol>
+
+            <div className="ws-guide-callout is-danger">
+              <strong>Wajib dijalankan sekali untuk unggah PDF</strong>
+              <p>Bucket <code>websensial-media</code> harus mengizinkan <code>application/pdf</code>. Jalankan <code>supabase/add-terms-document.sql</code> di SQL Editor Supabase. Tanpa langkah ini unggahan PDF akan ditolak walau tombolnya tersedia.</p>
+            </div>
+
+            <div className="ws-guide-callout is-warning">
+              <strong>Dokumen bukan nasihat hukum</strong>
+              <p>Pastikan isi syarat &amp; ketentuan sudah ditinjau sebelum dipublikasikan. Jangan mengunggah draf internal atau data pribadi karena URL penyimpanan bersifat publik.</p>
+            </div>
           </section>
         </div>
       </div>

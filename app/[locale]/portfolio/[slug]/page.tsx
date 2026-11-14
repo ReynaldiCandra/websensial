@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import PortfolioPreviewGallery from "@/components/marketing/PortfolioPreviewGallery";
 import PortfolioActions from "@/components/marketing/PortfolioActions";
+import PortfolioDetails, { type PortfolioDetailSection } from "@/components/marketing/PortfolioDetails";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import { Link } from "@/i18n/navigation";
 import { getWebContent } from "@/lib/admin/site-content";
 import { getWhatsAppUrl } from "@/lib/data/site";
+import { displayPrice, isPriceConverted } from "@/components/ui/format";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -52,26 +54,33 @@ export default async function PortfolioProjectPage({ params }: Props) {
   const features = (project.features?.[locale] ?? []).filter((feature) => feature.trim().length > 0);
   const tech = project.tech.filter((tag) => tag.trim().length > 0);
   const description = project.description[locale].trim();
-  // An empty case-study object (new CMS drafts) must not render a bare heading.
-  const caseStudy = project.caseStudy
-    ? (["challenge", "approach", "solution", "outcome"] as const)
-      .map((field) => ({ field, copy: project.caseStudy?.[field][locale]?.trim() ?? "" }))
-      .filter((entry) => entry.copy.length > 0)
-    : [];
+  const hasPrice = typeof project.price === "number" && Number.isFinite(project.price) && project.price >= 0;
+  const currency = project.currency ?? "IDR";
+  const priceConverted = hasPrice && isPriceConverted(currency, locale);
+  const beforeLaunch = (project.launch?.before[locale] ?? []).filter((item) => item.trim().length > 0);
+  const afterLaunch = (project.launch?.after[locale] ?? []).filter((item) => item.trim().length > 0);
 
-  const renderCaseStudy = (className: string) => caseStudy.length > 0 ? (
-    <section aria-labelledby="case-study" className={className}>
-      <h2 id="case-study" className="font-editorial text-3xl text-ink sm:text-4xl">{t("caseStudy")}</h2>
-      <div className="mt-5 space-y-7">
-        {caseStudy.map(({ field, copy }) => (
-          <section key={field} className="border-t border-line pt-5">
-            <h3 className="text-sm font-extrabold text-ink">{t(field)}</h3>
-            <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-muted">{copy}</p>
-          </section>
-        ))}
-      </div>
-    </section>
-  ) : null;
+  const details: PortfolioDetailSection[] = [];
+  if (features.length > 0) {
+    details.push({
+      id: "features",
+      label: t("featuresLabel"),
+      items: features,
+      note: project.kind === "concept" ? t("conceptFeaturesNote") : undefined,
+    });
+  }
+  if (project.caseStudy) {
+    (["challenge", "approach", "solution", "outcome"] as const).forEach((field) => {
+      const copy = project.caseStudy?.[field][locale]?.trim() ?? "";
+      if (copy.length > 0) details.push({ id: field, label: t(field), body: copy });
+    });
+  }
+  if (beforeLaunch.length > 0) {
+    details.push({ id: "before-launch", label: t("beforeLaunch"), items: beforeLaunch });
+  }
+  if (afterLaunch.length > 0) {
+    details.push({ id: "after-launch", label: t("afterLaunch"), items: afterLaunch });
+  }
 
   return (
     <Container className="pt-10 pb-20">
@@ -79,21 +88,21 @@ export default async function PortfolioProjectPage({ params }: Props) {
         <Link href={{ pathname: "/portfolio" }} className="font-semibold text-muted hover:text-primary">← {t("backToPortfolio")}</Link>
       </nav>
       <article>
-        <div className={project.previewPath ? "flex flex-col gap-10 lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-start" : "max-w-3xl"}>
+        <div className={project.previewPath ? "grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start lg:gap-10" : "max-w-3xl"}>
           {project.previewPath ? (
-            <div className="contents lg:col-start-1 lg:block">
-              <div className="order-1">
-                <PortfolioPreviewGallery
-                  slides={[project.previewPath, ...(project.previewPaths ?? [])]}
-                  projectName={project.name[locale]}
-                  category={project.category[locale]}
-                />
-              </div>
-              {renderCaseStudy("order-3 max-w-3xl lg:mt-10")}
+            <div className="lg:sticky lg:top-24">
+              <PortfolioPreviewGallery
+                slides={[project.previewPath, ...(project.previewPaths ?? [])]}
+                projectName={project.name[locale]}
+                category={project.category[locale]}
+              />
+              <p className="mt-3 text-xs leading-relaxed text-muted">
+                {project.kind === "concept" ? t("conceptNotice") : t("clientNotice")}
+              </p>
             </div>
           ) : null}
 
-          <div className={project.previewPath ? "order-2 lg:order-none lg:col-start-2" : ""}>
+          <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
                 {project.kind === "concept" ? t("conceptBadge") : t("clientBadge")}
@@ -104,6 +113,23 @@ export default async function PortfolioProjectPage({ params }: Props) {
             <h1 className="mt-3 font-editorial text-4xl tracking-tight text-ink sm:text-5xl">{project.name[locale]}</h1>
             {description.length > 0 ? <p className="mt-2 text-[15px] leading-relaxed text-muted">{description}</p> : null}
 
+            {hasPrice ? (
+              <section aria-label={t("investmentLabel")} className="mt-6 overflow-hidden rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.07] via-white to-[#4f6bff]/[0.07] p-5 shadow-[0_18px_45px_-38px_rgba(99,40,245,0.6)]">
+                <div className="flex flex-wrap items-end justify-between gap-2">
+                  <div>
+                    <p className="text-[10px] font-bold tracking-[0.16em] text-primary uppercase">{t("investmentLabel")}</p>
+                    <p className="mt-1 font-editorial text-3xl leading-none tracking-tight text-ink">
+                      {displayPrice(project.price as number, currency, locale)}
+                    </p>
+                  </div>
+                  <span className="rounded-full border border-primary/20 bg-white/70 px-3 py-1 text-[10px] font-semibold text-primary">
+                    {priceConverted ? t("estimateBadge") : t("startingFrom")}
+                  </span>
+                </div>
+                <p className="mt-3 text-xs leading-relaxed text-muted">{t("investmentNote")}</p>
+              </section>
+            ) : null}
+
             <div className="mt-6">
               <PortfolioActions demoUrl={project.projectUrl} whatsappUrl={whatsappUrl} />
             </div>
@@ -113,7 +139,7 @@ export default async function PortfolioProjectPage({ params }: Props) {
             </a>
 
             {tech.length > 0 ? (
-              <div className="mt-6 rounded-xl border border-line bg-white px-4 py-3 text-sm">
+              <div className="mt-6 rounded-xl border border-line bg-white/75 px-4 py-3 text-sm">
                 <h2 className="text-xs font-bold tracking-wider text-muted uppercase">{t("techStackLabel")}</h2>
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {tech.map((tag) => (
@@ -123,26 +149,13 @@ export default async function PortfolioProjectPage({ params }: Props) {
               </div>
             ) : null}
 
-            {features.length > 0 ? (
-              <section aria-labelledby="project-features" className="mt-6 border-t border-line pt-5">
-                <h2 id="project-features" className="text-sm font-extrabold text-ink">{t("featuresLabel")}</h2>
-                <ul className="mt-3 space-y-2 text-sm text-ink/80">
-                  {features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                {project.kind === "concept" ? (
-                  <p className="mt-3 text-xs leading-relaxed text-muted">{t("conceptFeaturesNote")}</p>
-                ) : null}
-              </section>
-            ) : null}
+            <PortfolioDetails
+              sections={details}
+              title={t("detailsTitle")}
+              eyebrow={t("detailsEyebrow", { count: details.length })}
+            />
           </div>
         </div>
-
-        {project.previewPath ? null : renderCaseStudy("mt-14 max-w-3xl")}
       </article>
     </Container>
   );

@@ -200,7 +200,16 @@
     "ctaTitle": "Have something specific in mind?",
     "ctaText": "Tell us about your website needs — we'll reply with a realistic estimate.",
     "ctaButton": "Contact us",
-    "badge": "What we do"
+    "badge": "What we do",
+    "before-launch": "Before launch",
+    "after-launch": "After launch",
+    "beforeLaunchTitle": "Before launch",
+    "beforeLaunchDescription": "Strategy, design, and build work to get the website ready for release.",
+    "afterLaunchTitle": "After launch",
+    "afterLaunchDescription": "Support, maintenance, and iteration once the website is live.",
+    "included": "Included",
+    "excluded": "Not included",
+    "scopeLabel": "Service scope"
   },
   "portfolio": {
     "title": "Pick your personality.",
@@ -220,6 +229,8 @@
     "empty": "No work in this category yet.",
     "conceptBadge": "Concept",
     "clientBadge": "Client",
+    "conceptNotice": "An original studio concept — not a client delivery.",
+    "clientNotice": "A client project shown with permission.",
     "visitProject": "Open project",
     "notConfigured": "Project link not configured yet.",
     "sourceCodeUnavailable": "Source code not configured",
@@ -227,6 +238,15 @@
     "actionsLabel": "Project actions",
     "techStackLabel": "Tech stack",
     "featuresLabel": "Features & highlights",
+    "detailsTitle": "Project details",
+    "detailsEyebrow": "{count} sections",
+    "beforeLaunch": "Before-launch services",
+    "afterLaunch": "After-launch services",
+    "referencePrice": "From",
+    "investmentLabel": "Reference investment",
+    "startingFrom": "Starting price",
+    "estimateBadge": "Estimate",
+    "investmentNote": "An indicative estimate for a similar scope, not a formal quote. The final price depends on the project requirements and scope.",
     "demoNotConfiguredBody": "**Live preview is not linked yet.** This concept has no demo page to open; the preview images above show the design direction. Contact us if you would like to see more.",
     "conceptFeaturesNote": "Showcase concept — the list above describes the design composition, not working features.",
     "tickerItems": ["Responsive websites", "Premium ready-to-use templates", "Thoughtful digital design", "Ideas brought to digital"],
@@ -287,7 +307,16 @@
     "colContact": "Contact",
     "languageNote": "English is active.",
     "rights": "All rights reserved.",
-    "demoNotice": "Some products and work shown on this site are demonstration content and will be replaced with the real thing."
+    "demoNotice": "Some products and work shown on this site are demonstration content and will be replaced with the real thing.",
+    "terms": "Terms & Conditions"
+  },
+  "legal": {
+    "eyebrow": "Service document",
+    "title": "Terms & Conditions",
+    "description": "Read the scope, working rules, and service terms for Websensial before starting a project.",
+    "open": "Read & download PDF",
+    "note": "The document opens in a new tab. Use the download button in the PDF viewer to save it.",
+    "empty": "The terms & conditions document has not been uploaded yet."
   },
   "notFound": {
     "title": "This page is lost in orbit",

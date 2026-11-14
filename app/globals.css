@@ -384,6 +384,100 @@ body {
   filter: saturate(1.08);
 }
 
+/* Portfolio detail: one compact FAQ-style disclosure per section. */
+.portfolio-accordion {
+  overflow: hidden;
+  border: 1px solid var(--ws-border);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--ws-surface) 92%, transparent);
+  box-shadow: 0 10px 30px -30px rgba(20, 24, 24, 0.45);
+  transition: border-color 240ms ease, box-shadow 240ms ease, background 240ms ease;
+}
+
+.portfolio-accordion:hover {
+  border-color: rgba(99, 40, 245, 0.24);
+}
+
+.portfolio-accordion.is-open {
+  border-color: rgba(99, 40, 245, 0.3);
+  background: var(--ws-surface);
+  box-shadow: 0 20px 48px -36px rgba(99, 40, 245, 0.55);
+}
+
+.portfolio-accordion-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+  border: 0;
+  background: transparent;
+  color: var(--ws-ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.portfolio-accordion-trigger:focus-visible {
+  outline: 2px solid #6328f5;
+  outline-offset: -3px;
+}
+
+.portfolio-accordion-index {
+  flex: none;
+  width: 2rem;
+  color: var(--ws-muted);
+  font-family: var(--font-editorial, Georgia, serif);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.portfolio-accordion-icon {
+  display: grid;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, #6328f5 8%, transparent);
+  color: #6328f5;
+  transition: transform 260ms ease, background 260ms ease, color 260ms ease;
+}
+
+.portfolio-accordion.is-open .portfolio-accordion-icon {
+  transform: rotate(45deg);
+  background: #6328f5;
+  color: #fff;
+}
+
+.portfolio-accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portfolio-accordion.is-open .portfolio-accordion-panel {
+  grid-template-rows: 1fr;
+}
+
+.portfolio-accordion-panel > div {
+  overflow: hidden;
+}
+
+.portfolio-accordion-body {
+  margin: 0 1.1rem 1.1rem 3.95rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--ws-border);
+}
+
+@media (max-width: 640px) {
+  .portfolio-accordion-body {
+    margin-left: 1.1rem;
+  }
+}
+
 .portfolio-marquee {
   --marquee-duration: 34s;
 }
@@ -464,7 +558,10 @@ body {
 
   .glass-card-hover,
   .portfolio-card,
-  .portfolio-preview-motion {
+  .portfolio-preview-motion,
+  .portfolio-accordion,
+  .portfolio-accordion-panel,
+  .portfolio-accordion-icon {
     transition: none !important;
     will-change: auto;
   }

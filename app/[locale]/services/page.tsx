@@ -5,6 +5,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import ServiceCards from "@/components/marketing/ServiceCards";
+import LegalDocumentCard from "@/components/marketing/LegalDocumentCard";
 import { getWebContent } from "@/lib/admin/site-content";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -35,7 +36,13 @@ export default async function ServicesPage({ params }: Props) {
           <p className="eyebrow mb-3">{t("badge")}</p>
           <SectionHeading title={t("title")} subtitle={t("subtitle")} />
         </Reveal>
-        <ServiceCards showHeading={false} services={content.services} />
+        <ServiceCards showHeading={false} services={content.services} grouped />
+
+        {content.legal.termsUrl ? (
+          <Reveal className="mt-16">
+            <LegalDocumentCard termsUrl={content.legal.termsUrl} />
+          </Reveal>
+        ) : null}
 
         <Reveal className="mt-16">
           <div className="border-y border-line px-8 py-10 text-center">

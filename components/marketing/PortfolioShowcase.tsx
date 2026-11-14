@@ -8,6 +8,7 @@ import Container from "@/components/ui/Container";
 import { InlineArrow } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
 import { portfolioFilters, type PortfolioFilter, type PortfolioProject } from "@/lib/data/portfolio";
+import { displayPrice } from "@/components/ui/format";
 
 type FilterValue = "all" | PortfolioFilter;
 
@@ -118,6 +119,12 @@ export default function PortfolioShowcase({ projects: allProjects, showHeader = 
                     </span>
                   </div>
                   <Link href={`/portfolio/${project.slug}`} className="mt-1 line-clamp-1 text-xs text-muted hover:text-ink">{project.description[locale]}</Link>
+                  {typeof project.price === "number" && project.price >= 0 ? (
+                    <p className="mt-2 flex items-baseline gap-1.5 text-[10px] text-muted">
+                      <span>{t("referencePrice")}</span>
+                      <strong className="font-semibold text-ink">{displayPrice(project.price, project.currency ?? "IDR", locale)}</strong>
+                    </p>
+                  ) : null}
                   <div className="mt-3 flex items-center justify-between border-y border-line py-2 text-[10px]">
                     {project.projectUrl ? (
                       <a

@@ -20,6 +20,14 @@ export type PortfolioProject = {
   previewPaths?: string[];
   /** null = not configured; the UI shows an honest unavailable live-preview state. */
   projectUrl: string | null;
+  /** Optional reference investment. null/undefined keeps the price hidden. */
+  price?: number | null;
+  currency?: "IDR" | "USD";
+  /** Scope offered before and after launch; omitted until authored in the CMS. */
+  launch?: {
+    before: LocalizedTextList;
+    after: LocalizedTextList;
+  };
   /** Showcase concepts must never be presented as client deliveries. */
   kind: "concept" | "client";
   /** Design highlights of the concept; omitted when not authored. */

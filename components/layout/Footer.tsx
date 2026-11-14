@@ -78,7 +78,14 @@ export default async function Footer() {
       <div className="relative border-t border-line bg-[var(--ws-bg)]/70">
         <div className="flex w-full flex-col gap-2 px-4 py-4 text-[10px] text-muted sm:flex-row sm:items-center sm:justify-between sm:px-7 lg:px-10 xl:px-14">
           <p>© {year} Websensial. {t("rights")}</p>
-          <p>{t("demoNotice")}</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {content.legal.termsUrl ? (
+              <a href={content.legal.termsUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-ink underline decoration-line underline-offset-4 transition-colors hover:text-primary">
+                {t("terms")} ↗
+              </a>
+            ) : null}
+            <p>{t("demoNotice")}</p>
+          </div>
         </div>
       </div>
     </footer>

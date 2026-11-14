@@ -170,7 +170,9 @@ export function validateServices(value: unknown): string | null {
   for (const service of value) {
     if (!isRecord(service) || typeof service.id !== "string" || !/^[a-z0-9-]{1,80}$/.test(service.id)
       || ids.has(service.id) || !isLocalizedCopy(service.name) || !isLocalizedCopy(service.description)
-      || !isLocalizedList(service.items)) return "Data layanan tidak valid.";
+      || !["before-launch", "after-launch"].includes(String(service.phase))
+      || !isLocalizedList(service.items)
+      || (service.excludes !== undefined && !isLocalizedList(service.excludes))) return "Data layanan tidak valid.";
     ids.add(service.id);
   }
   return null;

@@ -38,7 +38,7 @@ create policy "websensial admins can edit content"
   with check (exists (select 1 from public.websensial_admins where user_id = auth.uid()));
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('websensial-media', 'websensial-media', true, 10485760, array['image/jpeg','image/png','image/webp','image/avif'])
+values ('websensial-media', 'websensial-media', true, 10485760, array['image/jpeg','image/png','image/webp','image/avif','application/pdf'])
 on conflict (id) do update set public = true, file_size_limit = 10485760, allowed_mime_types = excluded.allowed_mime_types;
 
 create policy "public reads Websensial CMS media"

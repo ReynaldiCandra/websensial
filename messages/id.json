@@ -197,7 +197,16 @@
     "ctaTitle": "Punya kebutuhan spesifik?",
     "ctaText": "Ceritakan kebutuhan website Anda — kami balas dengan estimasi realistis.",
     "ctaButton": "Kontak kami",
-    "badge": "Layanan kami"
+    "badge": "Layanan kami",
+    "before-launch": "Sebelum launch",
+    "after-launch": "Setelah launch",
+    "beforeLaunchTitle": "Sebelum launch",
+    "beforeLaunchDescription": "Persiapan strategi, desain, dan pembangunan website sampai siap dirilis.",
+    "afterLaunchTitle": "Setelah launch",
+    "afterLaunchDescription": "Dukungan, perawatan, dan iterasi setelah website berjalan.",
+    "included": "Termasuk",
+    "excluded": "Tidak termasuk",
+    "scopeLabel": "Cakupan layanan"
   },
   "portfolio": {
     "title": "Pilih karakter Anda.",
@@ -217,6 +226,8 @@
     "empty": "Belum ada karya di kategori ini.",
     "conceptBadge": "Konsep",
     "clientBadge": "Klien",
+    "conceptNotice": "Konsep orisinal studio — bukan hasil proyek klien.",
+    "clientNotice": "Proyek klien yang ditampilkan dengan izin.",
     "visitProject": "Buka proyek",
     "notConfigured": "Tautan proyek belum diatur.",
     "sourceCodeUnavailable": "Kode sumber belum diatur",
@@ -224,6 +235,15 @@
     "actionsLabel": "Tindakan proyek",
     "techStackLabel": "Tech stack",
     "featuresLabel": "Fitur & highlight",
+    "detailsTitle": "Rincian proyek",
+    "detailsEyebrow": "{count} bagian",
+    "beforeLaunch": "Layanan sebelum launch",
+    "afterLaunch": "Layanan setelah launch",
+    "referencePrice": "Mulai dari",
+    "investmentLabel": "Referensi investasi",
+    "startingFrom": "Harga awal",
+    "estimateBadge": "Estimasi",
+    "investmentNote": "Estimasi indikatif untuk lingkup serupa, bukan penawaran resmi. Harga final mengikuti kebutuhan dan ruang lingkup proyek.",
     "demoNotConfiguredBody": "**Live preview belum ditautkan.** Konsep ini belum punya halaman demo yang bisa dibuka; gambar pratinjau di atas menampilkan arah desainnya. Hubungi kami kalau ingin melihatnya lebih detail.",
     "conceptFeaturesNote": "Konsep showcase — daftar di atas menggambarkan komposisi desain, bukan fitur yang sudah berjalan.",
     "tickerItems": ["Website responsif", "Template premium siap pakai", "Desain dibuat dengan perhatian", "Dari ide menuju digital"],
@@ -284,7 +304,16 @@
     "colContact": "Kontak",
     "languageNote": "Bahasa Indonesia aktif.",
     "rights": "Hak cipta dilindungi.",
-    "demoNotice": "Sebagian produk dan karya di situs ini adalah konten demonstrasi dan akan diganti dengan konten sebenarnya."
+    "demoNotice": "Sebagian produk dan karya di situs ini adalah konten demonstrasi dan akan diganti dengan konten sebenarnya.",
+    "terms": "Syarat & Ketentuan"
+  },
+  "legal": {
+    "eyebrow": "Dokumen layanan",
+    "title": "Syarat & Ketentuan",
+    "description": "Baca ruang lingkup, aturan kerja, dan ketentuan layanan Websensial sebelum memulai proyek.",
+    "open": "Baca & unduh PDF",
+    "note": "Dokumen terbuka di tab baru. Gunakan tombol unduh di penampil PDF untuk menyimpannya.",
+    "empty": "Dokumen syarat & ketentuan belum diunggah."
   },
   "notFound": {
     "title": "Halaman ini hilang di orbit",

@@ -14,8 +14,8 @@ import type { Service } from "@/lib/data/services";
 import { maxUploadBytes, prepareImageForUpload, putWithProgress } from "@/lib/admin/image-upload";
 import AdminGuide from "./AdminGuide";
 
-type Content = { portfolio: PortfolioProject[]; products: Product[]; articles: Article[]; tracking: TrackingSettings; contact: { email: string; whatsapp: string | null }; home: HomeContent; services: Service[] };
-type Section = "home" | "portfolio" | "products" | "articles" | "tracking" | "guide";
+type Content = { portfolio: PortfolioProject[]; products: Product[]; articles: Article[]; tracking: TrackingSettings; contact: { email: string; whatsapp: string | null }; home: HomeContent; services: Service[]; legal: { termsUrl: string | null } };
+type Section = "home" | "portfolio" | "products" | "articles" | "tracking" | "documents" | "guide";
 type Toast = { message: string; kind: "success" | "error" | "info" };
 type Asset = { name: string; url: string; width: number; height: number; bytes: number };
 type LocalizedField = "name" | "category" | "summary" | "description" | "license";
@@ -62,9 +62,12 @@ const emptyPortfolio = (): PortfolioProject => ({
   previewPath: null,
   previewPaths: [],
   projectUrl: null,
+  price: null,
+  currency: "IDR",
   kind: "concept",
   features: { id: [], en: [] },
   caseStudy: emptyCaseStudy(),
+  launch: { before: { id: [], en: [] }, after: { id: [], en: [] } },
 });
 
 const isProduct = (record: PortfolioProject | Product | Article): record is Product => "previews" in record;
@@ -110,7 +113,8 @@ export default function AdminDashboard() {
       const value = await response.json() as Content | { error?: string };
       if (!response.ok || !("portfolio" in value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)
         || !Array.isArray(value.articles) || !("tracking" in value) || !value.tracking
-        || !("home" in value) || !value.home || !("services" in value) || !Array.isArray(value.services)) {
+        || !("home" in value) || !value.home || !("services" in value) || !Array.isArray(value.services)
+        || !("legal" in value) || !value.legal) {
         throw new Error("error" in value ? value.error || "Konten tidak dapat dimuat." : "Format konten dari CMS tidak valid.");
       }
       setContent(value);
@@ -161,7 +165,7 @@ export default function AdminDashboard() {
   }, [dirty]);
 
   const records = section === "portfolio" ? content?.portfolio ?? [] : section === "articles" ? content?.articles ?? [] : content?.products ?? [];
-  const selected = section === "home" || section === "tracking" || section === "guide" ? null : records.find((item) => item.id === selectedId) ?? records[0] ?? null;
+  const selected = section === "home" || section === "tracking" || section === "documents" || section === "guide" ? null : records.find((item) => item.id === selectedId) ?? records[0] ?? null;
   const preset = section === "articles"
     ? { label: "Sampul artikel", width: 1600, height: 900 }
     : { label: section === "portfolio" ? "Pratinjau portofolio" : "Pratinjau template", width: 1600, height: 1000 };
@@ -252,6 +256,14 @@ export default function AdminDashboard() {
     setContent((current) => current ? { ...current, services: current.services.map((service, itemIndex) => itemIndex === index ? { ...service, items: { ...service.items, [locale]: value.split("\\n").map((item) => item.trim()).filter(Boolean) } } : service) } : current);
   }
 
+  function updateServiceExcludes(index: number, locale: "id" | "en", value: string) {
+    setContent((current) => current ? { ...current, services: current.services.map((service, itemIndex) => itemIndex === index ? { ...service, excludes: { ...(service.excludes ?? { id: [], en: [] }), [locale]: value.split("\\n").map((item) => item.trim()).filter(Boolean) } } : service) } : current);
+  }
+
+  function updateServicePhase(index: number, phase: Service["phase"]) {
+    setContent((current) => current ? { ...current, services: current.services.map((service, itemIndex) => itemIndex === index ? { ...service, phase } : service) } : current);
+  }
+
   function reorderService(index: number, direction: -1 | 1) {
     setContent((current) => {
       if (!current) return current;
@@ -264,7 +276,7 @@ export default function AdminDashboard() {
   }
 
   function addService() {
-    setContent((current) => current ? { ...current, services: [...current.services, { id: `service-${crypto.randomUUID()}`, name: { id: "Layanan baru", en: "New service" }, description: { id: "", en: "" }, items: { id: [], en: [] } }] } : current);
+    setContent((current) => current ? { ...current, services: [...current.services, { id: `service-${crypto.randomUUID()}`, phase: "before-launch", name: { id: "Layanan baru", en: "New service" }, description: { id: "", en: "" }, items: { id: [], en: [] }, excludes: { id: [], en: [] } }] } : current);
   }
 
   function removeService(id: string) {
@@ -378,6 +390,21 @@ export default function AdminDashboard() {
     if (!selected || isProduct(selected)) return;
     const items = value.split("\n").map((item) => item.trim()).filter(Boolean);
     updateSelected((record) => isProduct(record) ? record : { ...record, features: { id: items, en: items } });
+  }
+
+  function updatePortfolioLaunch(phase: "before" | "after", value: string) {
+    if (!selected || isProduct(selected)) return;
+    const items = value.split("\n").map((item) => item.trim()).filter(Boolean);
+    updateSelected((record) => {
+      if (isProduct(record)) return record;
+      const launch = record.launch ?? { before: { id: [], en: [] }, after: { id: [], en: [] } };
+      return {
+        ...record,
+        launch: phase === "before"
+          ? { ...launch, before: { id: items, en: items } }
+          : { ...launch, after: { id: items, en: items } },
+      };
+    });
   }
 
   function updateProductListBoth(field: ProductListField, value: string) {
@@ -535,6 +562,49 @@ export default function AdminDashboard() {
     }
   }
 
+  async function uploadTermsDocument(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      showToast("Dokumen syarat & ketentuan harus berupa PDF.", "error");
+      return;
+    }
+    if (file.size > maxUploadBytes) {
+      showToast("Ukuran PDF maksimal 10 MB.", "error");
+      return;
+    }
+    setBusy(true);
+    setUploadPercent(0);
+    setUploadProgress(`Mengunggah ${file.name} · 0%`);
+    try {
+      const ticketResponse = await fetch("/api/admin/documents/sign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: file.type, size: file.size }),
+      });
+      const ticket = await ticketResponse.json() as { uploadUrl?: string; publicUrl?: string; error?: string };
+      if (!ticketResponse.ok || !ticket.uploadUrl || !ticket.publicUrl) {
+        throw new Error(ticket.error || "Dokumen gagal disiapkan untuk diunggah.");
+      }
+      const result = await putWithProgress(ticket.uploadUrl, file, (percent) => {
+        setUploadPercent(percent);
+        setUploadProgress(`Mengunggah ${file.name} · ${percent}%`);
+      });
+      if (!result.ok) throw new Error(`Upload PDF gagal (status ${result.status})${result.detail ? `: ${result.detail}` : ""}.`);
+      setContent((current) => current ? { ...current, legal: { ...current.legal, termsUrl: ticket.publicUrl ?? null } } : current);
+      showToast("PDF berhasil diunggah. Tekan Simpan perubahan agar tautan aktif di situs.", "success");
+    } catch (reason) {
+      showToast(reason instanceof TypeError
+        ? "Koneksi terputus saat mengunggah PDF. Periksa koneksi lalu coba lagi."
+        : reason instanceof Error ? reason.message : "Upload PDF gagal.", "error");
+    } finally {
+      setBusy(false);
+      setUploadProgress("");
+      setUploadPercent(null);
+    }
+  }
+
   async function deleteUnusedAsset(url: string) {
     if (dirty) {
       showToast("Simpan atau buang perubahan konten terlebih dahulu sebelum menghapus file media.", "error");
@@ -644,6 +714,7 @@ export default function AdminDashboard() {
           <button title="Template" className={section === "products" ? "selected" : ""} onClick={() => changeSection("products")}><span className="ws-sidebar-icon" aria-hidden="true">▤</span><span>Template</span></button>
           <button title="Artikel" className={section === "articles" ? "selected" : ""} onClick={() => changeSection("articles")}><span className="ws-sidebar-icon" aria-hidden="true">✎</span><span>Artikel</span></button>
           <button title="Tracking & verifikasi" className={section === "tracking" ? "selected" : ""} onClick={() => changeSection("tracking")}><span className="ws-sidebar-icon" aria-hidden="true">◎</span><span>Tracking</span></button>
+          <button title="Dokumen" className={section === "documents" ? "selected" : ""} onClick={() => changeSection("documents")}><span className="ws-sidebar-icon" aria-hidden="true">§</span><span>Dokumen</span></button>
           <button title="Panduan" className={section === "guide" ? "selected" : ""} onClick={() => changeSection("guide")}><span className="ws-sidebar-icon" aria-hidden="true">?</span><span>Panduan</span></button>
         </nav>
         <div className="admin-side-bottom"><Link href="/id" target="_blank" rel="noreferrer"><span className="ws-sidebar-icon" aria-hidden="true">↗</span><span>Lihat situs</span></Link><button className="ws-admin-logout" onClick={() => void logout()}><span className="ws-sidebar-icon" aria-hidden="true">⇥</span><span>Keluar</span></button></div>
@@ -652,13 +723,24 @@ export default function AdminDashboard() {
         <header className="admin-topbar"><button className="ws-topbar-toggle" type="button" onClick={() => setSidebarCollapsed((collapsed) => !collapsed)} aria-label={sidebarCollapsed ? "Perlebar sidebar" : "Ciutkan sidebar"} aria-expanded={!sidebarCollapsed}><span aria-hidden="true">{sidebarCollapsed ? "☰" : "‹"}</span></button><span className="ws-admin-topbar-title">Panel pengelolaan konten</span><span className={`ws-admin-save-state${dirty ? " is-dirty" : ""}`}><span aria-hidden="true">●</span>{dirty ? "Ada perubahan belum disimpan" : "Semua perubahan tersimpan"}</span></header>
         <section className="admin-content">
           <div className="admin-page-heading">
-            <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "home" ? "Beranda" : section === "portfolio" ? "Portofolio" : section === "articles" ? "Artikel" : section === "tracking" ? "Tracking" : section === "guide" ? "Panduan" : "Template"}</h1></div>
-            <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button>{section === "home" ? <button className="admin-primary" type="button" onClick={addService} disabled={busy}>+ Tambah layanan</button> : section === "tracking" || section === "guide" ? null : <button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : section === "articles" ? "artikel" : "template"}</button>}{section !== "guide" ? <button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button> : null}</div>
+            <div><p className="admin-kicker">RUANG KERJA WEBSENSIAL</p><h1>{section === "home" ? "Beranda" : section === "portfolio" ? "Portofolio" : section === "articles" ? "Artikel" : section === "tracking" ? "Tracking" : section === "documents" ? "Dokumen" : section === "guide" ? "Panduan" : "Template"}</h1></div>
+            <div className="ws-admin-heading-actions"><button className="admin-quiet" type="button" onClick={() => { if (!dirty || window.confirm("Muat ulang akan membuang semua perubahan yang belum disimpan. Lanjutkan?")) void fetchContent(); }} disabled={busy}>Muat ulang</button>{section === "home" ? <button className="admin-primary" type="button" onClick={addService} disabled={busy}>+ Tambah layanan</button> : section === "tracking" || section === "documents" || section === "guide" ? null : <button className="admin-primary" type="button" onClick={addRecord} disabled={busy}>+ Tambah {section === "portfolio" ? "proyek" : section === "articles" ? "artikel" : "template"}</button>}{section !== "guide" ? <button className="admin-primary" type="submit" form="admin-content-form" disabled={busy || !dirty}>{busy ? "Menyimpan…" : dirty ? "Simpan perubahan" : "Tersimpan"}</button> : null}</div>
           </div>
-          {section === "home" ? <div className="ws-admin-intro"><div><p className="admin-kicker">KONTEN SITUS</p><h2>Kelola beranda</h2><p>Atur konten, urutan bagian, dan materi yang ditampilkan kepada pengunjung.</p></div><span className="ws-admin-locale-note">Satu teks untuk Indonesia &amp; English</span></div> : section === "tracking" ? <div className="ws-admin-intro"><div><p className="admin-kicker">INTEGRASI</p><h2>Tracking &amp; verifikasi</h2><p>Hubungkan Meta Pixel, Google Analytics, Google Ads, dan kode verifikasi domain. Kosongkan kolom yang belum dipakai.</p></div><span className="ws-admin-locale-note">Aktif di produksi</span></div> : section === "guide" ? null : <p className="admin-demo-note">Isi konten satu kali dalam bahasa Indonesia. Teks yang sama dipakai di halaman English sampai ada terjemahan khusus.</p>}
-          {section === "guide" ? <AdminGuide onNavigate={changeSection} /> : (
+          {section === "home" ? <div className="ws-admin-intro"><div><p className="admin-kicker">KONTEN SITUS</p><h2>Kelola beranda</h2><p>Atur konten, urutan bagian, dan materi yang ditampilkan kepada pengunjung.</p></div><span className="ws-admin-locale-note">Satu teks untuk Indonesia &amp; English</span></div> : section === "tracking" ? <div className="ws-admin-intro"><div><p className="admin-kicker">INTEGRASI</p><h2>Tracking &amp; verifikasi</h2><p>Hubungkan Meta Pixel, Google Analytics, Google Ads, dan kode verifikasi domain. Kosongkan kolom yang belum dipakai.</p></div><span className="ws-admin-locale-note">Aktif di produksi</span></div> : section === "documents" ? <div className="ws-admin-intro"><div><p className="admin-kicker">DOKUMEN PUBLIK</p><h2>Syarat &amp; Ketentuan</h2><p>Unggah PDF yang bisa dibaca dan diunduh calon klien dari footer serta halaman Layanan.</p></div><span className="ws-admin-locale-note">Satu PDF untuk semua bahasa</span></div> : section === "guide" ? null : <p className="admin-demo-note">Isi konten satu kali dalam bahasa Indonesia. Teks yang sama dipakai di halaman English sampai ada terjemahan khusus.</p>}
+          {section === "guide" ? <AdminGuide onNavigate={changeSection} /> : section === "documents" ? (
+            <form id="admin-content-form" onSubmit={save}>
+              <DocumentsEditor
+                termsUrl={content.legal.termsUrl}
+                busy={busy}
+                uploadProgress={uploadProgress}
+                uploadPercent={uploadPercent}
+                onUpload={(event) => void uploadTermsDocument(event)}
+                onRemove={() => setContent((current) => current ? { ...current, legal: { ...current.legal, termsUrl: null } } : current)}
+              />
+            </form>
+          ) : (
           <form id="admin-content-form" onSubmit={save}>
-            {section === "home" ? <HomeEditor content={content} addService={addService} updateHomeCopy={updateHomeCopy} toggleHomeSection={toggleHomeSection} reorderHomeSection={reorderHomeSection} setSelectedIds={setSelectedIds} moveSelectedId={moveSelectedId} updateService={updateService} updateServiceItems={updateServiceItems} reorderService={reorderService} removeService={removeService} updateTickerItem={updateTickerItem} moveTickerItem={moveTickerItem} addTickerItem={addTickerItem} removeTickerItem={removeTickerItem} updateProcessStep={updateProcessStep} moveProcessStep={moveProcessStep} addProcessStep={addProcessStep} removeProcessStep={removeProcessStep} busy={busy} /> : null}
+            {section === "home" ? <HomeEditor content={content} addService={addService} updateHomeCopy={updateHomeCopy} toggleHomeSection={toggleHomeSection} reorderHomeSection={reorderHomeSection} setSelectedIds={setSelectedIds} moveSelectedId={moveSelectedId} updateService={updateService} updateServiceItems={updateServiceItems} updateServiceExcludes={updateServiceExcludes} updateServicePhase={updateServicePhase} reorderService={reorderService} removeService={removeService} updateTickerItem={updateTickerItem} moveTickerItem={moveTickerItem} addTickerItem={addTickerItem} removeTickerItem={removeTickerItem} updateProcessStep={updateProcessStep} moveProcessStep={moveProcessStep} addProcessStep={addProcessStep} removeProcessStep={removeProcessStep} busy={busy} /> : null}
             {section === "tracking" ? <TrackingEditor tracking={content.tracking} onChange={updateTrackingField} /> : null}
             {section !== "tracking" ? <section className="admin-form-card ws-home-card ws-contact-card">
               <div className="ws-home-card-heading"><div><span className="ws-home-index">09</span><div><h3>Kontak global situs</h3><p>Kontak ini digunakan di halaman Kontak, footer, dan tombol chat calon klien.</p></div></div></div>
@@ -705,11 +787,16 @@ export default function AdminDashboard() {
                     </> : <>
                       <LocalizedInput label="Kategori" value={selected.category.id} onChange={(value) => updateLocalizedBoth("category", value)} required />
                       <label>Jenis portofolio<select value={selected.filter} onChange={(event) => updateField("filter", event.target.value as PortfolioProject["filter"])}><option value="website">Website</option><option value="landing">Landing page</option><option value="dashboard">Dashboard</option></select></label>
+                      <label>Harga referensi (opsional)<input type="number" min="0" step="1" placeholder="Kosongkan untuk menyembunyikan" value={selected.price ?? ""} onChange={(event) => updateField("price", event.target.value === "" ? null : Number(event.target.value))} /></label>
+                      <label>Mata uang harga<select value={selected.currency ?? "IDR"} onChange={(event) => updateField("currency", event.target.value as PortfolioProject["currency"])}><option value="IDR">IDR</option><option value="USD">USD</option></select></label>
                     </>}
                     <LocalizedTextArea label="Deskripsi" value={selected.description.id} onChange={(value) => updateLocalizedBoth("description", value)} />
                     {!isProduct(selected) ? <>
                       <h3 className="span-two">Studi kasus (opsional)</h3>
                       {(["challenge", "approach", "solution", "outcome"] as const).map((field) => <LocalizedTextArea key={field} label={{ challenge: "Tantangan", approach: "Pendekatan", solution: "Solusi", outcome: "Hasil" }[field]} value={selected.caseStudy?.[field].id ?? ""} onChange={(value) => updateCaseStudyBoth(field, value)} />)}
+                      <h3 className="span-two">Lingkup layanan sebelum &amp; sesudah launch (opsional)</h3>
+                      <LocalizedListArea label="Layanan sebelum launch (satu per baris)" value={selected.launch?.before.id ?? []} onChange={(value) => updatePortfolioLaunch("before", value)} />
+                      <LocalizedListArea label="Layanan setelah launch (satu per baris)" value={selected.launch?.after.id ?? []} onChange={(value) => updatePortfolioLaunch("after", value)} />
                     </> : null}
                     {isProduct(selected) ? <>
                       <LocalizedListArea label="Teknologi (satu per baris)" value={selected.tech.id} onChange={(value) => updateProductListBoth("tech", value)} />
@@ -744,7 +831,7 @@ export default function AdminDashboard() {
           </form>
           )}
 
-          {section !== "home" && section !== "tracking" && section !== "guide" ? <section className="ws-cms-media-library admin-form-card">
+          {section !== "home" && section !== "tracking" && section !== "documents" && section !== "guide" ? <section className="ws-cms-media-library admin-form-card">
             <div className="admin-settings-group"><h3>Perpustakaan media</h3><p className="ws-cms-hint">File terpakai tidak bisa dihapus. Lepas referensi, simpan konten, lalu hapus file jika memang tidak lagi diperlukan.</p></div>
             {assetList.length ? <div className="ws-cms-media-grid">{assetList.map((asset) => {
               const owner = imageRefs.find((ref) => ref.url === asset.url)?.owner;
@@ -755,6 +842,41 @@ export default function AdminDashboard() {
       </main>
     </div>
   );
+}
+
+function DocumentsEditor({ termsUrl, busy, uploadProgress, uploadPercent, onUpload, onRemove }: {
+  termsUrl: string | null;
+  busy: boolean;
+  uploadProgress: string;
+  uploadPercent: number | null;
+  onUpload: (event: ChangeEvent<HTMLInputElement>) => void;
+  onRemove: () => void;
+}) {
+  return <div className="ws-home-editor">
+    <section className="admin-form-card ws-home-card">
+      <div className="ws-home-card-heading"><div><span className="ws-home-index">01</span><div><h3>Syarat &amp; Ketentuan</h3><p>Dokumen PDF ini tampil sebagai tautan unduhan di footer dan kartu dokumen pada halaman Layanan.</p></div></div></div>
+      {termsUrl ? (
+        <div className="ws-doc-card">
+          <span className="ws-doc-icon" aria-hidden="true">PDF</span>
+          <div><strong>Dokumen aktif</strong><small>Calon klien dapat membaca dan mengunduhnya dari situs publik.</small></div>
+          <a href={termsUrl} target="_blank" rel="noopener noreferrer">Buka PDF ↗</a>
+          <button type="button" className="admin-danger" onClick={onRemove} disabled={busy}>Lepas</button>
+        </div>
+      ) : <p className="admin-empty">Belum ada dokumen. Situs tidak menampilkan tautan syarat &amp; ketentuan sampai PDF diunggah dan disimpan.</p>}
+      <label className="ws-cms-upload">{termsUrl ? "Ganti dokumen PDF" : "Unggah dokumen PDF"}<input type="file" accept="application/pdf" onChange={onUpload} disabled={busy} /></label>
+      {uploadProgress ? <div className="ws-cms-progress-block"><p role="status">{uploadProgress}</p>{uploadPercent !== null ? <div className="ws-cms-progress" role="progressbar" aria-valuenow={uploadPercent} aria-valuemin={0} aria-valuemax={100} aria-label="Progres unggahan dokumen"><span style={{ width: `${uploadPercent}%` }} /></div> : null}</div> : null}
+      <p className="ws-cms-hint">Format PDF, maksimal 10 MB. Mengganti dokumen hanya mengubah referensi; file lama tetap tersimpan di Supabase Storage sampai dihapus manual.</p>
+    </section>
+    <section className="admin-form-card ws-home-card">
+      <div className="ws-home-card-heading"><div><span className="ws-home-index">02</span><div><h3>Sebelum mengunggah</h3><p>Pastikan isi dokumen sudah final dan tidak memuat janji yang belum disepakati.</p></div></div></div>
+      <ul className="ws-track-notes">
+        <li>Gunakan satu PDF untuk bahasa Indonesia dan English; situs tidak membuat versi terpisah.</li>
+        <li>Dokumen langsung dapat diakses lewat URL publik setelah disimpan. Jangan unggah draf internal atau data pribadi.</li>
+        <li>Tautan muncul di footer semua halaman dan pada kartu dokumen di halaman Layanan.</li>
+        <li>Perubahan pada PDF tidak otomatis memperbarui file lama; unggah ulang lalu simpan untuk menggantinya.</li>
+      </ul>
+    </section>
+  </div>;
 }
 
 function TrackingEditor({ tracking, onChange }: { tracking: TrackingSettings; onChange: <K extends keyof TrackingSettings>(field: K, value: TrackingSettings[K]) => void }) {
@@ -876,9 +998,9 @@ function ArticleEditor({ article, busy, dirty, uploadProgress, uploadPercent, on
   </div>;
 }
 
-function HomeEditor({ content, addService, updateHomeCopy, toggleHomeSection, reorderHomeSection, setSelectedIds, moveSelectedId, updateService, updateServiceItems, reorderService, removeService, updateTickerItem, moveTickerItem, addTickerItem, removeTickerItem, updateProcessStep, moveProcessStep, addProcessStep, removeProcessStep, busy }: {
+function HomeEditor({ content, addService, updateHomeCopy, toggleHomeSection, reorderHomeSection, setSelectedIds, moveSelectedId, updateService, updateServiceItems, updateServiceExcludes, updateServicePhase, reorderService, removeService, updateTickerItem, moveTickerItem, addTickerItem, removeTickerItem, updateProcessStep, moveProcessStep, addProcessStep, removeProcessStep, busy }: {
   content: Content; addService: () => void; busy: boolean; updateHomeCopy: (path: string, locale: "id" | "en", value: string) => void; toggleHomeSection: (id: HomeSectionId) => void; reorderHomeSection: (index: number, direction: -1 | 1) => void; setSelectedIds: (group: "hero" | "portfolio" | "featured", id: string, checked: boolean) => void; moveSelectedId: (group: "hero" | "portfolio" | "featured", index: number, direction: -1 | 1) => void;
-  updateService: (index: number, field: "name" | "description", locale: "id" | "en", value: string) => void; updateServiceItems: (index: number, locale: "id" | "en", value: string) => void; reorderService: (index: number, direction: -1 | 1) => void; removeService: (id: string) => void; updateTickerItem: (index: number, locale: "id" | "en", value: string) => void; moveTickerItem: (index: number, direction: -1 | 1) => void; addTickerItem: () => void; removeTickerItem: (index: number) => void; updateProcessStep: (index: number, field: "title" | "text", locale: "id" | "en", value: string) => void; moveProcessStep: (index: number, direction: -1 | 1) => void; addProcessStep: () => void; removeProcessStep: (index: number) => void;
+  updateService: (index: number, field: "name" | "description", locale: "id" | "en", value: string) => void; updateServiceItems: (index: number, locale: "id" | "en", value: string) => void; updateServiceExcludes: (index: number, locale: "id" | "en", value: string) => void; updateServicePhase: (index: number, phase: Service["phase"]) => void; reorderService: (index: number, direction: -1 | 1) => void; removeService: (id: string) => void; updateTickerItem: (index: number, locale: "id" | "en", value: string) => void; moveTickerItem: (index: number, direction: -1 | 1) => void; addTickerItem: () => void; removeTickerItem: (index: number) => void; updateProcessStep: (index: number, field: "title" | "text", locale: "id" | "en", value: string) => void; moveProcessStep: (index: number, direction: -1 | 1) => void; addProcessStep: () => void; removeProcessStep: (index: number) => void;
 }) {
   // One field per copy block: Indonesian is the source text and the same value
   // fills the English locale, so the public pages never show half-filled copy.
@@ -903,7 +1025,7 @@ function HomeEditor({ content, addService, updateHomeCopy, toggleHomeSection, re
     <section className="admin-form-card ws-home-card"><div className="ws-home-card-heading"><div><span className="ws-home-index">03</span><div><h3>Teks berjalan</h3><p>Kalimat pendek yang bergerak di antara bagian beranda.</p></div></div><button type="button" className="admin-quiet" onClick={addTickerItem} disabled={content.home.tickerItems.length >= 20 || busy}>+ Tambah teks</button></div><div className="ws-home-repeat-list">{content.home.tickerItems.map((item, index) => <div className="ws-home-repeat-row" key={`ticker-${index}`}><span className="ws-home-row-number">{String(index + 1).padStart(2, "0")}</span><label>Teks<input value={item.id} onChange={(event) => { updateTickerItem(index, "id", event.target.value); updateTickerItem(index, "en", event.target.value); }} /></label><div className="ws-home-row-actions"><button type="button" className="ws-order-button" disabled={index === 0} onClick={() => moveTickerItem(index, -1)} aria-label="Naikkan teks">↑</button><button type="button" className="ws-order-button" disabled={index === content.home.tickerItems.length - 1} onClick={() => moveTickerItem(index, 1)} aria-label="Turunkan teks">↓</button><button type="button" className="admin-danger" onClick={() => removeTickerItem(index)} disabled={busy}>Hapus</button></div></div>)}</div></section>
     <section className="admin-form-card ws-home-card"><div className="ws-home-card-heading"><div><span className="ws-home-index">04</span><div><h3>Sorotan portofolio</h3><p>Judul bagian, deskripsi, serta karya yang ingin ditonjolkan.</p></div></div></div><div className="ws-home-field-list">{localizedGroup("portfolio", ["badge", "title", "description"], { badge: "Label", title: "Judul", description: "Deskripsi" })}</div>{picker("portfolio", content.home.portfolio.projectIds, content.portfolio)}</section>
     <section className="admin-form-card ws-home-card"><div className="ws-home-card-heading"><div><span className="ws-home-index">05</span><div><h3>Template unggulan</h3><p>Pilih template yang ditampilkan di beranda.</p></div></div></div><div className="ws-home-field-list">{localizedGroup("featured", ["title", "subtitle", "seeAll"], { title: "Judul", subtitle: "Deskripsi", seeAll: "Teks tautan katalog" })}</div>{picker("featured", content.home.featured.productIds, content.products, 3)}</section>
-    <section className="admin-form-card ws-home-card"><div className="ws-home-card-heading"><div><span className="ws-home-index">06</span><div><h3>Layanan</h3><p>Kelola judul bagian dan isi setiap layanan dalam satu teks.</p></div></div><button type="button" className="admin-quiet" onClick={addService} disabled={busy}>+ Tambah layanan</button></div><div className="ws-home-field-list">{localizedGroup("services", ["badge", "title", "subtitle", "seeAll"], { badge: "Label", title: "Judul", subtitle: "Deskripsi", seeAll: "Teks tautan layanan" })}</div><div className="ws-home-service-list">{content.services.map((service, index) => <article className="ws-home-service" key={service.id}><div className="ws-home-service-head"><span className="ws-home-row-number">{String(index + 1).padStart(2, "0")}</span><h4>Layanan {index + 1}</h4><button type="button" className="ws-order-button" disabled={index === 0 || busy} onClick={() => reorderService(index, -1)} aria-label="Naikkan layanan">↑</button><button type="button" className="ws-order-button" disabled={index === content.services.length - 1 || busy} onClick={() => reorderService(index, 1)} aria-label="Turunkan layanan">↓</button><button type="button" className="admin-danger" onClick={() => removeService(service.id)} disabled={busy}>Hapus</button></div><div className="ws-home-service-locale"><label>Nama<input value={service.name.id} onChange={(event) => { updateService(index, "name", "id", event.target.value); updateService(index, "name", "en", event.target.value); }} /></label><label>Deskripsi<textarea value={service.description.id} onChange={(event) => { updateService(index, "description", "id", event.target.value); updateService(index, "description", "en", event.target.value); }} /></label><label>Butir layanan <span className="ws-home-field-hint">satu per baris</span><textarea value={service.items.id.join("\n")} onChange={(event) => { updateServiceItems(index, "id", event.target.value); updateServiceItems(index, "en", event.target.value); }} /></label></div></article>)}</div></section>
+    <section className="admin-form-card ws-home-card"><div className="ws-home-card-heading"><div><span className="ws-home-index">06</span><div><h3>Layanan</h3><p>Kelola judul bagian dan isi setiap layanan dalam satu teks.</p></div></div><button type="button" className="admin-quiet" onClick={addService} disabled={busy}>+ Tambah layanan</button></div><div className="ws-home-field-list">{localizedGroup("services", ["badge", "title", "subtitle", "seeAll"], { badge: "Label", title: "Judul", subtitle: "Deskripsi", seeAll: "Teks tautan layanan" })}</div><div className="ws-home-service-list">{content.services.map((service, index) => <article className="ws-home-service" key={service.id}><div className="ws-home-service-head"><span className="ws-home-row-number">{String(index + 1).padStart(2, "0")}</span><h4>Layanan {index + 1}</h4><button type="button" className="ws-order-button" disabled={index === 0 || busy} onClick={() => reorderService(index, -1)} aria-label="Naikkan layanan">↑</button><button type="button" className="ws-order-button" disabled={index === content.services.length - 1 || busy} onClick={() => reorderService(index, 1)} aria-label="Turunkan layanan">↓</button><button type="button" className="admin-danger" onClick={() => removeService(service.id)} disabled={busy}>Hapus</button></div><div className="ws-home-service-locale"><label>Fase layanan<select value={service.phase ?? "before-launch"} onChange={(event) => updateServicePhase(index, event.target.value as Service["phase"])}><option value="before-launch">Sebelum launch</option><option value="after-launch">Setelah launch</option></select></label><label>Nama<input value={service.name.id} onChange={(event) => { updateService(index, "name", "id", event.target.value); updateService(index, "name", "en", event.target.value); }} /></label><label>Deskripsi<textarea value={service.description.id} onChange={(event) => { updateService(index, "description", "id", event.target.value); updateService(index, "description", "en", event.target.value); }} /></label><label>Tidak termasuk <span className="ws-home-field-hint">satu per baris</span><textarea value={(service.excludes?.id ?? []).join("\n")} onChange={(event) => { updateServiceExcludes(index, "id", event.target.value); updateServiceExcludes(index, "en", event.target.value); }} /></label><label>Termasuk / yang didapat <span className="ws-home-field-hint">satu per baris</span><textarea value={service.items.id.join("\n")} onChange={(event) => { updateServiceItems(index, "id", event.target.value); updateServiceItems(index, "en", event.target.value); }} /></label></div></article>)}</div></section>
     <section className="admin-form-card ws-home-card"><div className="ws-home-card-heading"><div><span className="ws-home-index">07</span><div><h3>Cara kerja</h3><p>Jelaskan tahapan kerja dan urutkan sesuai proses Anda.</p></div></div><button type="button" className="admin-quiet" onClick={addProcessStep} disabled={content.home.process.steps.length >= 12 || busy}>+ Tambah langkah</button></div><div className="ws-home-field-list">{copyField("process-title", "Judul bagian", content.home.process.title, (locale, value) => updateHomeCopy("process.title", locale, value))}</div><div className="ws-home-service-list">{content.home.process.steps.map((step, index) => <article className="ws-home-service" key={`step-${index}`}><div className="ws-home-service-head"><span className="ws-home-row-number">{String(index + 1).padStart(2, "0")}</span><h4>Langkah {index + 1}</h4><button type="button" className="ws-order-button" disabled={index === 0 || busy} onClick={() => moveProcessStep(index, -1)} aria-label="Naikkan langkah">↑</button><button type="button" className="ws-order-button" disabled={index === content.home.process.steps.length - 1 || busy} onClick={() => moveProcessStep(index, 1)} aria-label="Turunkan langkah">↓</button><button type="button" className="admin-danger" onClick={() => removeProcessStep(index)} disabled={busy}>Hapus</button></div><div className="ws-home-service-locale"><label>Judul<input value={step.title.id} onChange={(event) => { updateProcessStep(index, "title", "id", event.target.value); updateProcessStep(index, "title", "en", event.target.value); }} /></label><label>Deskripsi<textarea value={step.text.id} onChange={(event) => { updateProcessStep(index, "text", "id", event.target.value); updateProcessStep(index, "text", "en", event.target.value); }} /></label></div></article>)}</div></section>
     <section className="admin-form-card ws-home-card"><div className="ws-home-card-heading"><div><span className="ws-home-index">08</span><div><h3>Ajakan (CTA)</h3><p>Atur teks dan tujuan tombol di bagian penutup beranda.</p></div></div></div><div className="ws-home-field-list">{localizedGroup("cta", ["badge", "title", "text", "primary", "secondary"], { badge: "Label kecil", title: "Judul", text: "Deskripsi", primary: "Tombol utama", secondary: "Tombol kedua" })}</div><div className="ws-home-url-grid"><label>Tautan tombol utama<input value={content.home.cta.primaryHref} onChange={(event) => updateHomeCopy("cta.primaryHref", "id", event.target.value)} /></label><label>Tautan tombol kedua<input value={content.home.cta.secondaryHref ?? ""} onChange={(event) => updateHomeCopy("cta.secondaryHref", "id", event.target.value)} /><small className="ws-cms-hint">Kosongkan untuk memakai WhatsApp dari kontak global.</small></label></div></section>
   </div>;

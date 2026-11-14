@@ -5,11 +5,14 @@ import { products, type Product } from "@/lib/data/products";
 import { articles, type Article } from "@/lib/data/articles";
 import { defaultTracking, normalizeTracking, validateTracking, type TrackingSettings } from "@/lib/data/tracking";
 import { defaultHomeContent, defaultServices, normalizeHomeContent, validateHomeContent, validateServices, type HomeContent } from "@/lib/admin/home-content";
+import type { Service } from "@/lib/data/services";
 
 export type SiteContact = {
   email: string;
   whatsapp: string | null;
 };
+
+export type LegalSettings = { termsUrl: string | null };
 
 export type WebContent = {
   portfolio: PortfolioProject[];
@@ -19,6 +22,7 @@ export type WebContent = {
   contact: SiteContact;
   home: HomeContent;
   services: typeof defaultServices;
+  legal: LegalSettings;
 };
 
 const fallbackContent: WebContent = {
@@ -29,6 +33,7 @@ const fallbackContent: WebContent = {
   contact: { email: "agencywebsensial@gmail.com", whatsapp: "+6281319963253" },
   home: defaultHomeContent,
   services: defaultServices,
+  legal: { termsUrl: null },
 };
 const CONTENT_KEY = "site-v1";
 
@@ -54,6 +59,7 @@ export function getBundledWebContent(): WebContent {
     contact: structuredClone(fallbackContent.contact),
     home: structuredClone(fallbackContent.home),
     services: structuredClone(fallbackContent.services),
+    legal: structuredClone(fallbackContent.legal),
   };
 }
 
@@ -61,6 +67,16 @@ export function getBundledWebContent(): WebContent {
 function withPortfolioDefaults(project: PortfolioProject): PortfolioProject {
   const bundled = portfolioProjects.find((candidate) => candidate.id === project.id);
   return bundled ? { ...project, features: project.features ?? bundled.features } : project;
+}
+
+/** Stored services predate the phase/excludes fields; fill them from the bundled defaults. */
+function withServiceDefaults(service: Service): Service {
+  const bundled = defaultServices.find((candidate) => candidate.id === service.id);
+  return {
+    ...service,
+    phase: service.phase ?? bundled?.phase ?? "before-launch",
+    excludes: service.excludes ?? bundled?.excludes ?? { id: [], en: [] },
+  };
 }
 
 export async function getStoredWebContent(): Promise<WebContent | null> {
@@ -85,7 +101,10 @@ export async function getStoredWebContent(): Promise<WebContent | null> {
       tracking: normalizeTracking(content.tracking),
       contact: content.contact ?? fallbackContent.contact,
       home: normalizeHomeContent(content.home),
-      services: Array.isArray(content.services) ? content.services as WebContent["services"] : structuredClone(fallbackContent.services),
+      services: Array.isArray(content.services) ? (content.services as Service[]).map(withServiceDefaults) : structuredClone(fallbackContent.services),
+      legal: isRecord(content.legal) && (typeof content.legal.termsUrl === "string" || content.legal.termsUrl === null)
+        ? { termsUrl: content.legal.termsUrl }
+        : { termsUrl: null },
     };
   } catch (error) {
     console.error("Failed to load stored CMS content for media safety check.", error);
@@ -126,6 +145,17 @@ function isSafeOptionalUrl(value: unknown): boolean {
   }
 }
 
+function isSafeDocumentUrl(value: unknown): boolean {
+  if (value === null) return true;
+  if (typeof value !== "string" || value.length > 2048) return false;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "https:" && parsed.pathname.toLowerCase().endsWith(".pdf");
+  } catch {
+    return false;
+  }
+}
+
 function isSafeImagePath(value: unknown): value is string {
   if (typeof value !== "string" || value.length > 2048) return false;
   if (value.startsWith("/")) return value.startsWith("/previews/") && !value.includes("..");
@@ -141,6 +171,9 @@ export function validateWebContent(value: unknown): string | null {
   if (!isRecord(value) || !Array.isArray(value.portfolio) || !Array.isArray(value.products)
     || !Array.isArray(value.articles) || !isRecord(value.contact)) {
     return "Data portofolio, template, artikel, dan kontak harus valid.";
+  }
+  if (!isRecord(value.legal) || !isSafeDocumentUrl(value.legal.termsUrl)) {
+    return "Dokumen syarat dan ketentuan tidak valid. Gunakan PDF dari media Websensial.";
   }
   const trackingError = validateTracking(value.tracking);
   if (trackingError) return trackingError;
@@ -184,6 +217,8 @@ export function validateWebContent(value: unknown): string | null {
     if (!isRecord(item) || !isLocalizedText(item.name, true) || !isLocalizedText(item.category, true) || !isLocalizedText(item.description)
       || (item.features !== undefined && !isLocalizedList(item.features))
       || !Array.isArray(item.tech) || !item.tech.every((tag) => isText(tag, true))
+      || (item.price !== undefined && item.price !== null && (!Number.isSafeInteger(item.price) || Number(item.price) < 0))
+      || (item.currency !== undefined && !["IDR", "USD"].includes(String(item.currency)))
       || !(item.previewPath === null || isSafeImagePath(item.previewPath))
       || (item.previewPaths !== undefined && (!Array.isArray(item.previewPaths) || item.previewPaths.length > 20 || !item.previewPaths.every(isSafeImagePath)))
       || !isSafeOptionalUrl(item.projectUrl)
@@ -195,6 +230,11 @@ export function validateWebContent(value: unknown): string | null {
       if (!isRecord(item.caseStudy)
         || !["challenge", "approach", "solution", "outcome"].every((field) => isLocalizedText((item.caseStudy as Record<string, unknown>)[field]))) {
         return `Studi kasus portofolio nomor ${index + 1} tidak valid.`;
+      }
+    }
+    if (item.launch !== undefined) {
+      if (!isRecord(item.launch) || !isLocalizedList(item.launch.before) || !isLocalizedList(item.launch.after)) {
+        return `Lingkup sebelum dan sesudah launch portofolio nomor ${index + 1} tidak valid.`;
       }
     }
   }
