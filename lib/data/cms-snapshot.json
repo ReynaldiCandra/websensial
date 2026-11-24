@@ -1,0 +1,2073 @@
+{
+  "home": {
+    "cta": {
+      "text": {
+        "en": "Start with a ready-made template, or discuss a fully custom build.",
+        "id": "Mulai dari template siap pakai atau diskusikan kebutuhan khusus Anda."
+      },
+      "badge": {
+        "en": "Let's talk",
+        "id": "Mari berbincang"
+      },
+      "title": {
+        "en": "Turn your ideas into extraordinary digital products.",
+        "id": "Wujudkan ide Anda menjadi produk digital."
+      },
+      "primary": {
+        "en": "Browse Templates",
+        "id": "Lihat Template"
+      },
+      "secondary": {
+        "en": "Contact us",
+        "id": "Hubungi kami"
+      },
+      "primaryHref": "/products",
+      "secondaryHref": null
+    },
+    "hero": {
+      "badge": {
+        "en": "A small collection. A big range.",
+        "id": "Koleksi kecil. Banyak karakter."
+      },
+      "heroFoot": {
+        "en": "Built with intention. Made to fit your world.",
+        "id": "Dibuat dengan niat. Siap disesuaikan dengan dunia Anda."
+      },
+      "subtitle": {
+        "en": "Websites and ready-made templates with a point of view — designed for real businesses, shaped with care.",
+        "id": "Website dan template siap pakai dengan karakter tersendiri — dirancang untuk bisnis nyata, dibuat dengan penuh perhatian."
+      },
+      "primaryCta": {
+        "en": "Explore our work",
+        "id": "Jelajahi karya"
+      },
+      "projectIds": [
+        "pf-fallow",
+        "pf-offcut",
+        "pf-maree"
+      ],
+      "sceneBadge": {
+        "en": "A different kind of starting point",
+        "id": "Awal yang berbeda untuk cerita Anda"
+      },
+      "titleLine1": {
+        "en": "Different",
+        "id": "Karya"
+      },
+      "titleLine2": {
+        "en": "by",
+        "id": "dengan"
+      },
+      "primaryHref": "#work",
+      "featureLabel": {
+        "en": "{category} concept",
+        "id": "Konsep {category}"
+      },
+      "previewLabel": {
+        "en": "Featured concept preview",
+        "id": "Pratinjau konsep pilihan"
+      },
+      "secondaryCta": {
+        "en": "Browse templates",
+        "id": "Lihat template"
+      },
+      "secondaryHref": "/products",
+      "secondaryNote": {
+        "en": "Studio concepts, clearly labeled.",
+        "id": "Konsep studio, ditandai transparan."
+      },
+      "titleHighlight": {
+        "en": "design.",
+        "id": "karakter."
+      },
+      "exploreFeatured": {
+        "en": "Explore {name} concept",
+        "id": "Jelajahi konsep {name}"
+      }
+    },
+    "process": {
+      "steps": [
+        {
+          "text": {
+            "en": "We align on your goals, audience, and content needs from the start.",
+            "id": "Kita menyelaraskan tujuan, audiens, dan kebutuhan konten sejak awal."
+          },
+          "title": {
+            "en": "Brief & strategy",
+            "id": "Brief & strategi"
+          }
+        },
+        {
+          "text": {
+            "en": "We shape the visual direction, then build a responsive website.",
+            "id": "Kami merancang tampilan, lalu membangun website yang responsif."
+          },
+          "title": {
+            "en": "Design & development",
+            "id": "Desain & pengembangan"
+          }
+        },
+        {
+          "text": {
+            "en": "You review the work; we refine the details around your feedback.",
+            "id": "Anda meninjau hasilnya; kami menyempurnakan detail berdasarkan masukan."
+          },
+          "title": {
+            "en": "Review & refine",
+            "id": "Tinjau & sempurnakan"
+          }
+        },
+        {
+          "text": {
+            "en": "Your finished website or files come with clear usage guidance.",
+            "id": "Website atau file final diserahkan lengkap dengan panduan penggunaan."
+          },
+          "title": {
+            "en": "Handover & guidance",
+            "id": "Serah terima & panduan"
+          }
+        }
+      ],
+      "title": {
+        "en": "How we work",
+        "id": "Cara kerja kami"
+      }
+    },
+    "featured": {
+      "title": {
+        "en": "Featured templates",
+        "id": "Template unggulan"
+      },
+      "seeAll": {
+        "en": "See all templates",
+        "id": "Lihat semua template"
+      },
+      "subtitle": {
+        "en": "Ready-made digital products — buy, download, and host them yourself.",
+        "id": "Produk digital siap pakai — beli, unduh, dan hosting sendiri."
+      },
+      "productIds": [
+        "prd-aurora",
+        "prd-lumenstore"
+      ]
+    },
+    "sections": [
+      {
+        "id": "hero",
+        "enabled": true
+      },
+      {
+        "id": "ticker",
+        "enabled": true
+      },
+      {
+        "id": "portfolio",
+        "enabled": true
+      },
+      {
+        "id": "featured",
+        "enabled": true
+      },
+      {
+        "id": "services",
+        "enabled": true
+      },
+      {
+        "id": "process",
+        "enabled": true
+      },
+      {
+        "id": "cta",
+        "enabled": true
+      }
+    ],
+    "services": {
+      "badge": {
+        "en": "What we do",
+        "id": "Apa yang kami kerjakan"
+      },
+      "title": {
+        "en": "Agency services",
+        "id": "Layanan agency"
+      },
+      "seeAll": {
+        "en": "View services",
+        "id": "Detail layanan"
+      },
+      "subtitle": {
+        "en": "Need more than a template? We build websites tailored to you.",
+        "id": "Butuh lebih dari sekadar template? Kami buatkan website yang disesuaikan."
+      }
+    },
+    "portfolio": {
+      "badge": {
+        "en": "01 / The collection",
+        "id": "01 / Koleksi"
+      },
+      "title": {
+        "en": "Pick your personality.",
+        "id": "Pilih karakter Anda."
+      },
+      "projectIds": [
+        "pf-veillee",
+        "pf-tempo",
+        "pf-tessera",
+        "pf-oddpress",
+        "pf-ficelle",
+        "pf-passeline",
+        "pf-ecrin",
+        "pf-fallow",
+        "pf-offcut",
+        "pf-aero",
+        "pf-crux",
+        "pf-maree",
+        "pf-umbra",
+        "pf-aparte",
+        "pf-ae9b7aaa-5b95-4657-b465-270e3d3b77da"
+      ],
+      "description": {
+        "en": "Original studio concepts, built as visual explorations — not client deliveries.",
+        "id": "Konsep orisinal studio, dibuat sebagai eksplorasi visual — bukan hasil proyek klien."
+      }
+    },
+    "tickerItems": [
+      {
+        "en": "Responsive websites",
+        "id": "Website responsif"
+      },
+      {
+        "en": "Premium ready-to-use templates",
+        "id": "Template premium siap pakai"
+      },
+      {
+        "en": "Thoughtful digital design",
+        "id": "Desain dibuat dengan perhatian"
+      },
+      {
+        "en": "Ideas brought to digital",
+        "id": "Dari ide menuju digital"
+      }
+    ]
+  },
+  "legal": {
+    "termsUrl": null
+  },
+  "contact": {
+    "email": "agencywebsensial@gmail.com",
+    "whatsapp": "+6281319963253"
+  },
+  "articles": [
+    {
+      "id": "art-template-bisnis",
+      "seo": {
+        "title": {
+          "en": "How to Choose a Website Template for a Small Business",
+          "id": "Cara Memilih Template Website untuk Bisnis Kecil"
+        },
+        "keyword": "template website",
+        "description": {
+          "en": "A practical guide to ready-made website templates: check the format, customization, performance, license, and SEO readiness first.",
+          "id": "Panduan memilih template website siap pakai: cek format, kustomisasi, performa, lisensi, dan kesiapan SEO sebelum membeli."
+        }
+      },
+      "slug": "memilih-template-website-bisnis-kecil",
+      "tags": [
+        "Template",
+        "Bisnis Kecil",
+        "Panduan"
+      ],
+      "title": {
+        "en": "How to choose the right website template for a small business",
+        "id": "Cara memilih template website yang tepat untuk bisnis kecil"
+      },
+      "author": "Websensial",
+      "status": "published",
+      "content": {
+        "en": "A website template can shorten a launch from months to days. But not every template fits every business. Before buying, check the following so the template saves work instead of creating new work.\n\n## Start from the pages you actually need\nDecide which pages are essential. Service businesses usually need a home page, services, a short portfolio, and contact details. Online stores need a catalog, product pages, and a checkout flow. A template that already includes these structures will be faster to use than one with many irrelevant pages.\n\n## Check the format and technology\nHTML/CSS/JS templates suit static hosting and are easy to move. A Next.js template provides a component structure and good performance if you are comfortable with React. A Figma template contains design files, not code, so plan time for implementation.\n\n## Judge how easy it is to customize\nOpen the configuration files or documentation. Colors, typography, and copy should be replaceable without rebuilding the whole layout. A template with tidy design tokens is easier to adapt to your brand.\n\n## Test performance and accessibility\nLoad the demo on a phone. Check whether the page feels heavy, whether the text stays readable, and whether navigation works with a keyboard. Animation is fine as long as it does not compromise speed and legibility.\n\n## Make sure the license and support are clear\nRead the license: is it for one project, one team, or resale? Confirm that installation documentation and a support channel exist. Clear terms prevent technical and legal problems later.\n\n## Check its SEO readiness\nTemplate pages should already have titles, descriptions, canonical URLs, and a correct heading structure. Clean markup helps search engines understand the page. A sample sitemap and metadata are signs that the template is ready to publish.\n\nThe best template is not the one with the most features. It is the one closest to your needs and easiest to maintain after launch.",
+        "id": "Template website bisa memangkas waktu peluncuran dari hitungan bulan menjadi hitungan hari. Namun tidak semua template cocok untuk setiap bisnis. Sebelum membeli, periksa beberapa hal berikut agar hasilnya tidak menambah pekerjaan baru.\n\n## Mulai dari tujuan halaman\nTentukan halaman apa yang benar-benar dibutuhkan. Bisnis jasa biasanya memerlukan beranda, layanan, portofolio singkat, dan kontak. Toko online membutuhkan katalog, halaman produk, serta alur checkout. Template yang menyediakan struktur ini lebih cepat dipakai daripada template dengan banyak halaman yang tidak relevan.\n\n## Periksa format dan teknologi\nTemplate HTML/CSS/JS cocok untuk hosting statis dan mudah dipindahkan. Template Next.js memberi struktur komponen dan performa baik bila Anda terbiasa dengan React. Template Figma hanya berisi desain, bukan kode, jadi siapkan waktu untuk implementasi.\n\n## Nilai kemudahan kustomisasi\nBuka file konfigurasi atau dokumentasinya. Warna, tipografi, dan teks sebaiknya bisa diganti tanpa membongkar seluruh layout. Template dengan token desain yang rapi lebih mudah disesuaikan dengan brand Anda.\n\n## Cek performa dan aksesibilitas\nMuat demo di ponsel. Perhatikan apakah halaman terasa berat, teks tetap terbaca, dan navigasi bisa digunakan dengan keyboard. Animasi boleh ada, tetapi jangan sampai mengorbankan kecepatan dan keterbacaan.\n\n## Pastikan lisensi dan dukungan jelas\nBaca lisensinya: untuk satu proyek, satu tim, atau boleh dijual ulang. Pastikan juga ada dokumentasi penginstalan dan kanal untuk bertanya. Ketentuan yang jelas mencegah masalah teknis dan hukum di kemudian hari.\n\n## Periksa kesiapan SEO\nHalaman template sebaiknya sudah memiliki judul, deskripsi, URL kanonik, dan struktur heading yang benar. Struktur data yang rapi memudahkan mesin pencari memahami halaman. Jika penjual menyertakan sitemap dan contoh metadata, itu tanda template siap dipublikasikan.\n\nTemplate terbaik bukan yang paling banyak fiturnya, melainkan yang paling dekat dengan kebutuhan Anda dan paling mudah dirawat setelah diluncurkan."
+      },
+      "excerpt": {
+        "en": "A short guide to ready-made templates: check the format, customization, performance, license, and SEO readiness before buying.",
+        "id": "Panduan singkat memilih template siap pakai: cek format, kustomisasi, performa, lisensi, dan kesiapan SEO sebelum membeli."
+      },
+      "coverPath": "/previews/articles/article-template-selection.svg",
+      "publishedAt": "2026-11-05T09:00:00.000Z"
+    },
+    {
+      "id": "art-indeks-google",
+      "seo": {
+        "title": {
+          "en": "How to Get a New Website Indexed by Google Faster",
+          "id": "Membuat Website Baru Cepat Terindeks Google"
+        },
+        "keyword": "terindeks Google",
+        "description": {
+          "en": "A practical guide to help Google find a new website faster: sitemap, robots.txt, metadata, heading structure, and internal links.",
+          "id": "Panduan praktis agar website baru cepat ditemukan Google: sitemap, robots.txt, metadata, struktur heading, dan tautan internal."
+        }
+      },
+      "slug": "website-baru-cepat-terindeks-google",
+      "tags": [
+        "SEO",
+        "Google",
+        "Peluncuran"
+      ],
+      "title": {
+        "en": "How to get a new website indexed by Google faster",
+        "id": "Membuat website baru lebih cepat terindeks Google"
+      },
+      "author": "Websensial",
+      "status": "published",
+      "content": {
+        "en": "A new page does not appear in search results immediately. Google has to find it, crawl its content, and decide whether the page is worth indexing. Clean technical foundations make that process faster.\n\n## 1. Make sure sitemap.xml lists published pages\nA sitemap helps search engines discover the URLs you want to show. Include the home page, services, portfolio, published templates, and articles. Leave out admin pages, carts, and test URLs. Submit the sitemap in Google Search Console after launch.\n\n## 2. Check robots.txt\nrobots.txt tells crawlers which pages they may open. Make sure public pages are not blocked and internal areas such as the admin panel are closed. A small mistake in this file can keep an entire site out of the index.\n\n## 3. Write unique titles and descriptions\nEvery page should have a title of roughly 30–60 characters and a description of 70–160 characters. Do not reuse the same description across pages. A clear title helps people understand the page before they click.\n\n## 4. Use one H1 and structured subheadings\nEach page should have a single main heading. Use subheadings to divide the content into scannable sections. A consistent heading structure helps crawlers understand the topic instead of seeing a wall of words.\n\n## 5. Keep it fast and comfortable on phones\nUse reasonably sized images, load fonts efficiently, and avoid unnecessary scripts. Test on a mobile connection. Slow pages make visitors leave before they read anything.\n\n## 6. Connect pages to each other\nInternal links help crawlers find new pages and help visitors continue reading. Add articles to the navigation or footer, and link related articles from within the content. Descriptive link text is more useful than “click here”.\n\n## 7. Use canonical URLs and hreflang\nIf the site is available in several languages, set hreflang attributes so Google shows the right language version. Canonical URLs prevent similar pages from being treated as duplicates. Both are already standard on this site.\n\n## 8. Submit and monitor in Google Search Console\nRegister the property, verify ownership, and request indexing for important pages. Watch the coverage report for pages that are not indexed or have issues. Fix the cause instead of waiting without direction.\n\nIndexing is not a one-night race. When the site structure is tidy, the content is original, and pages link to each other, Google finds new pages faster and more consistently.",
+        "id": "Halaman baru tidak langsung muncul di hasil pencarian. Google perlu menemukannya, merayapi isinya, lalu memutuskan apakah halaman itu layak diindeks. Proses ini bisa dipercepat dengan fondasi teknis yang rapi.\n\n## 1. Pastikan sitemap.xml berisi halaman terbit\nSitemap membantu mesin pencari menemukan URL yang ingin Anda tampilkan. Sertakan beranda, layanan, portofolio, template yang sudah terbit, dan artikel. Jangan masukkan halaman admin, keranjang, atau URL uji. Kirim sitemap ke Google Search Console setelah situs diluncurkan.\n\n## 2. Periksa robots.txt\nFile robots.txt memberi tahu perayap halaman mana yang boleh dibuka. Pastikan halaman publik tidak terblokir dan area internal seperti panel admin ditutup. Kesalahan kecil di file ini bisa membuat seluruh situs tidak terindeks.\n\n## 3. Tulis judul dan deskripsi yang unik\nSetiap halaman sebaiknya punya judul sekitar 30–60 karakter dan deskripsi 70–160 karakter. Hindari menyalin deskripsi yang sama ke semua halaman. Judul yang jelas membantu pengguna memahami isi halaman sebelum mengkliknya.\n\n## 4. Gunakan satu H1 dan subjudul yang terstruktur\nSetiap halaman sebaiknya memiliki satu heading utama. Gunakan subjudul untuk membagi isi menjadi bagian yang mudah dipindai. Struktur heading yang konsisten membantu perayap memahami topik halaman, bukan sekadar kumpulan kata.\n\n## 5. Pastikan cepat dan nyaman di ponsel\nGunakan gambar dengan ukuran wajar, muat font secara efisien, dan hindari skrip yang tidak perlu. Uji di koneksi seluler. Halaman yang lambat membuat pengunjung pergi sebelum konten sempat dibaca.\n\n## 6. Hubungkan halaman satu sama lain\nTautan internal membantu perayap menemukan halaman baru dan membantu pengunjung melanjutkan bacaan. Cantumkan artikel di navigasi atau footer, dan tautkan artikel terkait dari dalam isi artikel. Tautan dengan teks yang deskriptif lebih berguna daripada tautan “klik di sini”.\n\n## 7. Gunakan URL kanonik dan hreflang\nJika situs tersedia dalam beberapa bahasa, pasang atribut hreflang agar Google menampilkan versi bahasa yang tepat. URL kanonik mencegah halaman yang mirip dianggap duplikat. Keduanya sudah menjadi standar di situs ini.\n\n## 8. Kirim dan pantau di Google Search Console\nDaftarkan properti, verifikasi kepemilikan, lalu minta pengindeksan untuk halaman penting. Pantau laporan cakupan untuk melihat halaman yang belum terindeks atau bermasalah. Perbaiki penyebabnya, bukan menunggu tanpa arah.\n\nPengindeksan bukan perlombaan satu malam. Jika struktur situs rapi, konten asli, dan halaman saling terhubung, Google akan menemukan halaman baru lebih cepat dan lebih konsisten."
+      },
+      "excerpt": {
+        "en": "Sitemaps, robots.txt, metadata, and internal links are the foundation for helping Google find and understand new pages. Here is the order to check.",
+        "id": "Sitemap, robots.txt, metadata, dan tautan internal adalah fondasi agar halaman baru ditemukan dan dipahami Google. Ini urutan pengecekannya."
+      },
+      "coverPath": "/previews/articles/article-seo-indexing.svg",
+      "publishedAt": "2026-11-08T09:00:00.000Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prd-b0bb9cc0-d12a-4ce0-9891-fec3e73e75dd",
+      "name": {
+        "en": "New template",
+        "id": "Property Ads Landing Page — SKYLINE PROPERTIES."
+      },
+      "slug": "template-baru",
+      "tech": {
+        "en": [
+          "Html"
+        ],
+        "id": [
+          "Html"
+        ]
+      },
+      "price": 299000,
+      "format": "html",
+      "status": "published",
+      "license": {
+        "en": "",
+        "id": ""
+      },
+      "summary": {
+        "en": "Desainnya berfokus pada konversi calon pembeli properti, dengan CTA Jadwalkan Kunjungan, formulir prospek, galeri rumah, pilihan unit dan harga, lokasi, serta tombol WhatsApp.",
+        "id": "Desainnya berfokus pada konversi calon pembeli properti, dengan CTA Jadwalkan Kunjungan, formulir prospek, galeri rumah, pilihan unit dan harga, lokasi, serta tombol WhatsApp."
+      },
+      "category": "landing-pages",
+      "currency": "IDR",
+      "featured": false,
+      "features": {
+        "en": [],
+        "id": []
+      },
+      "previews": [
+        "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/products/6da8b15a-50dc-4865-908b-20bca6d811a5.webp"
+      ],
+      "description": {
+        "en": "Desainnya berfokus pada konversi calon pembeli properti, dengan CTA Jadwalkan Kunjungan, formulir prospek, galeri rumah, pilihan unit dan harga, lokasi, serta tombol WhatsApp.",
+        "id": "Desainnya berfokus pada konversi calon pembeli properti, dengan CTA Jadwalkan Kunjungan, formulir prospek, galeri rumah, pilihan unit dan harga, lokasi, serta tombol WhatsApp."
+      },
+      "liveDemoUrl": null,
+      "purchaseUrl": null,
+      "compatibility": {
+        "en": [],
+        "id": []
+      },
+      "includedFiles": {
+        "en": [],
+        "id": []
+      },
+      "installRequirements": {
+        "en": [],
+        "id": []
+      }
+    },
+    {
+      "id": "prd-aurora",
+      "name": {
+        "en": "Aurora — SaaS Landing Page",
+        "id": "Aurora — Landing Page SaaS"
+      },
+      "slug": "aurora-saas-landing",
+      "tech": {
+        "en": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS"
+        ],
+        "id": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS"
+        ]
+      },
+      "price": 490000,
+      "format": "nextjs",
+      "status": "published",
+      "license": {
+        "en": "Single-project license. Directly reselling the template is not allowed.",
+        "id": "Lisensi tunggal proyek. Dilarang menjual ulang template secara langsung."
+      },
+      "summary": {
+        "en": "A modern SaaS landing page with a glassmorphism hero and pricing section.",
+        "id": "Landing page SaaS modern dengan hero glassmorphism dan section harga."
+      },
+      "category": "landing-pages",
+      "currency": "IDR",
+      "featured": true,
+      "features": {
+        "en": [
+          "Hero with CSS 3D illustration",
+          "Interactive pricing table",
+          "Newsletter form (client-side validation)",
+          "FAQ accordion"
+        ],
+        "id": [
+          "Hero dengan ilustrasi 3D CSS",
+          "Tabel harga interaktif",
+          "Form newsletter (validasi sisi klien)",
+          "FAQ accordion"
+        ]
+      },
+      "previews": [
+        "/previews/aurora-saas-landing.svg",
+        "/previews/aurora-saas-landing-2.svg"
+      ],
+      "description": {
+        "en": "Aurora is a landing page template for digital products and SaaS. It pairs a glass-themed hero with product highlights, feature lists, a pricing table, and a customizable FAQ. The section structure is arranged to guide visitors from product explanation to the call-to-action button.",
+        "id": "Aurora adalah template landing page untuk produk digital dan SaaS. Halaman ini memadukan hero bertema kaca dengan statistik produk, daftar fitur, tabel harga, dan FAQ yang siap dikustomisasi. Struktur section sudah disusun untuk memandu pengunjung dari penjelasan produk hingga tombol ajakan bertindak."
+      },
+      "liveDemoUrl": null,
+      "purchaseUrl": null,
+      "compatibility": {
+        "en": [
+          "All modern browsers",
+          "Responsive 320px–1920px"
+        ],
+        "id": [
+          "Semua browser modern",
+          "Responsif 320px–1920px"
+        ]
+      },
+      "includedFiles": {
+        "en": [
+          "Complete source code",
+          "Installation documentation",
+          "Color customization notes"
+        ],
+        "id": [
+          "Kode sumber lengkap",
+          "Dokumentasi penginstalan",
+          "Aktivitas kustomisasi warna"
+        ]
+      },
+      "installRequirements": {
+        "en": [
+          "Node.js 20+",
+          "npm or pnpm",
+          "Run npm install && npm run dev"
+        ],
+        "id": [
+          "Node.js 20+",
+          "npm atau pnpm",
+          "Jalankan npm install && npm run dev"
+        ]
+      }
+    },
+    {
+      "id": "prd-noxcorp",
+      "name": {
+        "en": "NoxCorp — Business Profile Website",
+        "id": "NoxCorp — Website Profil Perusahaan"
+      },
+      "slug": "noxcorp-business",
+      "tech": {
+        "en": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS"
+        ],
+        "id": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS"
+        ]
+      },
+      "price": 790000,
+      "format": "nextjs",
+      "status": "published",
+      "license": {
+        "en": "Single-project license.",
+        "id": "Lisensi tunggal proyek."
+      },
+      "summary": {
+        "en": "A corporate company website with services and team pages.",
+        "id": "Website perusahaan korporat dengan halaman layanan dan tim."
+      },
+      "category": "business-websites",
+      "currency": "IDR",
+      "featured": false,
+      "features": {
+        "en": [
+          "Multi-route pages",
+          "Service cards",
+          "Short case studies",
+          "Sticky header"
+        ],
+        "id": [
+          "Halaman multi-rute",
+          "Kartu layanan",
+          "Studi kasus singkat",
+          "Header sticky"
+        ]
+      },
+      "previews": [
+        "/previews/noxcorp-business.svg",
+        "/previews/noxcorp-business-2.svg"
+      ],
+      "description": {
+        "en": "NoxCorp is a multi-page template for service companies. It includes home, about, services, and contact pages with simple navigation. Typography and grids are tuned for readable corporate content.",
+        "id": "NoxCorp adalah template multi-halaman untuk perusahaan jasa. Termasuk halaman beranda, tentang, layanan, dan kontak dengan struktur navigasi sederhana. Tipografi dan grid dioptimalkan untuk keterbacaan konten korporat."
+      },
+      "liveDemoUrl": null,
+      "purchaseUrl": null,
+      "compatibility": {
+        "en": [
+          "All modern browsers",
+          "Responsive 320px–1920px"
+        ],
+        "id": [
+          "Semua browser modern",
+          "Responsif 320px–1920px"
+        ]
+      },
+      "includedFiles": {
+        "en": [
+          "Complete source code",
+          "Installation documentation"
+        ],
+        "id": [
+          "Kode sumber lengkap",
+          "Dokumentasi penginstalan"
+        ]
+      },
+      "installRequirements": {
+        "en": [
+          "Node.js 20+",
+          "npm or pnpm",
+          "Run npm install && npm run dev"
+        ],
+        "id": [
+          "Node.js 20+",
+          "npm atau pnpm",
+          "Jalankan npm install && npm run dev"
+        ]
+      }
+    },
+    {
+      "id": "prd-glassfolio",
+      "name": {
+        "en": "Glassfolio — Portfolio Template",
+        "id": "Glassfolio — Template Portofolio"
+      },
+      "slug": "glassfolio-portfolio",
+      "tech": {
+        "en": [
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ],
+        "id": [
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ]
+      },
+      "price": 350000,
+      "format": "html",
+      "status": "published",
+      "license": {
+        "en": "Single-project license.",
+        "id": "Lisensi tunggal proyek."
+      },
+      "summary": {
+        "en": "A one-page portfolio with glass effects and a project grid.",
+        "id": "Portofolio satu halaman dengan efek kaca dan grid proyek."
+      },
+      "category": "portfolio",
+      "currency": "IDR",
+      "featured": false,
+      "features": {
+        "en": [
+          "Glass project grid",
+          "Smooth scroll navigation",
+          "Automatic dark mode"
+        ],
+        "id": [
+          "Grid proyek kaca",
+          "Navigasi smooth scroll",
+          "Mode gelap otomatis"
+        ]
+      },
+      "previews": [
+        "/previews/glassfolio-portfolio.svg",
+        "/previews/glassfolio-portfolio-2.svg"
+      ],
+      "description": {
+        "en": "Glassfolio presents work in a glass card grid with subtle hover effects. It suits designers, developers, and creators. Project content is managed through a single simple data file.",
+        "id": "Glassfolio menampilkan karya di grid kartu kaca dengan hover halus. Cocok untuk desainer, developer, dan kreator. Konten proyek dikelola lewat satu file data sederhana."
+      },
+      "liveDemoUrl": null,
+      "purchaseUrl": null,
+      "compatibility": {
+        "en": [
+          "All modern browsers",
+          "Can be hosted as static files anywhere"
+        ],
+        "id": [
+          "Semua browser modern",
+          "Bisa di-hosting statis di mana saja"
+        ]
+      },
+      "includedFiles": {
+        "en": [
+          "HTML/CSS/JS files",
+          "Short documentation"
+        ],
+        "id": [
+          "File HTML/CSS/JS",
+          "Dokumentasi singkat"
+        ]
+      },
+      "installRequirements": {
+        "en": [
+          "No build needed — upload to any static host"
+        ],
+        "id": [
+          "Tidak butuh build — unggah ke hosting statis"
+        ]
+      }
+    },
+    {
+      "id": "prd-lumenstore",
+      "name": {
+        "en": "Lumen Store — Modern Storefront",
+        "id": "Lumen Store — Storefront Modern"
+      },
+      "slug": "lumen-store",
+      "tech": {
+        "en": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS"
+        ],
+        "id": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS"
+        ]
+      },
+      "price": 1250000,
+      "format": "nextjs",
+      "status": "published",
+      "license": {
+        "en": "Single-project license.",
+        "id": "Lisensi tunggal proyek."
+      },
+      "summary": {
+        "en": "A product catalog storefront with filters and a detail page.",
+        "id": "Storefront katalog produk dengan filter dan halaman detail."
+      },
+      "category": "ecommerce",
+      "currency": "IDR",
+      "featured": true,
+      "features": {
+        "en": [
+          "Category filter & search",
+          "Product detail page",
+          "WhatsApp checkout button"
+        ],
+        "id": [
+          "Filter kategori & pencarian",
+          "Halaman detail produk",
+          "Tombol checkout ke WhatsApp"
+        ]
+      },
+      "previews": [
+        "/previews/lumen-store.svg",
+        "/previews/lumen-store-2.svg"
+      ],
+      "description": {
+        "en": "Lumen Slider is a print-on-demand storefront for poster frames. Category filtering and search are built on a local data layer, ready to be moved to a backend.",
+        "id": "Lumen Slider adalah storefront cetak-on-demand dengan katalog bingkai poster. Sistem filter kategori dan pencarian dibangun berbasis data lokal yang mudah dipindahkan ke backend."
+      },
+      "liveDemoUrl": null,
+      "purchaseUrl": null,
+      "compatibility": {
+        "en": [
+          "All modern browsers",
+          "Responsive 320px–1920px"
+        ],
+        "id": [
+          "Semua browser modern",
+          "Responsif 320px–1920px"
+        ]
+      },
+      "includedFiles": {
+        "en": [
+          "Complete source code",
+          "Sample product data",
+          "Installation documentation"
+        ],
+        "id": [
+          "Kode sumber lengkap",
+          "Data produk contoh",
+          "Dokumentasi penginstalan"
+        ]
+      },
+      "installRequirements": {
+        "en": [
+          "Node.js 20+",
+          "npm or pnpm",
+          "Run npm install && npm run dev"
+        ],
+        "id": [
+          "Node.js 20+",
+          "npm atau pnpm",
+          "Jalankan npm install && npm run dev"
+        ]
+      }
+    },
+    {
+      "id": "prd-eventide",
+      "name": {
+        "en": "Eventide — Event Landing",
+        "id": "Eventide — Landing Event"
+      },
+      "slug": "eventide-event",
+      "tech": {
+        "en": [
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ],
+        "id": [
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ]
+      },
+      "price": 420000,
+      "format": "html",
+      "status": "draft",
+      "license": {
+        "en": "Single-project license.",
+        "id": "Lisensi tunggal proyek."
+      },
+      "summary": {
+        "en": "An event landing page with a countdown and agenda.",
+        "id": "Landing page event dengan countdown dan agenda sesi."
+      },
+      "category": "landing-pages",
+      "currency": "IDR",
+      "featured": false,
+      "features": {
+        "en": [
+          "Countdown script",
+          "Agenda grid",
+          "Registration form (mailto)"
+        ],
+        "id": [
+          "Countdown script",
+          "Grid agenda",
+          "Form pendaftaran (mailto)"
+        ]
+      },
+      "previews": [
+        "/previews/eventide-event.svg",
+        "/previews/eventide-event-2.svg"
+      ],
+      "description": {
+        "en": "Eventide is designed for conferences and workshops: a session agenda, speaker cards, and a registration section. Event name, dates, and schedule can be changed from one config file.",
+        "id": "Eventide dirancang untuk konferensi dan workshop: agenda sesi, kartu pembicara, dan section pendaftaran. Nama event, tanggal, dan jadwal dapat diganti dari satu file konfigurasi."
+      },
+      "liveDemoUrl": null,
+      "purchaseUrl": null,
+      "compatibility": {
+        "en": [
+          "All modern browsers",
+          "Can be hosted as static files anywhere"
+        ],
+        "id": [
+          "Semua browser modern",
+          "Bisa di-hosting statis di mana saja"
+        ]
+      },
+      "includedFiles": {
+        "en": [
+          "HTML/CSS/JS files",
+          "Event config file"
+        ],
+        "id": [
+          "File HTML/CSS/JS",
+          "File konfigurasi event"
+        ]
+      },
+      "installRequirements": {
+        "en": [
+          "No build needed — upload to any static host"
+        ],
+        "id": [
+          "Tidak butuh build — unggah ke hosting statis"
+        ]
+      }
+    },
+    {
+      "id": "prd-monogram",
+      "name": {
+        "en": "Monogram — Figma UI Kit",
+        "id": "Monogram — UI Kit Figma"
+      },
+      "slug": "monogram-ui-kit",
+      "tech": {
+        "en": [
+          "Figma",
+          "Auto Layout",
+          "Variables"
+        ],
+        "id": [
+          "Figma",
+          "Auto Layout",
+          "Variables"
+        ]
+      },
+      "price": 299000,
+      "format": "figma",
+      "status": "published",
+      "license": {
+        "en": "Personal/commercial license for 1 team.",
+        "id": "Lisensi penggunaan pribadi/komersial 1 tim."
+      },
+      "summary": {
+        "en": "A Figma UI kit with 40+ web-ready components.",
+        "id": "Paket UI kit Figma dengan 40+ komponen siap desain web."
+      },
+      "category": "portfolio",
+      "currency": "IDR",
+      "featured": false,
+      "features": {
+        "en": [
+          "40+ components",
+          "Complete text styles",
+          "4pt grid"
+        ],
+        "id": [
+          "40+ komponen",
+          "Style teks lengkap",
+          "Grid 4pt"
+        ]
+      },
+      "previews": [
+        "/previews/monogram-ui-kit.svg",
+        "/previews/monogram-ui-kit-2.svg"
+      ],
+      "description": {
+        "en": "Monogram is a Figma file with premium purple-and-white styled components: buttons, cards, navigation, and grids. Every component uses easily changeable color variables.",
+        "id": "Monogram adalah berkas Figma berisi komponen bergaya premium ungu-putih: tombol, kartu, navigasi, dan grid. Setiap komponen memakai variable warna yang mudah diubah."
+      },
+      "liveDemoUrl": null,
+      "purchaseUrl": null,
+      "compatibility": {
+        "en": [
+          "Figma desktop & web"
+        ],
+        "id": [
+          "Figma desktop & web"
+        ]
+      },
+      "includedFiles": {
+        "en": [
+          ".fig file",
+          "Variable usage guide"
+        ],
+        "id": [
+          "File .fig",
+          "Panduan penggunaan variable"
+        ]
+      },
+      "installRequirements": {
+        "en": [
+          "A free Figma account is enough",
+          "Import the .fig file into your workspace"
+        ],
+        "id": [
+          "Akun Figma gratis sudah cukup",
+          "Impor file .fig ke workspace"
+        ]
+      }
+    }
+  ],
+  "services": [
+    {
+      "id": "svc-landing",
+      "name": {
+        "en": "Landing Page Development",
+        "id": "Pembuatan Landing Page"
+      },
+      "items": {
+        "en": [
+          "Conversion-focused copy structure",
+          "Mobile-first design",
+          "Lead form integration"
+        ],
+        "id": [
+          "Copy struktur konversi",
+          "Desain mobile-first",
+          "Integrasi form leads"
+        ]
+      },
+      "phase": "before-launch",
+      "excludes": {
+        "en": [
+          "Advertising spend",
+          "Photo and video production"
+        ],
+        "id": [
+          "Biaya iklan",
+          "Produksi foto dan video"
+        ]
+      },
+      "description": {
+        "en": "Conversion pages for campaigns, digital products, and launches.",
+        "id": "Halaman konversi untuk kampanye, produk digital, dan peluncuran."
+      }
+    },
+    {
+      "id": "svc-business",
+      "name": {
+        "en": "Business & Company Websites",
+        "id": "Website Bisnis & Profil Perusahaan"
+      },
+      "items": {
+        "en": [
+          "Clear page structure",
+          "Basic SEO included",
+          "Fast performance"
+        ],
+        "id": [
+          "Struktur halaman jelas",
+          "SEO dasar terpasang",
+          "Performa cepat"
+        ]
+      },
+      "phase": "before-launch",
+      "excludes": {
+        "en": [
+          "Hosting and domain",
+          "Monthly maintenance"
+        ],
+        "id": [
+          "Hosting dan domain",
+          "Pemeliharaan bulanan"
+        ]
+      },
+      "description": {
+        "en": "Complete company sites that build brand credibility.",
+        "id": "Situs perusahaan lengkap yang membangun kredibilitas brand."
+      }
+    },
+    {
+      "id": "svc-redesign",
+      "name": {
+        "en": "Website Redesign",
+        "id": "Redesign Website"
+      },
+      "items": {
+        "en": [
+          "Old look audit",
+          "Conversion page priority",
+          "Content migration"
+        ],
+        "id": [
+          "Audit tampilan lama",
+          "Prioritas halaman konversi",
+          "Migrasi konten"
+        ]
+      },
+      "phase": "before-launch",
+      "excludes": {
+        "en": [
+          "Full content rewrite",
+          "System migration outside the website"
+        ],
+        "id": [
+          "Penulisan ulang seluruh konten",
+          "Migrasi sistem di luar website"
+        ]
+      },
+      "description": {
+        "en": "Visual and structural refresh without losing existing content.",
+        "id": "Penyegaran visual dan struktur tanpa kehilangan konten lama."
+      }
+    },
+    {
+      "id": "svc-uiux",
+      "name": {
+        "en": "UI/UX Design",
+        "id": "Desain UI/UX"
+      },
+      "items": {
+        "en": [
+          "Interactive Figma prototypes",
+          "Component system",
+          "Complete handoff"
+        ],
+        "id": [
+          "Prototipe Figma interaktif",
+          "Sistem komponen",
+          "Handoff lengkap"
+        ]
+      },
+      "phase": "before-launch",
+      "excludes": {
+        "en": [
+          "Code implementation",
+          "Large-scale user research"
+        ],
+        "id": [
+          "Implementasi kode",
+          "Riset pengguna skala besar"
+        ]
+      },
+      "description": {
+        "en": "Interface design from wireframes to final UI in Figma.",
+        "id": "Desain antarmuka dari wireframe sampai UI final di Figma."
+      }
+    },
+    {
+      "id": "svc-custom",
+      "name": {
+        "en": "Template Customization",
+        "id": "Kustomisasi Template"
+      },
+      "items": {
+        "en": [
+          "Color & typography swap",
+          "Section adjustments",
+          "Deploy assistance"
+        ],
+        "id": [
+          "Ganti tema warna & tipografi",
+          "Penyesuaian section",
+          "Deploy bantuan"
+        ]
+      },
+      "phase": "before-launch",
+      "excludes": {
+        "en": [
+          "Template license",
+          "Hosting and domain costs"
+        ],
+        "id": [
+          "Lisensi template",
+          "Biaya hosting dan domain"
+        ]
+      },
+      "description": {
+        "en": "Adapting a Websensial template to your brand and content.",
+        "id": "Menyesuaikan template Websensial dengan brand dan konten Anda."
+      }
+    }
+  ],
+  "tracking": {
+    "googleAdsId": null,
+    "metaPixelId": null,
+    "gaMeasurementId": null,
+    "bingSiteVerification": null,
+    "googleSiteVerification": null,
+    "metaDomainVerification": null,
+    "additionalVerifications": []
+  },
+  "portfolio": [
+    {
+      "id": "pf-ae9b7aaa-5b95-4657-b465-270e3d3b77da",
+      "kind": "concept",
+      "name": {
+        "en": "Glowra Skincare",
+        "id": "Glowra Skincare"
+      },
+      "slug": "glowra-skincare",
+      "tech": [
+        "Web Design",
+        "E-commerce",
+        "Skincare"
+      ],
+      "price": null,
+      "filter": "website",
+      "launch": {
+        "after": {
+          "en": [],
+          "id": []
+        },
+        "before": {
+          "en": [],
+          "id": []
+        }
+      },
+      "category": {
+        "en": "Skincare",
+        "id": "Skincare"
+      },
+      "currency": "IDR",
+      "features": {
+        "en": [
+          "• Pembeli mendapat panduan rutinitas lima langkah, sehingga belanja terasa lebih mudah",
+          "• Rutinitas yang berulang membuat pelanggan kembali untuk membeli produk lanjutan",
+          "• Diskon pembelian pertama dan pelacakan pengiriman meningkatkan kepercayaan",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman kategori dan panduan, misalnya \"rutinitas skincare pemula\"",
+          "• Loading cepat dengan foto produk yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman produk yang fokus pada pembelian pertama",
+          "• Beranda, Shop, New Arrivals, Best Sellers, Collections, Tentang Kami, Kontak"
+        ],
+        "id": [
+          "• Pembeli mendapat panduan rutinitas lima langkah, sehingga belanja terasa lebih mudah",
+          "• Rutinitas yang berulang membuat pelanggan kembali untuk membeli produk lanjutan",
+          "• Diskon pembelian pertama dan pelacakan pengiriman meningkatkan kepercayaan",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman kategori dan panduan, misalnya \"rutinitas skincare pemula\"",
+          "• Loading cepat dengan foto produk yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman produk yang fokus pada pembelian pertama",
+          "• Beranda, Shop, New Arrivals, Best Sellers, Collections, Tentang Kami, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Koleksi dibagi per kategori (skincare, makeup, wajah, mata, bibir). Panduan \"Glowra Ritual\" dengan lima langkah menjadi alasan untuk kembali. Best seller dan penawaran 15% untuk pembelian pertama mendorong transaksi pertama.",
+          "id": "Koleksi dibagi per kategori (skincare, makeup, wajah, mata, bibir). Panduan \"Glowra Ritual\" dengan lima langkah menjadi alasan untuk kembali. Best seller dan penawaran 15% untuk pembelian pertama mendorong transaksi pertama."
+        },
+        "challenge": {
+          "en": "Pembeli ingin kulit lebih sehat, tetapi bingung urutan rutinitas dan produk yang cocok.\nMenawarkan panduan, bukan hanya katalog. Pembeli diajak mengikuti rutinitas, sehingga belanja terasa lebih mudah dan berulang.",
+          "id": "Pembeli ingin kulit lebih sehat, tetapi bingung urutan rutinitas dan produk yang cocok.\nMenawarkan panduan, bukan hanya katalog. Pembeli diajak mengikuti rutinitas, sehingga belanja terasa lebih mudah dan berulang."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Website skincare premium yang menonjolkan rutinitas sederhana dan koleksi lengkap, dari perawatan kulit sampai makeup.",
+        "id": "Website skincare premium yang menonjolkan rutinitas sederhana dan koleksi lengkap, dari perawatan kulit sampai makeup."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/1dd8a82c-24fb-4142-8d7a-e058af442269.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-veillee",
+      "kind": "concept",
+      "name": {
+        "en": "Skyline Properties",
+        "id": "Skyline Properties"
+      },
+      "slug": "skyline-properties-website",
+      "tech": [
+        "Web Design",
+        "Creative Direction",
+        "Real Estate"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Properti",
+        "id": "Properti"
+      },
+      "features": {
+        "en": [
+          "• Pembeli bisa membandingkan properti dengan harga dan spesifikasi yang jelas dalam beberapa klik",
+          "• Kesan premium dan tepercaya membantu meyakinkan pembeli bernilai tinggi",
+          "• Jalur langsung ke jadwal konsultasi dan kunjungan memperpendek jarak ke keputusan",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman yang fokus pada konversi",
+          "• Struktur halaman (7): Beranda, Properti, Tentang Kami, Investasi, Galeri, Berita, Kontak"
+        ],
+        "id": [
+          "• Pembeli bisa membandingkan properti dengan harga dan spesifikasi yang jelas dalam beberapa klik",
+          "• Kesan premium dan tepercaya membantu meyakinkan pembeli bernilai tinggi",
+          "• Jalur langsung ke jadwal konsultasi dan kunjungan memperpendek jarak ke keputusan",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman yang fokus pada konversi",
+          "• Struktur halaman (7): Beranda, Properti, Tentang Kami, Investasi, Galeri, Berita, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "Menghasilkan konsep website pemasaran perumahan yang menyajikan informasi proyek secara lebih terstruktur dan menarik.",
+          "id": "Menghasilkan konsep website pemasaran perumahan yang menyajikan informasi proyek secara lebih terstruktur dan menarik."
+        },
+        "approach": {
+          "en": "Menggunakan pendekatan desain properti residensial yang mengutamakan visual arsitektur, informasi kawasan, dan penyajian tipe hunian secara sistematis. Struktur website diarahkan agar calon pembeli dapat memahami proyek secara bertahap, mulai dari pengenalan kawasan hingga mengajukan konsultasi.",
+          "id": "Menggunakan pendekatan desain properti residensial yang mengutamakan visual arsitektur, informasi kawasan, dan penyajian tipe hunian secara sistematis. Struktur website diarahkan agar calon pembeli dapat memahami proyek secara bertahap, mulai dari pengenalan kawasan hingga mengajukan konsultasi."
+        },
+        "solution": {
+          "en": "Website dengan tampilan gelap dan aksen emas yang menonjolkan kesan premium. Halaman utama menampilkan properti unggulan dengan harga dan spesifikasi yang jelas, dikelompokkan berdasarkan kategori residensial, apartemen, villa, dan komersial. Setiap properti punya halaman detail, dan ada jalur langsung untuk menjadwalkan konsultasi atau kunjungan.",
+          "id": "Website dengan tampilan gelap dan aksen emas yang menonjolkan kesan premium. Halaman utama menampilkan properti unggulan dengan harga dan spesifikasi yang jelas, dikelompokkan berdasarkan kategori residensial, apartemen, villa, dan komersial. Setiap properti punya halaman detail, dan ada jalur langsung untuk menjadwalkan konsultasi atau kunjungan."
+        },
+        "challenge": {
+          "en": "Calon pembeli properti di kota besar sulit membandingkan lokasi, harga, dan spesifikasi dari berbagai pilihan. Pembeli yang mencari hunian maupun investasi perlu kesan kepercayaan yang kuat sebelum menghubungi pengembang.",
+          "id": "Calon pembeli properti di kota besar sulit membandingkan lokasi, harga, dan spesifikasi dari berbagai pilihan. Pembeli yang mencari hunian maupun investasi perlu kesan kepercayaan yang kuat sebelum menghubungi pengembang."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Situs web properti premium dengan nuansa gelap dan aksen emas. Menampilkan hunian, apartemen, villa, dan properti komersial dengan kesan investasi yang kuat.",
+        "id": "Situs web properti premium dengan nuansa gelap dan aksen emas. Menampilkan hunian, apartemen, villa, dan properti komersial dengan kesan investasi yang kuat."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/cfe78b7b-646b-4667-95df-90ea79c51a91.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-tempo",
+      "kind": "concept",
+      "name": {
+        "en": "Wanderly Tour & Travel",
+        "id": "Wanderly Tour & Travel"
+      },
+      "slug": "wanderly-travel",
+      "tech": [
+        "Web Design",
+        "Travel",
+        "Booking"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Travel",
+        "id": "Travel"
+      },
+      "features": {
+        "en": [
+          "• Pengunjung bisa mencari tur sesuai tanggal dan jumlah traveler dalam satu langkah",
+          "• Harga \"mulai dari\" yang terlihat membantu pengunjung membandingkan paket sejak awal",
+          "• Jaminan harga terbaik, dukungan 24/7, dan booking fleksibel mengurangi keraguan",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman destinasi, misalnya \"tur Bali\" dan \"paket Santorini\"",
+          "• Loading cepat dengan foto destinasi yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman destinasi yang fokus pada pemesanan",
+          "• Beranda, Destinasi, Tur, Tentang Kami, Blog, Kontak"
+        ],
+        "id": [
+          "• Pengunjung bisa mencari tur sesuai tanggal dan jumlah traveler dalam satu langkah",
+          "• Harga \"mulai dari\" yang terlihat membantu pengunjung membandingkan paket sejak awal",
+          "• Jaminan harga terbaik, dukungan 24/7, dan booking fleksibel mengurangi keraguan",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman destinasi, misalnya \"tur Bali\" dan \"paket Santorini\"",
+          "• Loading cepat dengan foto destinasi yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman destinasi yang fokus pada pemesanan",
+          "• Beranda, Destinasi, Tur, Tentang Kami, Blog, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "Isi jumlah booking tur atau inquiry",
+          "id": "Isi jumlah booking tur atau inquiry"
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Pencarian tur di bawah hero. Destinasi populer tampil dengan rating dan harga \"mulai dari\". Empat jaminan (harga terbaik, mitra terpercaya, dukungan 24/7, booking fleksibel) menjawab keraguan sebelum pengunjung bertanya.",
+          "id": "Pencarian tur di bawah hero. Destinasi populer tampil dengan rating dan harga \"mulai dari\". Empat jaminan (harga terbaik, mitra terpercaya, dukungan 24/7, booking fleksibel) menjawab keraguan sebelum pengunjung bertanya."
+        },
+        "challenge": {
+          "en": "Wisatawan ingin liburan tanpa repot, tetapi sulit menemukan paket dengan harga jelas dan terpercaya.",
+          "id": "Wisatawan ingin liburan tanpa repot, tetapi sulit menemukan paket dengan harga jelas dan terpercaya."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Website biro perjalanan yang menjual pengalaman liburan terkurasi, dengan pencarian tur dan jaminan layanan yang menenangkan.",
+        "id": "Website biro perjalanan yang menjual pengalaman liburan terkurasi, dengan pencarian tur dan jaminan layanan yang menenangkan."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/3f5837e2-4b6b-4ab5-95df-ad352d682969.webp",
+      "previewPaths": [
+        "/previews/portfolio/tempo-chess.svg"
+      ]
+    },
+    {
+      "id": "pf-tessera",
+      "kind": "concept",
+      "name": {
+        "en": "Sora And Soul Ecommerce",
+        "id": "Sora And Soul Ecommerce"
+      },
+      "slug": "tessera-interior-objects",
+      "tech": [
+        "E-commerce",
+        "Art Direction",
+        "UI/UX"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Objects",
+        "id": "Objek"
+      },
+      "features": {
+        "en": [
+          "Curated architectural grid",
+          "Calm product presentation",
+          "Home-object storefront"
+        ],
+        "id": [
+          "Grid arsitektural yang terkurasi",
+          "Presentasi produk yang tenang",
+          "Etalase objek rumah"
+        ]
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "konsep website e-commerce modern yang dirancang untuk bisnis retail dan brand yang ingin menjual produk secara online melalui toko digital milik sendiri.\n\nWebsite ini menghadirkan pengalaman belanja yang praktis, nyaman, dan profesional. Pengunjung dapat menjelajahi berbagai kategori produk, melihat informasi dan detail barang, memilih varian, memasukkan produk ke keranjang, hingga menyelesaikan pembelian melalui proses checkout.\n\nDengan desain visual yang bersih, katalog produk yang terorganisir, dan navigasi yang mudah digunakan, VELORA STORE membantu bisnis membangun identitas brand, memperluas jangkauan pasar, serta meningkatkan penjualan secara online.",
+        "id": "konsep website e-commerce modern yang dirancang untuk bisnis retail dan brand yang ingin menjual produk secara online melalui toko digital milik sendiri.\n\nWebsite ini menghadirkan pengalaman belanja yang praktis, nyaman, dan profesional. Pengunjung dapat menjelajahi berbagai kategori produk, melihat informasi dan detail barang, memilih varian, memasukkan produk ke keranjang, hingga menyelesaikan pembelian melalui proses checkout.\n\nDengan desain visual yang bersih, katalog produk yang terorganisir, dan navigasi yang mudah digunakan, VELORA STORE membantu bisnis membangun identitas brand, memperluas jangkauan pasar, serta meningkatkan penjualan secara online."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/7957f609-e7af-42d1-9704-c30ee3905a81.webp",
+      "previewPaths": [
+        "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/3415d80a-152b-47ce-9bf6-cd7f937a5614.webp"
+      ]
+    },
+    {
+      "id": "pf-oddpress",
+      "kind": "concept",
+      "name": {
+        "en": "MediLife Clinic & Hospital",
+        "id": "MediLife Clinic & Hospital"
+      },
+      "slug": "medilife-clinic",
+      "tech": [
+        "Web Design",
+        "Healthcare UX",
+        "Booking"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Kesehatan",
+        "id": "Kesehatan"
+      },
+      "features": {
+        "en": [
+          "• Pasien bisa membuat janji dokter dalam hitungan menit, tanpa menelepon",
+          "• Pencarian spesialis yang tepat mengurangi kebingungan dan pasien tidak salah tujuan",
+          "• Layanan yang tertata jelas membuat rumah sakit terlihat profesional dan siap melayani",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman yang fokus pada konversi",
+          "• Beranda, Tentang Kami, Layanan, Dokter, Blog, Kontak"
+        ],
+        "id": [
+          "• Pasien bisa membuat janji dokter dalam hitungan menit, tanpa menelepon",
+          "• Pencarian spesialis yang tepat mengurangi kebingungan dan pasien tidak salah tujuan",
+          "• Layanan yang tertata jelas membuat rumah sakit terlihat profesional dan siap melayani",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman yang fokus pada konversi",
+          "• Beranda, Tentang Kami, Layanan, Dokter, Blog, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Form janji dengan pilihan spesialisasi, tanggal, dan jam. Layanan umum, spesialis, gigi, laboratorium, dan farmasi tampil sebagai kartu yang mudah dipindai. Nuansa hijau lembut membuat pengunjung merasa tenang.",
+          "id": "Form janji dengan pilihan spesialisasi, tanggal, dan jam. Layanan umum, spesialis, gigi, laboratorium, dan farmasi tampil sebagai kartu yang mudah dipindai. Nuansa hijau lembut membuat pengunjung merasa tenang."
+        },
+        "challenge": {
+          "en": "Pasien sering bingung memilih spesialis dan kesulitan membuat janji dengan cepat.",
+          "id": "Pasien sering bingung memilih spesialis dan kesulitan membuat janji dengan cepat."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Website klinik dan rumah sakit modern yang memudahkan pasien membuat janji dengan dokter, menemukan spesialis yang tepat, dan memahami layanan sejak kunjungan pertama.",
+        "id": "Website klinik dan rumah sakit modern yang memudahkan pasien membuat janji dengan dokter, menemukan spesialis yang tepat, dan memahami layanan sejak kunjungan pertama."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/68b24570-8ede-4982-8c87-6510a0efb3ec.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-ficelle",
+      "kind": "concept",
+      "name": {
+        "en": "Lumière Furniture & Interior",
+        "id": "Lumière Furniture & Interior"
+      },
+      "slug": "lumiere-interior",
+      "tech": [
+        "Web Design",
+        "Art Direction",
+        "Furniture"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Furnitur & Interior",
+        "id": "Furnitur & Interior"
+      },
+      "features": {
+        "en": [
+          "• Pengunjung bisa membayangkan hasilnya di ruangan sendiri, sehingga lebih yakin membeli",
+          "• Koleksi per ruangan memudahkan pembeli menemukan apa yang dibutuhkan",
+          "• Konsultasi desain bisa dijadwalkan langsung dari website, menghasilkan lead yang lebih serius",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman yang fokus pada konversi",
+          "• Beranda, Koleksi, Proyek, Tentang Kami, Blog, Kontak"
+        ],
+        "id": [
+          "• Pengunjung bisa membayangkan hasilnya di ruangan sendiri, sehingga lebih yakin membeli",
+          "• Koleksi per ruangan memudahkan pembeli menemukan apa yang dibutuhkan",
+          "• Konsultasi desain bisa dijadwalkan langsung dari website, menghasilkan lead yang lebih serius",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman yang fokus pada konversi",
+          "• Beranda, Koleksi, Proyek, Tentang Kami, Blog, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Koleksi dibagi per ruangan (ruang tamu, kamar tidur, ruang makan, kantor). Koleksi unggulan ditampilkan sebagai kartu besar, dan tombol konsultasi selalu terlihat.",
+          "id": "Koleksi dibagi per ruangan (ruang tamu, kamar tidur, ruang makan, kantor). Koleksi unggulan ditampilkan sebagai kartu besar, dan tombol konsultasi selalu terlihat."
+        },
+        "challenge": {
+          "en": "Pengunjung tertarik, tetapi belum yakin gaya dan ukuran mana yang cocok untuk ruangannya.",
+          "id": "Pengunjung tertarik, tetapi belum yakin gaya dan ukuran mana yang cocok untuk ruangannya."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Website furnitur dan jasa interior yang menjual gaya hidup hunian nyaman dan elegan, dari koleksi siap pakai sampai desain custom.",
+        "id": "Website furnitur dan jasa interior yang menjual gaya hidup hunian nyaman dan elegan, dari koleksi siap pakai sampai desain custom."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/60a612d4-5a5d-4446-881b-2a329aadf165.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-passeline",
+      "kind": "concept",
+      "name": {
+        "en": "The Ocean Resort & Villas",
+        "id": "The Ocean Resort & Villas"
+      },
+      "slug": "the-ocean-resort",
+      "tech": [
+        "Resor & Hospitality"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Resor & Hospitality",
+        "id": "Resor & Hospitality"
+      },
+      "features": {
+        "en": [
+          "• Pengunjung bisa membayangkan hasilnya di ruangan sendiri, sehingga lebih yakin membeli",
+          "• Koleksi per ruangan memudahkan pembeli menemukan apa yang dibutuhkan",
+          "• Konsultasi desain bisa dijadwalkan langsung dari website, menghasilkan lead yang lebih serius",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman yang fokus pada konversi",
+          "• Beranda, Koleksi, Proyek, Tentang Kami, Blog, Kontak"
+        ],
+        "id": [
+          "• Pengunjung bisa membayangkan hasilnya di ruangan sendiri, sehingga lebih yakin membeli",
+          "• Koleksi per ruangan memudahkan pembeli menemukan apa yang dibutuhkan",
+          "• Konsultasi desain bisa dijadwalkan langsung dari website, menghasilkan lead yang lebih serius",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman yang fokus pada konversi",
+          "• Beranda, Koleksi, Proyek, Tentang Kami, Blog, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Formulir pencarian (destinasi, check-in, check-out, tamu) ada di bawah hero. Video \"Experience the Beauty\" membantu tamu merasakan suasananya. Destinasi unggulan seperti Bali, Maladewa, dan Santorini tampil dengan kartu visual.",
+          "id": "Formulir pencarian (destinasi, check-in, check-out, tamu) ada di bawah hero. Video \"Experience the Beauty\" membantu tamu merasakan suasananya. Destinasi unggulan seperti Bali, Maladewa, dan Santorini tampil dengan kartu visual."
+        },
+        "challenge": {
+          "en": "Tamu ingin langsung melihat destinasi dan ketersediaan, tetapi harus mencari di banyak halaman.",
+          "id": "Tamu ingin langsung melihat destinasi dan ketersediaan, tetapi harus mencari di banyak halaman."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Website resor mewah tepi laut yang menjual pengalaman menginap, bukan sekadar kamar. Pencarian tanggal dan tamu langsung tersedia di halaman depan.",
+        "id": "Website resor mewah tepi laut yang menjual pengalaman menginap, bukan sekadar kamar. Pencarian tanggal dan tamu langsung tersedia di halaman depan."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/4ce6ec12-a6d5-4e95-b71c-2ba0bda6b81d.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-ecrin",
+      "kind": "concept",
+      "name": {
+        "en": "Lumière Beauty",
+        "id": "Lumière Beauty"
+      },
+      "slug": "lumiere-beauty",
+      "tech": [
+        "Web Design",
+        "E-commerce",
+        "Beauty •"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Kecantikan",
+        "id": "Kecantikan"
+      },
+      "features": {
+        "en": [
+          "• Pembeli bisa menemukan produk sesuai kebutuhan kulit lewat kategori yang jelas",
+          "• Rating dan ulasan membangun kepercayaan sebelum pembelian pertama",
+          "• Diskon pembeli pertama dan newsletter membantu membangun daftar pelanggan jangka panjang",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar produk yang dioptimalkan, penting untuk toko online di ponsel",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman produk yang fokus pada pembelian",
+          "• Beranda, Shop, Skincare, Body Care, Set & Bundles, Tentang Kami, Jurnal, Kontak"
+        ],
+        "id": [
+          "• Pembeli bisa menemukan produk sesuai kebutuhan kulit lewat kategori yang jelas",
+          "• Rating dan ulasan membangun kepercayaan sebelum pembelian pertama",
+          "• Diskon pembeli pertama dan newsletter membantu membangun daftar pelanggan jangka panjang",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari",
+          "• Loading cepat dengan gambar produk yang dioptimalkan, penting untuk toko online di ponsel",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman produk yang fokus pada pembelian",
+          "• Beranda, Shop, Skincare, Body Care, Set & Bundles, Tentang Kami, Jurnal, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Memandu pembeli dari kategori ke produk terlaris, dengan rating dan ulasan sebagai bukti.\nKategori belanja jelas: perawatan wajah, tubuh, sun care, set, dan alat. Bagian best seller menampilkan harga dan rating. Penawaran 20% untuk pembelian pertama mendorong pengunjung mendaftar newsletter.",
+          "id": "Memandu pembeli dari kategori ke produk terlaris, dengan rating dan ulasan sebagai bukti.\nKategori belanja jelas: perawatan wajah, tubuh, sun care, set, dan alat. Bagian best seller menampilkan harga dan rating. Penawaran 20% untuk pembelian pertama mendorong pengunjung mendaftar newsletter."
+        },
+        "challenge": {
+          "en": "Pembeli bingung memilih produk dan ragu apakah produk cocok untuk kulitnya.",
+          "id": "Pembeli bingung memilih produk dan ragu apakah produk cocok untuk kulitnya."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "E-commerce skincare dan kecantikan alami yang membangun kepercayaan lewat bahan, riset, dan hasil yang terlihat.",
+        "id": "E-commerce skincare dan kecantikan alami yang membangun kepercayaan lewat bahan, riset, dan hasil yang terlihat."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/ad4222f0-e074-4dce-bbd8-4e59d1e9ef88.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-fallow",
+      "kind": "concept",
+      "name": {
+        "en": "DashFlow",
+        "id": "DashFlow"
+      },
+      "slug": "dashflow-dashboard",
+      "tech": [
+        "UI/UX Dashboard",
+        "SaaS",
+        "Data Visualization"
+      ],
+      "filter": "dashboard",
+      "category": {
+        "en": "SaaS / Dashboard",
+        "id": "SaaS / Dashboard"
+      },
+      "features": {
+        "en": [
+          "• Pemilik bisnis bisa melihat kondisi penjualan, pelanggan, dan keuangan dalam satu layar",
+          "• Tugas harian dan pintasan aksi cepat menghemat waktu tim setiap hari",
+          "• Grafik yang mudah dibaca membantu keputusan lebih cepat, tanpa perlu laporan manual",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman pemasaran produk, dengan halaman aplikasi yang tetap ringan",
+          "• Loading cepat, penting untuk dashboard yang dibuka setiap hari",
+          "• Siap dipasang iklan di Meta dan Google Ads untuk halaman pendaftaran uji coba",
+          "• Dashboard, Analitik, CRM, Inventaris, Keuangan, HR, Proyek, Laporan, Pengaturan"
+        ],
+        "id": [
+          "• Pemilik bisnis bisa melihat kondisi penjualan, pelanggan, dan keuangan dalam satu layar",
+          "• Tugas harian dan pintasan aksi cepat menghemat waktu tim setiap hari",
+          "• Grafik yang mudah dibaca membantu keputusan lebih cepat, tanpa perlu laporan manual",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman pemasaran produk, dengan halaman aplikasi yang tetap ringan",
+          "• Loading cepat, penting untuk dashboard yang dibuka setiap hari",
+          "• Siap dipasang iklan di Meta dan Google Ads untuk halaman pendaftaran uji coba",
+          "• Dashboard, Analitik, CRM, Inventaris, Keuangan, HR, Proyek, Laporan, Pengaturan"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Menampilkan informasi terpenting di halaman pertama dan membuat aksi harian bisa dilakukan dalam sekali klik.\nHalaman utama berisi KPI (pelanggan, penjualan, pendapatan, proyek aktif), grafik pendapatan, sumber penjualan, tugas harian, dan aktivitas terbaru. Pintasan aksi cepat menjaga alur kerja tetap singkat.",
+          "id": "Menampilkan informasi terpenting di halaman pertama dan membuat aksi harian bisa dilakukan dalam sekali klik.\nHalaman utama berisi KPI (pelanggan, penjualan, pendapatan, proyek aktif), grafik pendapatan, sumber penjualan, tugas harian, dan aktivitas terbaru. Pintasan aksi cepat menjaga alur kerja tetap singkat."
+        },
+        "challenge": {
+          "en": "Pemilik bisnis dan tim operasional harus berpindah antar aplikasi dan sulit melihat kondisi bisnis secara keseluruhan.",
+          "id": "Pemilik bisnis dan tim operasional harus berpindah antar aplikasi dan sulit melihat kondisi bisnis secara keseluruhan."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Dashboard bisnis yang menyatukan penjualan, pelanggan, inventaris, keuangan, dan tugas dalam satu layar.",
+        "id": "Dashboard bisnis yang menyatukan penjualan, pelanggan, inventaris, keuangan, dan tugas dalam satu layar."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/2f5bed7e-8c88-4fab-a1b0-8b901507f376.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-offcut",
+      "kind": "concept",
+      "name": {
+        "en": "Peakwell Fitness",
+        "id": "Peakwell Fitness"
+      },
+      "slug": "peakwell-fitness",
+      "tech": [
+        "Web Design",
+        "Fitness",
+        "Membership"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Kebugaran",
+        "id": "Kebugaran"
+      },
+      "features": {
+        "en": [
+          "• Calon member langsung menemukan program yang sesuai dengan tujuan mereka",
+          "• Pelatih bersertifikat dan komunitas membangun rasa aman untuk pemula",
+          "• Paket keanggotaan yang jelas memudahkan keputusan untuk mendaftar",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari, misalnya \"gym\" dan \"program fitness\" di kota klien",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman pendaftaran trial yang fokus pada konversi",
+          "• Beranda, Program, Trainer, Harga, Tentang Kami, Blog, Kontak"
+        ],
+        "id": [
+          "• Calon member langsung menemukan program yang sesuai dengan tujuan mereka",
+          "• Pelatih bersertifikat dan komunitas membangun rasa aman untuk pemula",
+          "• Paket keanggotaan yang jelas memudahkan keputusan untuk mendaftar",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari, misalnya \"gym\" dan \"program fitness\" di kota klien",
+          "• Loading cepat dengan gambar yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman pendaftaran trial yang fokus pada konversi",
+          "• Beranda, Program, Trainer, Harga, Tentang Kami, Blog, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Lima program utama (kekuatan, penurunan berat badan, yoga, fungsional, nutrisi) dengan ajakan \n\"Learn More\". Profil pelatih dan angka komunitas memberi bukti sosial. CTA \"Get Started Today\" selalu terlihat.",
+          "id": "Lima program utama (kekuatan, penurunan berat badan, yoga, fungsional, nutrisi) dengan ajakan \n\"Learn More\". Profil pelatih dan angka komunitas memberi bukti sosial. CTA \"Get Started Today\" selalu terlihat."
+        },
+        "challenge": {
+          "en": "Calon member ingin mulai berlatih, tetapi belum tahu program mana yang cocok dan takut merasa belum siap.",
+          "id": "Calon member ingin mulai berlatih, tetapi belum tahu program mana yang cocok dan takut merasa belum siap."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": " Website pusat kebugaran dengan pelatih bersertifikat, program untuk setiap tujuan, dan komunitas yang saling mendukung.",
+        "id": " Website pusat kebugaran dengan pelatih bersertifikat, program untuk setiap tujuan, dan komunitas yang saling mendukung."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/f8ff3904-7895-4c91-a3f8-95e8cb3bd735.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-aero",
+      "kind": "concept",
+      "name": {
+        "en": "Nexora",
+        "id": "Nexora"
+      },
+      "slug": "nexora-saas",
+      "tech": [
+        "Web Design",
+        "SaaS",
+        "UI/UX"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Travel Studio",
+        "id": "Travel Studio"
+      },
+      "features": {
+        "en": [
+          "◦ Tim bisa melihat demo dashboard yang hidup sebelum mencoba, sehingga lebih yakin",
+          "◦ Integrasi dengan alat yang sudah dipakai mengurangi kebutuhan pindah sistem",
+          "◦ Uji coba gratis yang mudah diakses menurunkan hambatan pendaftaran",
+          "◦ Tampilan responsif di ponsel, tablet, dan desktop",
+          "◦ Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari, dengan halaman fitur yang terpisah",
+          "◦ Loading cepat dengan gambar dan animasi yang ringan",
+          "◦ Siap dipasang iklan di Meta dan Google Ads, dengan halaman pendaftaran uji coba yang fokus pada konversi",
+          "◦ Beranda, Fitur, Solusi, Harga, Resources, Tentang Kami"
+        ],
+        "id": [
+          "◦ Tim bisa melihat demo dashboard yang hidup sebelum mencoba, sehingga lebih yakin",
+          "◦ Integrasi dengan alat yang sudah dipakai mengurangi kebutuhan pindah sistem",
+          "◦ Uji coba gratis yang mudah diakses menurunkan hambatan pendaftaran",
+          "◦ Tampilan responsif di ponsel, tablet, dan desktop",
+          "◦ Struktur SEO siap: judul, meta, dan heading tertata untuk mesin pencari, dengan halaman fitur yang terpisah",
+          "◦ Loading cepat dengan gambar dan animasi yang ringan",
+          "◦ Siap dipasang iklan di Meta dan Google Ads, dengan halaman pendaftaran uji coba yang fokus pada konversi",
+          "◦ Beranda, Fitur, Solusi, Harga, Resources, Tentang Kami"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Headline \"Build, Automate, Grow Faster\" dengan mockup dashboard dan kartu integrasi (Slack, Notion, Google Drive, Figma). Setiap modul punya kartu sendiri, dan uji coba gratis berada di posisi utama",
+          "id": "Headline \"Build, Automate, Grow Faster\" dengan mockup dashboard dan kartu integrasi (Slack, Notion, Google Drive, Figma). Setiap modul punya kartu sendiri, dan uji coba gratis berada di posisi utama"
+        },
+        "challenge": {
+          "en": "Tim memakai terlalu banyak alat terpisah, sehingga pekerjaan melambat dan data tercecer.",
+          "id": "Tim memakai terlalu banyak alat terpisah, sehingga pekerjaan melambat dan data tercecer."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Platform bisnis all-in-one yang menggabungkan manajemen proyek, CRM, analitik, dan kolaborasi untuk tim yang ingin bekerja lebih cepat.",
+        "id": "Platform bisnis all-in-one yang menggabungkan manajemen proyek, CRM, analitik, dan kolaborasi untuk tim yang ingin bekerja lebih cepat."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/19804b80-f0bc-45fe-be03-2e4b7b5f2025.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-crux",
+      "kind": "concept",
+      "name": {
+        "en": "Eduloop",
+        "id": "Eduloop"
+      },
+      "slug": "eduloop-elearning",
+      "tech": [
+        "Web Design",
+        "EdTech",
+        "Landing Page"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Edukasi Online",
+        "id": "Edukasi Online"
+      },
+      "features": {
+        "en": [
+          "• Calon peserta bisa melihat jumlah lesson dan durasi, sehingga yakin kursus bisa diselesaikan",
+          "• Profil instruktur dan testimoni membangun kepercayaan sebelum membayar",
+          "• Sertifikat yang jelas memberi alasan nyata untuk mendaftar demi karier",
+          "• Tampilan responsif di ponsel, tablet, dan desktop, cocok untuk belajar dari HP",
+          "• Struktur SEO siap untuk halaman kursus, misalnya \"kursus UI/UX online\" dan \"belajar React\"",
+          "• Loading cepat, penting untuk video pembelajaran dan katalog kursus",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman kursus yang fokus pada pendaftaran",
+          "• Beranda, Kursus, Instruktur, Harga, Tentang Kami, Blog"
+        ],
+        "id": [
+          "• Calon peserta bisa melihat jumlah lesson dan durasi, sehingga yakin kursus bisa diselesaikan",
+          "• Profil instruktur dan testimoni membangun kepercayaan sebelum membayar",
+          "• Sertifikat yang jelas memberi alasan nyata untuk mendaftar demi karier",
+          "• Tampilan responsif di ponsel, tablet, dan desktop, cocok untuk belajar dari HP",
+          "• Struktur SEO siap untuk halaman kursus, misalnya \"kursus UI/UX online\" dan \"belajar React\"",
+          "• Loading cepat, penting untuk video pembelajaran dan katalog kursus",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman kursus yang fokus pada pendaftaran",
+          "• Beranda, Kursus, Instruktur, Harga, Tentang Kami, Blog"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "",
+          "id": ""
+        },
+        "challenge": {
+          "en": "Calon peserta ragu membayar kursus online karena takut tidak selesai dan tidak yakin manfaatnya untuk karier.\nMembuat kursus terasa dapat diselesaikan, dengan jumlah lesson dan durasi yang jelas, serta bukti dari peserta lain.",
+          "id": "Calon peserta ragu membayar kursus online karena takut tidak selesai dan tidak yakin manfaatnya untuk karier.\nMembuat kursus terasa dapat diselesaikan, dengan jumlah lesson dan durasi yang jelas, serta bukti dari peserta lain."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Platform belajar online untuk meningkatkan skill dan karier, dengan kursus yang fleksibel dan sertifikat yang bisa dipakai.",
+        "id": "Platform belajar online untuk meningkatkan skill dan karier, dengan kursus yang fleksibel dan sertifikat yang bisa dipakai."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/3a298be4-78c4-4c09-81c1-4165b2ddb3c3.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-maree",
+      "kind": "concept",
+      "name": {
+        "en": "Aurelia Hotels & Resorts",
+        "id": "Aurelia Hotels & Resorts"
+      },
+      "slug": "aurelia-hotel",
+      "tech": [
+        "Web Design",
+        "Hospitality",
+        "Booking"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Hotel",
+        "id": "Hotel"
+      },
+      "features": {
+        "en": [
+          "• Tamu bisa memesan kamar langsung dari website tanpa harus lewat platform lain",
+          "• Kartu kamar yang jelas menampilkan kapasitas, tempat tidur, dan harga per malam",
+          "• Penawaran khusus, dining, dan wellness memberi alasan menginap lebih lama",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman kamar dan lokasi, misalnya \"hotel mewah di Bali\"",
+          "• Loading cepat dengan galeri foto yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman pemesanan yang fokus pada konversi",
+          "• Beranda, Kamar, Penawaran, Dining, Fasilitas, Galeri, Tentang Kami, Kontak"
+        ],
+        "id": [
+          "• Tamu bisa memesan kamar langsung dari website tanpa harus lewat platform lain",
+          "• Kartu kamar yang jelas menampilkan kapasitas, tempat tidur, dan harga per malam",
+          "• Penawaran khusus, dining, dan wellness memberi alasan menginap lebih lama",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman kamar dan lokasi, misalnya \"hotel mewah di Bali\"",
+          "• Loading cepat dengan galeri foto yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman pemesanan yang fokus pada konversi",
+          "• Beranda, Kamar, Penawaran, Dining, Fasilitas, Galeri, Tentang Kami, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Pencarian check-in, check-out, dan jumlah tamu ada di hero. Kartu kamar menampilkan kapasitas, jenis tempat tidur, dan harga per malam. Penawaran khusus, dining, dan wellness menambah alasan untuk menginap lebih lama.",
+          "id": "Pencarian check-in, check-out, dan jumlah tamu ada di hero. Kartu kamar menampilkan kapasitas, jenis tempat tidur, dan harga per malam. Penawaran khusus, dining, dan wellness menambah alasan untuk menginap lebih lama."
+        },
+        "challenge": {
+          "en": "Tamu membandingkan banyak hotel dan butuh alasan kuat untuk memesan langsung, bukan lewat platform lain.\nMendorong pemesanan langsung dengan harga terbaik dan pengalaman yang lebih personal.",
+          "id": "Tamu membandingkan banyak hotel dan butuh alasan kuat untuk memesan langsung, bukan lewat platform lain.\nMendorong pemesanan langsung dengan harga terbaik dan pengalaman yang lebih personal."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Website hotel dan resor mewah yang menampilkan kamar, penawaran, dan fasilitas, dengan pemesanan langsung dari halaman depan.",
+        "id": "Website hotel dan resor mewah yang menampilkan kamar, penawaran, dan fasilitas, dengan pemesanan langsung dari halaman depan."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/bd9e1d9f-8cae-4bcd-b070-4f675ebda51f.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-umbra",
+      "kind": "concept",
+      "name": {
+        "en": "Seraphine Fashion Ecommerce",
+        "id": "Seraphine Fashion Ecommerce"
+      },
+      "slug": "seraphine-fashion",
+      "tech": [
+        "Web Design",
+        "E-commerce",
+        "Fashion"
+      ],
+      "filter": "website",
+      "category": {
+        "en": "Fashion",
+        "id": "Fashion"
+      },
+      "features": {
+        "en": [
+          "• Pembeli bisa membayangkan padu-padan pakaian lewat foto lifestyle",
+          "• Kebijakan pengembalian 7 hari menurunkan keraguan soal kualitas",
+          "• Promo pembelian pertama dan new arrivals mendorong pembelian dan kunjungan ulang",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman kategori produk, misalnya \"tas kulit wanita\" dan \"sepatu pria\"",
+          "• Loading cepat dengan foto produk yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman produk yang fokus pada pembelian",
+          "• Beranda, Shop, New Arrivals, Tentang Kami, Kontak"
+        ],
+        "id": [
+          "• Pembeli bisa membayangkan padu-padan pakaian lewat foto lifestyle",
+          "• Kebijakan pengembalian 7 hari menurunkan keraguan soal kualitas",
+          "• Promo pembelian pertama dan new arrivals mendorong pembelian dan kunjungan ulang",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk halaman kategori produk, misalnya \"tas kulit wanita\" dan \"sepatu pria\"",
+          "• Loading cepat dengan foto produk yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman produk yang fokus pada pembelian",
+          "• Beranda, Shop, New Arrivals, Tentang Kami, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Kategori belanja jelas (wanita, pria, tas, sepatu, aksesori, lifestyle). Best seller menampilkan rating, dan new arrivals mendorong kunjungan ulang. Promo pembelian pertama dan kebijakan pengembalian menurunkan keraguan.",
+          "id": "Kategori belanja jelas (wanita, pria, tas, sepatu, aksesori, lifestyle). Best seller menampilkan rating, dan new arrivals mendorong kunjungan ulang. Promo pembelian pertama dan kebijakan pengembalian menurunkan keraguan."
+        },
+        "challenge": {
+          "en": "Pembeli fashion sulit membayangkan padu-padan pakaian dan ragu soal kualitas saat belanja online.\nMenjual gaya hidup, bukan hanya produk. Gambar lifestyle membantu pembeli membayangkan hasil di tubuhnya.",
+          "id": "Pembeli fashion sulit membayangkan padu-padan pakaian dan ragu soal kualitas saat belanja online.\nMenjual gaya hidup, bukan hanya produk. Gambar lifestyle membantu pembeli membayangkan hasil di tubuhnya."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "E-commerce fashion premium untuk pria dan wanita, dengan koleksi yang mudah dijelajahi dan tampilan yang membangun gaya.",
+        "id": "E-commerce fashion premium untuk pria dan wanita, dengan koleksi yang mudah dijelajahi dan tampilan yang membangun gaya."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/44df8294-a12c-4cc2-9484-48db9b9999a1.webp",
+      "previewPaths": []
+    },
+    {
+      "id": "pf-aparte",
+      "kind": "concept",
+      "name": {
+        "en": "Velox Auto Motors",
+        "id": "Velox Auto Motors"
+      },
+      "slug": "velox",
+      "tech": [
+        "Web Design",
+        "Automotive",
+        "Booking"
+      ],
+      "filter": "landing",
+      "category": {
+        "en": "Automotif",
+        "id": "Automotif"
+      },
+      "features": {
+        "en": [
+          "• Pengunjung yang sudah tertarik bisa booking test drive dalam satu klik dari header",
+          "• Filter tipe dan harga membantu pembeli menemukan mobil yang cocok lebih cepat",
+          "• Booking servis dan opsi pembiayaan membuat dealer terasa lengkap dan tidak merepotkan",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk katalog mobil, misalnya \"mobil bekas SUV\" dan \"dealer mobil premium\"",
+          "• Loading cepat dengan foto mobil yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman test drive yang fokus pada konversi",
+          "• Beranda, Mobil Baru, Mobil Bekas, Servis, Tentang Kami, Blog, Kontak"
+        ],
+        "id": [
+          "• Pengunjung yang sudah tertarik bisa booking test drive dalam satu klik dari header",
+          "• Filter tipe dan harga membantu pembeli menemukan mobil yang cocok lebih cepat",
+          "• Booking servis dan opsi pembiayaan membuat dealer terasa lengkap dan tidak merepotkan",
+          "• Tampilan responsif di ponsel, tablet, dan desktop",
+          "• Struktur SEO siap untuk katalog mobil, misalnya \"mobil bekas SUV\" dan \"dealer mobil premium\"",
+          "• Loading cepat dengan foto mobil yang dioptimalkan",
+          "• Siap dipasang iklan di Meta dan Google Ads, dengan halaman test drive yang fokus pada konversi",
+          "• Beranda, Mobil Baru, Mobil Bekas, Servis, Tentang Kami, Blog, Kontak"
+        ]
+      },
+      "caseStudy": {
+        "outcome": {
+          "en": "",
+          "id": ""
+        },
+        "approach": {
+          "en": "",
+          "id": ""
+        },
+        "solution": {
+          "en": "Tombol merah \"Book a Test Drive\" di header. Mobil unggulan tampil dengan tipe, kapasitas mesin, transmisi, dan harga. Label New dan Pre-Owned membantu pengunjung memilih. Layanan servis dan kepercayaan (teknisi, garansi, dukungan",
+          "id": "Tombol merah \"Book a Test Drive\" di header. Mobil unggulan tampil dengan tipe, kapasitas mesin, transmisi, dan harga. Label New dan Pre-Owned membantu pengunjung memilih. Layanan servis dan kepercayaan (teknisi, garansi, dukungan"
+        },
+        "challenge": {
+          "en": "Calon pembeli ingin melihat pilihan dan harga dengan cepat, lalu ingin uji coba tanpa repot.\nMembuat aksi \"Book a Test Drive\" selalu terlihat, sehingga pengunjung yang sudah tertarik bisa langsung bertindak.",
+          "id": "Calon pembeli ingin melihat pilihan dan harga dengan cepat, lalu ingin uji coba tanpa repot.\nMembuat aksi \"Book a Test Drive\" selalu terlihat, sehingga pengunjung yang sudah tertarik bisa langsung bertindak."
+        }
+      },
+      "projectUrl": null,
+      "description": {
+        "en": "Website dealer mobil premium yang menggabungkan koleksi mobil baru dan bekas dengan layanan servis dan uji coba.",
+        "id": "Website dealer mobil premium yang menggabungkan koleksi mobil baru dan bekas dengan layanan servis dan uji coba."
+      },
+      "previewPath": "https://dqooqivbccxmglqiztvd.supabase.co/storage/v1/object/public/websensial-media/portfolio/0530c00e-92e3-4a16-a83e-7e82a9cd6c31.webp",
+      "previewPaths": []
+    }
+  ]
+}

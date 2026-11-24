@@ -73,6 +73,24 @@ editor never does: when the CMS cannot be read it refuses to load instead of
 showing bundled content that a save would write over the stored data, and login
 distinguishes a wrong password from an unreachable CMS.
 
+### Snapshot fallback and keep-alive
+
+Supabase pauses Free projects after about a week of low database activity, which
+is why the portfolio used to revert to the demo catalog. Two safeguards:
+
+- `lib/data/cms-snapshot.json` holds the last content saved from the CMS and the
+  public site serves it when Supabase cannot be reached, so the real portfolio
+  stays online. Refresh it after admin edits with `npm run cms:snapshot`, then
+  commit the file. The admin editor never reads the snapshot.
+- `.github/workflows/supabase-keep-alive.yml` reads one real row of
+  `websensial_content` every day so a quiet site counts as active. It needs the
+  repository secrets `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`, and it fails
+  loudly (GitHub emails the owner) if Supabase answers anything but 200.
+
+A paid Supabase plan is still the only guarantee against pausing. Moving the CMS
+to a free database that does not pause projects (e.g. Neon) removes the problem
+entirely.
+
 ## Current limitations (by design or not yet configured)
 
 - Products are **demonstration concepts**; `liveDemoUrl`/`purchaseUrl` are

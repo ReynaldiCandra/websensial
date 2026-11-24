@@ -6,6 +6,7 @@ import { articles, type Article } from "@/lib/data/articles";
 import { defaultTracking, normalizeTracking, validateTracking, type TrackingSettings } from "@/lib/data/tracking";
 import { defaultHomeContent, defaultServices, normalizeHomeContent, validateHomeContent, validateServices, type HomeContent } from "@/lib/admin/home-content";
 import type { Service } from "@/lib/data/services";
+import cmsSnapshot from "@/lib/data/cms-snapshot.json";
 
 export type SiteContact = {
   email: string;
@@ -86,6 +87,35 @@ export class CmsUnavailableError extends Error {
   }
 }
 
+/** Shapes a stored or snapshotted content object; returns null when it is unusable. */
+function shapeStoredContent(raw: unknown): WebContent | null {
+  if (!isRecord(raw)) return null;
+  const content = raw as Partial<WebContent>;
+  if (!Array.isArray(content.portfolio) || !Array.isArray(content.products)) return null;
+  return {
+    portfolio: content.portfolio.map(withPortfolioDefaults),
+    products: content.products,
+    articles: Array.isArray(content.articles) ? content.articles : structuredClone(fallbackContent.articles),
+    tracking: normalizeTracking(content.tracking),
+    contact: content.contact ?? fallbackContent.contact,
+    home: normalizeHomeContent(content.home),
+    services: Array.isArray(content.services) ? (content.services as Service[]).map(withServiceDefaults) : structuredClone(fallbackContent.services),
+    legal: isRecord(content.legal) && (typeof content.legal.termsUrl === "string" || content.legal.termsUrl === null)
+      ? { termsUrl: content.legal.termsUrl }
+      : { termsUrl: null },
+  };
+}
+
+/**
+ * Content snapshot committed from the CMS with `npm run cms:snapshot`. The
+ * public site serves it when the CMS is unreachable, so visitors keep seeing
+ * the real portfolio instead of the bundled demo catalog.
+ */
+export function getSnapshotWebContent(): WebContent | null {
+  const shaped = shapeStoredContent(cmsSnapshot as unknown);
+  return shaped ? structuredClone(shaped) : null;
+}
+
 export async function getStoredWebContent(options: { strict?: boolean } = {}): Promise<WebContent | null> {
   const client = getCmsClient();
   if (!client) {
@@ -101,30 +131,16 @@ export async function getStoredWebContent(options: { strict?: boolean } = {}): P
       .maybeSingle();
     if (error) throw error;
     if (!data?.content) return getBundledWebContent();
-    if (typeof data.content !== "object") return null;
-    const content = data.content as Partial<WebContent>;
-    if (!Array.isArray(content.portfolio) || !Array.isArray(content.products)) return null;
-    return {
-      portfolio: content.portfolio.map(withPortfolioDefaults),
-      products: content.products,
-      articles: Array.isArray(content.articles) ? content.articles : structuredClone(fallbackContent.articles),
-      tracking: normalizeTracking(content.tracking),
-      contact: content.contact ?? fallbackContent.contact,
-      home: normalizeHomeContent(content.home),
-      services: Array.isArray(content.services) ? (content.services as Service[]).map(withServiceDefaults) : structuredClone(fallbackContent.services),
-      legal: isRecord(content.legal) && (typeof content.legal.termsUrl === "string" || content.legal.termsUrl === null)
-        ? { termsUrl: content.legal.termsUrl }
-        : { termsUrl: null },
-    };
+    return shapeStoredContent(data.content);
   } catch (error) {
-    console.error("Failed to load stored CMS content; the public site is serving bundled demo content.", error);
+    console.error("Failed to load stored CMS content; the public site is using the committed CMS snapshot.", error);
     if (options.strict) throw new CmsUnavailableError();
     return null;
   }
 }
 
 export async function getWebContent(): Promise<WebContent> {
-  return (await getStoredWebContent()) ?? fallbackContent;
+  return (await getStoredWebContent()) ?? getSnapshotWebContent() ?? fallbackContent;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
