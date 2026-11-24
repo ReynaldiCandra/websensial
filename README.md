@@ -85,7 +85,9 @@ is why the portfolio used to revert to the demo catalog. Two safeguards:
 - `.github/workflows/supabase-keep-alive.yml` reads one real row of
   `websensial_content` every day so a quiet site counts as active. It needs the
   repository secrets `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`, and it fails
-  loudly (GitHub emails the owner) if Supabase answers anything but 200.
+  loudly (GitHub emails the owner) if Supabase answers anything but 200. GitHub
+  only accepts this file from a token with the `workflow` scope; a token without
+  it is rejected, so add the file through the GitHub web UI in that case.
 
 A paid Supabase plan is still the only guarantee against pausing. Moving the CMS
 to a free database that does not pause projects (e.g. Neon) removes the problem
