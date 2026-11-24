@@ -138,6 +138,25 @@ export async function POST(request: Request) {
   const authClient = createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data, error } = await authClient.auth.signInWithPassword({ email, password });
   if (error || !data.user || !data.session) {
+    // A missing status means the request never reached Supabase Auth (DNS,
+    // network, paused or deleted project) and 5xx means Supabase is failing.
+    // Neither is a wrong password, so say so and do not lock the account.
+    const status = typeof error?.status === "number" ? error.status : undefined;
+    const code = typeof error?.code === "string" ? error.code : "";
+    // supabase-js reports network failures as AuthRetryableFetchError with
+    // status 0, so a missing/zero status also means "never reached Supabase".
+    const unreachable = status === undefined || status === 0
+      || error?.name === "AuthRetryableFetchError" || error?.name === "AuthUnknownError";
+    if (unreachable || (status ?? 0) >= 500) {
+      console.error("Admin login could not reach Supabase Auth.", error);
+      return NextResponse.json(
+        { error: "CMS Websensial tidak dapat dihubungi, jadi login belum bisa diperiksa — ini bukan salah password. Periksa proyek Supabase dan variabel SUPABASE_*." },
+        { status: 503 },
+      );
+    }
+    if (code === "email_not_confirmed") {
+      return NextResponse.json({ error: "Email admin belum dikonfirmasi di Supabase." }, { status: 403 });
+    }
     await recordFailure();
     return NextResponse.json({ error: "Email atau password salah." }, { status: 401 });
   }
@@ -147,7 +166,15 @@ export async function POST(request: Request) {
     .select("user_id")
     .eq("user_id", data.user.id)
     .maybeSingle();
-  if (adminError || !admin) {
+  if (adminError) {
+    console.error("Admin membership could not be checked.", adminError);
+    await authClient.auth.signOut();
+    return NextResponse.json(
+      { error: "Status admin tidak dapat diperiksa karena database CMS tidak dapat dihubungi. Login berhasil, tetapi akses belum bisa dipastikan." },
+      { status: 503 },
+    );
+  }
+  if (!admin) {
     await authClient.auth.signOut();
     return NextResponse.json({ error: "Akun ini belum diberi akses admin Websensial." }, { status: 403 });
   }

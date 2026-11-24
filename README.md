@@ -44,6 +44,35 @@ UI strings live in `messages/id.json` + `messages/en.json`.
 See `AGENTS.md` for the full conventions (how to add products, honesty rules,
 design tokens).
 
+## CMS admin (Supabase)
+
+`/admin` stores content in the Supabase table `websensial_content`
+(`content_key = site-v1`) and images in the `websensial-media` bucket. Content is
+**not** kept in this repository, so git cannot restore it.
+
+Required variables (`.env.local` locally, Vercel for production): `SUPABASE_URL`,
+`SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, optionally
+`ADMIN_SESSION_SECRET`. Schema: `supabase/websensial-cms.sql`; create the admin
+user in Supabase Auth, then allow its UUID in `websensial_admins`.
+
+If the panel says "CMS tidak dapat dihubungi" or the site falls back to the
+demo catalog:
+
+1. Open the Supabase dashboard and make sure the Websensial project is active.
+   Free-tier projects are paused after days without activity; "Restore project"
+   brings the data back.
+2. Check that `SUPABASE_URL` in Vercel points to that project and its host still
+   answers: `https://<ref>.supabase.co/auth/v1/health`.
+3. Check that `SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` belong to the
+   same project, then redeploy.
+4. Sign in at `/admin` and verify Portfolio/Templates. If the project was
+   recreated, `websensial_content` is empty and the content must be entered again.
+
+Only the public site falls back to `lib/data/` so it stays online. The admin
+editor never does: when the CMS cannot be read it refuses to load instead of
+showing bundled content that a save would write over the stored data, and login
+distinguishes a wrong password from an unreachable CMS.
+
 ## Current limitations (by design or not yet configured)
 
 - Products are **demonstration concepts**; `liveDemoUrl`/`purchaseUrl` are

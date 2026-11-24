@@ -105,3 +105,22 @@
 @media(max-width:680px){.ws-guide-hero{flex-direction:column;padding:18px}.ws-guide-actions{width:100%}.ws-guide-card{padding:16px}.ws-guide-table{display:block;overflow-x:auto}.ws-guide-table th,.ws-guide-table td{min-width:120px}}
 @media(max-width:760px){.ws-cms-shell .admin-sidebar nav{overflow-x:auto;scrollbar-width:thin}.ws-cms-shell .admin-sidebar nav button{flex:1 0 auto;min-width:70px;padding:0 8px}}
 @media(max-width:680px){.ws-cms-shell .admin-sidebar nav button{flex:1 0 auto}}
+
+/* Sidebar brand: the transparent logo sits directly on the sidebar, aligned
+   with the nav, instead of inside a bordered white card. */
+.ws-cms-shell .ws-admin-brand-row{gap:10px;margin:0 0 26px;padding:0 2px}
+.ws-cms-shell .admin-logo{flex:1;min-width:0;height:56px;padding:0;border:0;background:transparent;justify-content:flex-start}
+.ws-cms-shell .admin-logo img{width:100%;height:100%;object-fit:contain;object-position:left center}
+.ws-cms-shell.is-sidebar-collapsed .admin-logo{display:none}
+@media(max-width:760px){.ws-cms-shell .ws-admin-brand-row{margin:0}.ws-cms-shell .admin-logo{flex:none;width:170px;height:46px;padding:0}}
+
+/* Lucide icons keep their own square box inside the menu labels. */
+.ws-cms-shell .ws-sidebar-icon svg{display:block;width:18px;height:18px}
+.ws-cms-shell .ws-sidebar-toggle svg,.ws-cms-shell .ws-topbar-toggle svg{display:block;width:18px;height:18px}
+.ws-cms-shell.is-sidebar-collapsed .ws-sidebar-icon svg{width:20px;height:20px}
+
+/* Icon spacing for controls that pair a Lucide icon with a label. */
+.ws-cms-shell button.admin-primary,.ws-cms-shell button.admin-quiet{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.ws-cms-shell .ws-doc-card a,.ws-cms-shell .ws-admin-link-preview{display:inline-flex;align-items:center;gap:4px}
+.ws-cms-shell .ws-admin-toast>button{display:grid;place-items:center;padding:2px}
+.ws-cms-shell .ws-cms-thumbs button{display:inline-flex;align-items:center;justify-content:center;gap:4px}

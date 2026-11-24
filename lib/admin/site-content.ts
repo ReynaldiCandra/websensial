@@ -79,9 +79,19 @@ function withServiceDefaults(service: Service): Service {
   };
 }
 
-export async function getStoredWebContent(): Promise<WebContent | null> {
+export class CmsUnavailableError extends Error {
+  constructor(message = "CMS Websensial tidak dapat dihubungi.") {
+    super(message);
+    this.name = "CmsUnavailableError";
+  }
+}
+
+export async function getStoredWebContent(options: { strict?: boolean } = {}): Promise<WebContent | null> {
   const client = getCmsClient();
-  if (!client) return null;
+  if (!client) {
+    if (options.strict) throw new CmsUnavailableError("CMS belum dikonfigurasi.");
+    return null;
+  }
 
   try {
     const { data, error } = await client
@@ -107,7 +117,8 @@ export async function getStoredWebContent(): Promise<WebContent | null> {
         : { termsUrl: null },
     };
   } catch (error) {
-    console.error("Failed to load stored CMS content for media safety check.", error);
+    console.error("Failed to load stored CMS content; the public site is serving bundled demo content.", error);
+    if (options.strict) throw new CmsUnavailableError();
     return null;
   }
 }
